@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wardrobe</title>
+<meta name="description" content="A personal outfit builder. Your wardrobe is stored only in your own browser.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wardrobe">
+<meta name="theme-color" content="#E8EBF0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F131C" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap"></noscript>
+<style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: one phone-width column. Each layer of an outfit is a rail of tags; picking a tag sorts every other rail into what still works and what is ruled out. */
+:root{
+  --bg:#E8EBF0; --surface:#FBFCFD; --inset:#EEF1F5; --ink:#151B2B; --ink-2:#4B556A; --line:#C8CFDB;
+  --accent:#2B3F9E; --on-accent:#FFFFFF; --accent-soft:#DDE3F8;
+  --crit:#AE3716; --crit-soft:#F7DFD6; --good:#17734F; --good-soft:#D6EEE3;
+  --scrim:rgba(12,16,28,.52);
+  --font-display:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --tabs-h:58px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F131C; --surface:#181E2B; --inset:#1F2636; --ink:#E9EDF5; --ink-2:#A4AEC1; --line:#303A4E;
+    --accent:#93A5FF; --on-accent:#0F131C; --accent-soft:#252F57;
+    --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427;
+    --scrim:rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F131C; --surface:#181E2B; --inset:#1F2636; --ink:#E9EDF5; --ink-2:#A4AEC1; --line:#303A4E;
+  --accent:#93A5FF; --on-accent:#0F131C; --accent-soft:#252F57;
+  --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427;
+  --scrim:rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+h1,h2,h3,p,ul,ol,fieldset,legend{margin:0;padding:0}
+ul,ol{list-style:none}
+fieldset{border:0;min-width:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+h1{font-family:var(--font-display);font-weight:700;font-size:34px;line-height:1;letter-spacing:.03em;text-transform:uppercase}
+h2{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-wrap:balance}
+h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.15;letter-spacing:.02em;text-wrap:balance}
+
+.page{max-width:760px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px calc(var(--tabs-h) + var(--tray-h,0px) + 28px);display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tally{font-family:var(--font-display);font-weight:600;font-size:13.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line);border-radius:3px;padding:2px 8px;font-variant-numeric:tabular-nums}
+.tally:empty{display:none}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:6px;background:var(--surface);border-top:1px solid var(--line);padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.tabs a{flex:1;display:flex;align-items:center;justify-content:center;height:42px;border-radius:6px;font-family:var(--font-display);font-weight:600;font-size:17px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);text-decoration:none}
+.tabs a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+
+#notice:empty{display:none}
+.notice{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:10px 12px;font-size:14.5px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.notice.err{border-color:var(--crit);color:var(--crit)}
+.notice span{flex:1;min-width:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-weight:600;font-size:15px;text-align:center}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.danger{background:transparent;border-color:var(--crit);color:var(--crit)}
+.btn.inv{min-height:40px;padding:0 12px;background:transparent;color:inherit;border-color:var(--ink-2);border-color:color-mix(in srgb,currentColor 42%,transparent);white-space:nowrap}
+.btn[disabled]{opacity:.55;cursor:default}
+.mini{margin-left:auto;min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:5px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.mini.is-on{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+
+select,input[type="text"],textarea{border:1px solid var(--line);border-radius:6px;background:var(--surface);min-height:44px;padding:0 12px;font-size:16px;max-width:100%}
+textarea{width:100%;min-height:64px;padding:10px 12px;resize:vertical}
+
+#view{display:flex;flex-direction:column;gap:22px;min-width:0}
+.filters{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filters select{min-height:40px;font-weight:500}
+.chip{min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:20px;background:var(--surface);font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.hint{font-size:14.5px;color:var(--ink-2);margin-top:-10px}
+
+.rail,.group,.panel{display:flex;flex-direction:column;gap:10px;min-width:0}
+.rail-head,.group-head{display:flex;align-items:center;gap:10px;min-height:36px}
+.rail-count,.n{font-family:var(--font-body);font-size:13.5px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.empty{font-size:14.5px;color:var(--ink-2)}
+.ph{display:flex;flex-wrap:wrap;gap:8px}
+.ph i{display:block;height:50px;width:124px;border-radius:4px;background:var(--inset)}
+.ph i:nth-child(2){width:150px}
+.ph i:nth-child(3){width:70px}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:flex;align-items:center;gap:10px;min-height:50px;max-width:100%;padding:7px 12px 7px 10px;border:1px solid var(--line);border-radius:4px;background:var(--surface);text-align:left}
+.tag-main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.tag-name{font-weight:500;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
+.tag.is-sel{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tag.is-out{background:transparent;border-style:dashed;color:var(--ink-2)}
+.tag-why{font-size:12.5px;line-height:1.1;color:var(--crit)}
+.sw{flex:none;display:block;width:18px;height:18px;border-radius:50%;background:var(--sw,transparent);box-shadow:inset 0 0 0 1px var(--line);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 32%,transparent)}
+.sw.big{width:24px;height:24px}
+.sw.pat{background:conic-gradient(#C4312A 0 25%,#E3C03B 0 50%,#2E7B4E 0 75%,#2D5BCB 0)}
+.sw.none{background:repeating-linear-gradient(135deg,transparent 0 3px,var(--line) 3px 5px)}
+.tag.is-sel .sw{box-shadow:0 0 0 2px var(--on-accent)}
+.bar{display:inline-flex;gap:2px}
+.bar i{display:block;width:14px;height:4px;border-radius:1px;background:var(--line)}
+.bar i.on{background:var(--ink)}
+.bar.big i{width:26px;height:6px}
+.tag.is-sel .bar i{background:var(--accent-soft);background:color-mix(in srgb,var(--on-accent) 34%,transparent)}
+.tag.is-sel .bar i.on{background:var(--on-accent)}
+.ruled summary{width:max-content;max-width:100%;padding:6px 0;font-size:13.5px;color:var(--ink-2);cursor:pointer}
+.ruled .tags{margin-top:4px}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.rows{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow:hidden}
+.rows li + li{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:11px 12px;border:0;background:none;text-align:left}
+.row.is-rest{opacity:.6}
+.row-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row-name{font-weight:600;overflow-wrap:anywhere}
+.row-meta{font-size:13.5px;color:var(--ink-2)}
+.badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.badge{font-family:var(--font-display);font-weight:600;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;line-height:1.3;padding:1px 6px;border:1px solid var(--line);border-radius:3px;color:var(--ink-2)}
+.row-n{font-size:13.5px;color:var(--ink-2);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{font-family:var(--font-display);font-weight:600;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;line-height:1.3;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}
+.exc{display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14.5px}
+.exc span{flex:1;min-width:0}
+
+.sub{font-size:14.5px;color:var(--ink-2);max-width:62ch}
+.note{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--ink-2)}
+.note b{color:var(--ink);font-weight:600}
+.scroll-x{position:relative;overflow-x:auto}
+.cov{width:100%;border-collapse:separate;border-spacing:3px;font-variant-numeric:tabular-nums}
+.cov th{position:relative;padding:2px;font-family:var(--font-display);font-weight:600;font-size:12px;line-height:1.1;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-2);text-align:center}
+.cov tbody th{padding-right:6px;font-size:14.5px;letter-spacing:.04em;color:var(--ink);text-align:left;white-space:nowrap}
+.cov th small{display:block;font-family:var(--font-body);font-weight:400;font-size:11.5px;letter-spacing:0;text-transform:none;white-space:normal;color:var(--ink-2)}
+.cov td{position:relative;min-width:40px;height:38px;border-radius:3px;background:var(--inset);font-weight:600;text-align:center}
+.cov td.z{font-weight:400;color:var(--ink-2)}
+.cov td.c1{background:var(--accent-soft);background:color-mix(in srgb,var(--accent) 13%,var(--surface))}
+.cov td.c2{background:var(--accent-soft);background:color-mix(in srgb,var(--accent) 24%,var(--surface))}
+.cov td.c3{background:var(--accent-soft);background:color-mix(in srgb,var(--accent) 38%,var(--surface))}
+.cov td.hole{background:var(--crit-soft);color:var(--crit);box-shadow:inset 0 0 0 1.5px var(--crit)}
+.cov tr.sum td{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.cov tr.sum td.has{background:var(--ink);color:var(--bg);box-shadow:none}
+.legend{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
+.key-hole{flex:none;width:12px;height:12px;margin-top:4px;border-radius:2px;background:var(--crit-soft);box-shadow:inset 0 0 0 1.5px var(--crit)}
+.list,.cands{display:flex;flex-direction:column;gap:8px}
+.blk,.cand{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:12px}
+.blk{gap:4px}
+.blk-top{display:flex;align-items:center;gap:8px}
+.blk-top b{flex:1;min-width:0;font-weight:600}
+.blk p{font-size:14.5px;color:var(--ink-2)}
+.cand{gap:10px}
+.cand-top{display:flex;gap:12px;align-items:flex-start}
+.rank{flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:700;font-size:16px}
+.cand-name{min-width:0}
+.cand-name p{font-size:13.5px;color:var(--ink-2)}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.facts li{padding:3px 8px;border-radius:4px;background:var(--good-soft);color:var(--good);font-size:14px}
+.facts b{font-weight:600}
+.bearing li{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:10px 12px}
+.bear-top{display:flex;align-items:center;gap:8px}
+.bear-name{flex:1;min-width:0;font-weight:500}
+.bear-n{font-size:13.5px;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.meter{height:6px;margin-top:8px;border-radius:3px;background:var(--inset);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.key{display:flex;flex-direction:column;gap:7px}
+.key li{display:grid;grid-template-columns:auto 104px minmax(0,1fr);gap:10px;align-items:center;font-size:14.5px}
+.key b{font-weight:600}
+.key li > span:last-child{color:var(--ink-2)}
+
+.tray{position:fixed;left:0;right:0;bottom:calc(var(--tabs-h) + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tray-text{flex:1;min-width:0}
+.tray-title{font-weight:600;font-size:15px;line-height:1.25}
+.tray-sub{font-size:13px;line-height:1.3;opacity:.82}
+
+dialog.sheet{width:100%;max-width:560px;max-height:92vh;max-height:92dvh;margin:auto auto 0;padding:0;border:0;border-radius:12px 12px 0 0;background:var(--surface);color:var(--ink);overflow:auto}
+dialog.sheet::backdrop{background:var(--scrim)}
+.sheet-in{display:flex;flex-direction:column;gap:16px;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.form,fieldset.all{display:flex;flex-direction:column;gap:16px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.x{width:40px;height:40px;border:0;border-radius:6px;background:transparent;font-size:26px;line-height:1;color:var(--ink-2)}
+.fld{display:flex;flex-direction:column;gap:7px}
+.lbl{font-family:var(--font-display);font-weight:600;font-size:13.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+.lbl em{font-style:normal;font-weight:500;letter-spacing:.03em;text-transform:none;opacity:.85}
+.lbl-val{margin-left:6px;font-family:var(--font-body);font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink)}
+.fld input[type="text"]{width:100%;background:var(--bg)}
+.fld textarea,.fld select{background:var(--bg)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.segl{position:relative;display:block}
+.segl input,.swl input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.segl span{display:flex;align-items:center;min-height:42px;padding:0 13px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font-weight:500;font-size:15px}
+.segl input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.segl input:focus-visible + span,.swl input:focus-visible + .sw{outline:2px solid var(--accent);outline-offset:2px}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.swl{position:relative;display:block;width:38px;height:38px}
+.swl .sw{position:absolute;inset:6px;width:auto;height:auto}
+.swl input:checked + .sw{outline:2px solid var(--ink);outline-offset:3px}
+.range{display:flex;gap:10px;flex-wrap:wrap}
+.range label{flex:1;min-width:130px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--ink-2)}
+.range select{width:100%;color:var(--ink)}
+.range-show{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.help{font-size:13.5px;color:var(--ink-2)}
+.lv-key summary{width:max-content;max-width:100%;font-size:13.5px;color:var(--ink-2);cursor:pointer}
+.lv-key ul{display:flex;flex-direction:column;gap:3px;margin-top:6px;font-size:13.5px;color:var(--ink-2)}
+.lv-key b{font-weight:600;color:var(--ink)}
+.check{display:flex;align-items:center;gap:10px;min-height:36px;font-size:15px}
+.check input{width:20px;height:20px;margin:0;accent-color:var(--accent)}
+.form-err{font-size:14.5px;color:var(--crit)}
+.sheet-foot{display:flex;gap:8px;flex-wrap:wrap}
+.sheet-foot .primary{flex:1}
+.why-item{display:flex;align-items:center;gap:10px}
+.whys{display:flex;flex-direction:column;gap:12px}
+.whys li{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--tabs-h) + var(--tray-h,0px) + env(safe-area-inset-bottom,0px) + 12px);z-index:40;transform:translateX(-50%);max-width:calc(100% - 32px);padding:9px 14px;border-radius:6px;background:var(--ink);color:var(--bg);font-size:14.5px;text-align:center}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;background:var(--bg)}
+input[type="file"]{max-width:100%;font-size:15px}
+.tag,.chip,.btn,.mini,.tabs a,.row,.segl,.swl,summary{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+
+@media (min-width:800px){
+  .page{padding-block:22px calc(var(--tray-h,0px) + 48px)}
+  .tabs{position:static;gap:4px;padding:0;border:0;background:none}
+  .tabs a{flex:none;height:38px;padding:0 16px;font-size:16px}
+  .tray{left:50%;right:auto;bottom:16px;width:min(728px,calc(100% - 32px));transform:translateX(-50%);padding:10px 14px;border-radius:8px}
+  dialog.sheet{margin:auto;border-radius:10px}
+  .toast{bottom:calc(var(--tray-h,0px) + 28px)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .tag,.chip,.btn,.segl span,.tabs a{transition:background-color .12s,border-color .12s,color .12s}
+}
+</style>
+</head>
+<body>
+<script>
+/* Standalone storage: the wardrobe lives in this browser, on this device. Nothing is sent anywhere. */
+(function(){
+  'use strict';
+  var KEY='wardrobe.v1',subs=[],META={fromCache:false,hasPendingWrites:false};
+  function bag(o){var b=Object.create(null);if(o&&typeof o==='object'&&!Array.isArray(o)){Object.keys(o).forEach(function(k){b[k]=o[k];});}return b;}
+  function load(){
+    var s={items:bag(),pins:bag(),meta:bag()};
+    try{
+      var p=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(p&&typeof p==='object'){s.items=bag(p.items);s.pins=bag(p.pins);s.meta=bag(p.meta);}
+    }catch(e){}
+    return s;
+  }
+  var store=load();
+  function persist(){try{localStorage.setItem(KEY,JSON.stringify(store));return true;}catch(e){return false;}}
+  function clone(x){return JSON.parse(JSON.stringify(x));}
+  function col(name){if(!store[name])store[name]=bag();return store[name];}
+  function docSnap(c,id){var d=col(c)[id];return {id:id,exists:d!==undefined,data:function(){return d===undefined?undefined:clone(d);},metadata:META};}
+  function colSnap(c){var docs=Object.keys(col(c)).sort().map(function(id){return docSnap(c,id);});return {docs:docs,size:docs.length,empty:!docs.length,docChanges:function(){return [];},metadata:META};}
+  function emit(){subs.slice().forEach(function(f){try{f();}catch(e){}});}
+  function sub(fn){subs.push(fn);setTimeout(fn,0);return function(){var i=subs.indexOf(fn);if(i>=0)subs.splice(i,1);};}
+  function full(){return {code:'quota_exceeded',message:'This browser would not save the change.'};}
+  function docRef(p){
+    var a=String(p).split('/');
+    if(a.length!==2||!a[0]||!a[1])throw new TypeError('A document path needs two segments.');
+    var c=a[0],id=a[1];
+    return {id:id,path:p,
+      get:function(){return Promise.resolve(docSnap(c,id));},
+      set:function(data){
+        var had=col(c)[id]!==undefined,prev=col(c)[id];
+        col(c)[id]=clone(data);
+        if(!persist()){if(had)col(c)[id]=prev;else delete col(c)[id];return Promise.reject(full());}
+        emit();return Promise.resolve();
+      },
+      delete:function(){
+        var prev=col(c)[id];
+        if(prev===undefined)return Promise.resolve();
+        delete col(c)[id];
+        if(!persist()){col(c)[id]=prev;return Promise.reject(full());}
+        emit();return Promise.resolve();
+      },
+      onSnapshot:function(next){return sub(function(){next(docSnap(c,id));});}};
+  }
+  var db={doc:docRef,collection:function(c){return {path:c,doc:function(id){return docRef(c+'/'+id);},get:function(){return Promise.resolve(colSnap(c));},onSnapshot:function(next){return sub(function(){next(colSnap(c));});}};}};
+  var yes=function(){return Promise.resolve(true);};
+  var user={canEdit:yes,isOwner:yes};
+  /* Saving a file: the share sheet on phones (Save to Files), an ordinary download elsewhere. */
+  var downloads={save:function(req){
+    var name=String(req&&req.filename||'wardrobe.txt'),data=req&&req.data;
+    var type=/\.json$/i.test(name)?'application/json':/\.csv$/i.test(name)?'text/csv':'text/plain';
+    try{
+      var file=new File([data],name,{type:type});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){
+        return navigator.share({files:[file]}).then(function(){return {status:'saved'};},function(e){
+          return Promise.reject({code:e&&e.name==='AbortError'?'declined':'unavailable',message:String(e&&e.message||e)});
+        });
+      }
+    }catch(e){}
+    try{
+      var url=URL.createObjectURL(new Blob([data],{type:type})),link=document.createElement('a');
+      link.href=url;link.download=name;link.style.display='none';
+      document.body.appendChild(link);link.click();link.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},5000);
+      return Promise.resolve({status:'saved'});
+    }catch(e){return Promise.reject({code:'unavailable',message:'Saving a file is not available here.'});}
+  }};
+  window.WARDROBE_LOCAL=true;
+  window.claude={use:function(name){return Promise.resolve(name==='db'?db:name==='user'?user:name==='downloads'?downloads:null);}};
+  /* Another tab or window changed the wardrobe: pick the change up. */
+  window.addEventListener('storage',function(e){if(e.key===KEY){store=load();emit();}});
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});}catch(e){}
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});
+  }
+})();
+</script>
+<div class="page">
+  <header class="top">
+    <div class="brand"><h1>Wardrobe</h1><p class="tally" id="tally"></p></div>
+    <nav class="tabs" aria-label="Views">
+      <a href="#build" data-tab="build">Build</a>
+      <a href="#wardrobe" data-tab="wardrobe">Wardrobe</a>
+      <a href="#gaps" data-tab="gaps">Gaps</a>
+    </nav>
+  </header>
+  <div id="notice"></div>
+  <main id="view"></main>
+</div>
+<div class="tray" id="tray" hidden></div>
+<dialog class="sheet" id="sheet"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+
+/*ENGINE-START*/
+var LAYERS=[
+  {id:'shoes',name:'Shoes',req:true,units:['pair','pairs'],need:'shoes'},
+  {id:'bottoms',name:'Bottoms',req:true,units:['piece','pieces'],need:'bottoms'},
+  {id:'tops',name:'Tops',req:true,units:['piece','pieces'],need:'a top'},
+  {id:'mid',name:'Mid-layers',req:false,units:['piece','pieces'],need:'a mid-layer'},
+  {id:'outer',name:'Outerwear',req:false,units:['piece','pieces'],need:'outerwear'}
+];
+var LAYER_IDS=LAYERS.map(function(l){return l.id;});
+var LAYER_MAP={};LAYERS.forEach(function(l){LAYER_MAP[l.id]=l;});
+var REQ=LAYER_IDS.filter(function(id){return LAYER_MAP[id].req;});
+var OPT=LAYER_IDS.filter(function(id){return !LAYER_MAP[id].req;});
+var LEVELS=['','Active','Casual','Smart-casual','Smart','Formal'];
+/* What-if purchases: common pieces, scored against the wardrobe as it stands. */
+var CANDIDATES=[
+  {key:'trainers',layer:'shoes',name:'Casual trainers',eg:'clean leather or suede trainers',lo:2,hi:3},
+  {key:'smartshoes',layer:'shoes',name:'Smart shoes',eg:'derbies, loafers or Chelsea boots',lo:3,hi:4},
+  {key:'dressshoes',layer:'shoes',name:'Dress shoes',eg:'black or dark brown Oxfords',lo:4,hi:5},
+  {key:'jeans',layer:'bottoms',name:'Dark jeans',eg:'indigo or black, no rips',lo:2,hi:3},
+  {key:'chinos',layer:'bottoms',name:'Chinos',eg:'navy, stone or olive',lo:2,hi:4},
+  {key:'tailored',layer:'bottoms',name:'Tailored trousers',eg:'wool or suit trousers',lo:4,hi:5},
+  {key:'shorts',layer:'bottoms',name:'Shorts',eg:'chino or tailored shorts',lo:2,hi:2,season:'warm'},
+  {key:'tee',layer:'tops',name:'Plain T-shirt',eg:'white, black, grey or navy',lo:2,hi:3},
+  {key:'casualshirt',layer:'tops',name:'Casual shirt',eg:'Oxford, denim or flannel',lo:2,hi:4},
+  {key:'dressshirt',layer:'tops',name:'Dress shirt',eg:'white or light blue',lo:4,hi:5}
+];
+
+function clampLevel(n,d){n=Math.round(Number(n));return n>=1&&n<=5?n:d;}
+function cleanStr(s,max){return typeof s==='string'?s.trim().slice(0,max):'';}
+
+/* Rows come from the shared store, so every field is checked before use. */
+function normItem(id,d){
+  if(!d||typeof d!=='object')return null;
+  var name=cleanStr(d.name,80);
+  if(!name||LAYER_IDS.indexOf(d.layer)<0)return null;
+  var lo=clampLevel(d.lo,2),hi=clampLevel(d.hi,lo),t;
+  if(lo>hi){t=lo;lo=hi;hi=t;}
+  return {id:String(id),name:name,layer:d.layer,type:cleanStr(d.type,40),colour:cleanStr(d.colour,20),
+    tone:d.tone==='statement'?'statement':'neutral',lo:lo,hi:hi,
+    season:d.season==='warm'||d.season==='cold'?d.season:'all',
+    care:d.care==='protect'||d.care==='beater'?d.care:'normal',
+    status:d.status==='resting'?'resting':'active',
+    notes:cleanStr(d.notes,300),createdAt:Number(d.createdAt)||0};
+}
+
+function pinKey(a,b){return a<b?a+'__'+b:b+'__'+a;}
+
+/* Why two pieces from different layers can't be worn together, or null if they can.
+   Every rule is pairwise, so an outfit is valid exactly when all of its pairs are. */
+function pairWhy(a,b,pins){
+  var p=pins?pins[pinKey(a.id,b.id)]:null;
+  if(p==='block')return {code:'pin'};
+  if(p==='allow')return null;
+  if(a.hi<b.lo)return {code:'casual'};
+  if(a.lo>b.hi)return {code:'smart'};
+  if((a.season==='warm'&&b.season==='cold')||(a.season==='cold'&&b.season==='warm'))return {code:'season'};
+  if(a.tone==='statement'&&b.tone==='statement'&&Math.min(a.hi,b.hi)>=2)return {code:'tone'};
+  return null;
+}
+
+function activeBy(items){
+  var by={};
+  LAYER_IDS.forEach(function(l){by[l]=[];});
+  items.forEach(function(it){if(it.status==='active')by[it.layer].push(it);});
+  return by;
+}
+
+/* An outfit is one piece from each core layer that has anything in it yet. */
+function countOutfits(by,pins,keep){
+  var live=REQ.filter(function(l){return by[l].length>0;});
+  var res={live:live,total:null,perItem:Object.create(null),perLevel:[0,0,0,0,0,0],tuples:keep?[]:null};
+  if(live.length<2)return res;
+  res.total=0;
+  var pick=[];
+  function rec(i){
+    var k,x,j,ok,arr;
+    if(i===live.length){
+      var lo=1,hi=5;
+      res.total++;
+      for(k=0;k<pick.length;k++){
+        res.perItem[pick[k].id]=(res.perItem[pick[k].id]||0)+1;
+        if(pick[k].lo>lo)lo=pick[k].lo;
+        if(pick[k].hi<hi)hi=pick[k].hi;
+      }
+      for(x=lo;x<=hi;x++)res.perLevel[x]++;
+      if(res.tuples)res.tuples.push(pick.slice());
+      return;
+    }
+    arr=by[live[i]];
+    for(j=0;j<arr.length;j++){
+      ok=true;
+      for(k=0;k<pick.length;k++){if(pairWhy(arr[j],pick[k],pins)){ok=false;break;}}
+      if(ok){pick.push(arr[j]);rec(i+1);pick.pop();}
+    }
+  }
+  rec(0);
+  return res;
+}
+
+/* A piece is blocked when it is in no outfit and the layer stopping it has been fully audited. */
+function findBlocked(by,res,pins,audit){
+  var out=Object.create(null);
+  if(res.total===null)return out;
+  res.live.forEach(function(l){
+    by[l].forEach(function(it){
+      if(res.perItem[it.id])return;
+      var culprits=res.live.filter(function(m){
+        return m!==l&&!by[m].some(function(o){return !pairWhy(it,o,pins);});
+      });
+      var known=culprits.filter(function(m){return audit[m];});
+      if(known.length)out[it.id]={item:it,layer:known[0]};
+      else if(!culprits.length&&res.live.every(function(m){return m===l||audit[m];}))out[it.id]={item:it,layer:null};
+    });
+  });
+  return out;
+}
+
+function analyse(items,pins,audit){
+  audit=audit||{};
+  var by=activeBy(items),base=countOutfits(by,pins,true);
+  var cov={},holes=Object.create(null),addOn=Object.create(null);
+  LAYER_IDS.forEach(function(l){
+    cov[l]=[0,0,0,0,0,0];
+    by[l].forEach(function(it){for(var x=it.lo;x<=it.hi;x++)cov[l][x]++;});
+  });
+  REQ.forEach(function(l){
+    if(!audit[l])return;
+    [1,2,3,4,5].forEach(function(x){
+      if(cov[l][x]===0&&REQ.some(function(m){return m!==l&&cov[m][x]>0;}))holes[l+':'+x]=true;
+    });
+  });
+  var blockedMap=findBlocked(by,base,pins,audit);
+  var allAudited=REQ.every(function(m){return audit[m];});
+  OPT.forEach(function(l){
+    by[l].forEach(function(it){
+      var n=0,i,k,t,ok;
+      if(base.tuples){
+        for(i=0;i<base.tuples.length;i++){
+          t=base.tuples[i];ok=true;
+          for(k=0;k<t.length;k++){if(pairWhy(it,t[k],pins)){ok=false;break;}}
+          if(ok)n++;
+        }
+      }
+      addOn[it.id]=n;
+      if(base.total>0&&n===0&&allAudited)blockedMap[it.id]={item:it,layer:'*'};
+    });
+  });
+  var blocked=Object.keys(blockedMap).map(function(id){return blockedMap[id];});
+  var candidates=[];
+  if(base.total!==null){
+    CANDIDATES.forEach(function(c){
+      if(!audit[c.layer]||!by[c.layer].length)return;
+      var hyp={id:'~'+c.key,name:c.name,layer:c.layer,lo:c.lo,hi:c.hi,tone:'neutral',season:c.season||'all',care:'normal',status:'active'};
+      var by2={};
+      LAYER_IDS.forEach(function(l){by2[l]=l===c.layer?by[l].concat([hyp]):by[l];});
+      var r2=countOutfits(by2,pins,false),b2=findBlocked(by2,r2,pins,audit),delta=r2.total-base.total;
+      if(delta<=0)return;
+      var freed=blocked.filter(function(b){return b.layer!=='*'&&!b2[b.item.id];}).map(function(b){return b.item;});
+      var opened=[1,2,3,4,5].filter(function(x){return base.perLevel[x]===0&&r2.perLevel[x]>0;});
+      candidates.push({c:c,delta:delta,freed:freed,opened:opened});
+    });
+    candidates.sort(function(a,b){
+      return b.freed.length-a.freed.length||b.opened.length-a.opened.length||b.delta-a.delta;
+    });
+  }
+  var bearing=[];
+  if(base.total){
+    LAYER_IDS.forEach(function(l){
+      by[l].forEach(function(it){if(base.perItem[it.id])bearing.push({item:it,n:base.perItem[it.id]});});
+    });
+    bearing.sort(function(a,b){return b.n-a.n;});
+    bearing=bearing.slice(0,5);
+  }
+  return {by:by,base:base,cov:cov,holes:holes,blockedMap:blockedMap,blocked:blocked,addOn:addOn,candidates:candidates,bearing:bearing};
+}
+/*ENGINE-END*/
+
+var COLOURS=[
+  ['black','Black','#1C1C20','neutral'],['charcoal','Charcoal','#41444C','neutral'],['grey','Grey','#9197A1','neutral'],
+  ['white','White','#F6F6F2','neutral'],['cream','Cream','#EDE5CF','neutral'],['beige','Beige','#D3BF9C','neutral'],
+  ['tan','Tan','#B0875A','neutral'],['brown','Brown','#67462F','neutral'],['navy','Navy','#1E2A4C','neutral'],
+  ['denim','Denim blue','#4D6B93','neutral'],['lightblue','Light blue','#AAC5E5','neutral'],['olive','Olive','#6A6B3B','neutral'],
+  ['blue','Blue','#2D5BCB','statement'],['green','Green','#2E7B4E','statement'],['burgundy','Burgundy','#6C2132','statement'],
+  ['red','Red','#C4312A','statement'],['orange','Orange','#DE7A2A','statement'],['yellow','Yellow','#E3C03B','statement'],
+  ['pink','Pink','#E1A0B7','statement'],['purple','Purple','#6A49A3','statement'],['pattern','Pattern or multi','','statement']
+].map(function(c){return {key:c[0],name:c[1],hex:c[2],tone:c[3]};});
+var COLOUR_MAP={};COLOURS.forEach(function(c){COLOUR_MAP[c.key]=c;});
+var TYPES={
+  shoes:['Trainers','High-tops','Boots','Loafers','Derbies','Oxfords','Running shoes','Walking boots','Sandals'],
+  bottoms:['Jeans','Chinos','Trousers','Suit trousers','Shorts','Joggers'],
+  tops:['T-shirt','Long-sleeve tee','Shirt','Polo','Vest'],
+  mid:['Jumper','Cardigan','Hoodie','Sweatshirt','Overshirt','Waistcoat'],
+  outer:['Jacket','Coat','Blazer','Suit jacket','Gilet','Raincoat']
+};
+var LEVEL_NOTES=['','Fitness, walking, sport','Friends, gigs, streetwear','Nice events, going out','Posh: shirt and proper trousers','Suit'];
+
+var state={items:[],pins:Object.create(null),pinList:[],audit:{},phase:'connecting',loaded:false,slow:false,dead:false};
+var ui={tab:'build',sel:{},level:0,rough:false,open:{},form:null,focus:null,focusSel:false};
+var db=null,dl=null,canWrite=true,unsubs=[],conf={},slowTimer=0,toastTimer=0,pending=false;
+/* Set by the standalone build, where the wardrobe is kept in this browser instead of in Claude. */
+var LOCAL=!!window.WARDROBE_LOCAL;
+
+function $(id){return document.getElementById(id);}
+var view=$('view'),tray=$('tray'),sheet=$('sheet'),toastEl=$('toast'),noticeEl=$('notice'),tallyEl=$('tally');
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function itemById(id){
+  for(var i=0;i<state.items.length;i++){if(state.items[i].id===id)return state.items[i];}
+  return null;
+}
+function selItem(layer){
+  var it=ui.sel[layer]?itemById(ui.sel[layer]):null;
+  return it&&it.status==='active'?it:null;
+}
+function colourName(it){var c=COLOUR_MAP[it.colour];return c?c.name:'Colour not set';}
+function rangeText(o){return o.lo===o.hi?LEVELS[o.lo]+' only':LEVELS[o.lo]+' → '+LEVELS[o.hi];}
+function rangeSpoken(o){return o.lo===o.hi?LEVELS[o.lo]+' only':LEVELS[o.lo]+' to '+LEVELS[o.hi];}
+function orderItems(a,b){
+  return (a.hi===1?1:0)-(b.hi===1?1:0)||b.hi-a.hi||a.lo-b.lo||a.name.localeCompare(b.name);
+}
+function swatch(it,big){
+  var c=COLOUR_MAP[it.colour],cls='sw'+(big?' big':'');
+  if(!c)return '<span class="'+cls+' none" title="Colour not set"></span>';
+  if(!c.hex)return '<span class="'+cls+' pat" title="'+c.name+'"></span>';
+  return '<span class="'+cls+'" style="--sw:'+c.hex+'" title="'+c.name+'"></span>';
+}
+function bar(lo,hi,cls){
+  var h='<span class="bar'+(cls?' '+cls:'')+'" aria-hidden="true">';
+  for(var x=1;x<=5;x++)h+='<i'+(x>=lo&&x<=hi?' class="on"':'')+'></i>';
+  return h+'</span>';
+}
+
+/* ---------- Builder ---------- */
+function conflictsFor(it){
+  var out=[];
+  if(ui.level&&!(it.lo<=ui.level&&ui.level<=it.hi))out.push({code:'level'});
+  if(ui.rough&&it.care==='protect')out.push({code:'rough'});
+  LAYER_IDS.forEach(function(l){
+    if(l===it.layer)return;
+    var s=selItem(l);
+    if(!s)return;
+    var w=pairWhy(it,s,state.pins);
+    if(w)out.push({code:w.code,other:s});
+  });
+  return out;
+}
+function shortWhy(c){
+  switch(c.code){
+    case 'level':return 'not for '+LEVELS[ui.level];
+    case 'rough':return 'keeping it nice';
+    case 'pin':return 'your exception';
+    case 'casual':return 'too casual';
+    case 'smart':return 'too smart';
+    case 'season':return 'wrong season';
+    case 'tone':return 'two statements';
+  }
+  return 'ruled out';
+}
+function longWhy(it,c){
+  var o=c.other;
+  switch(c.code){
+    case 'level':return 'It covers '+rangeSpoken(it)+', so it’s out while the dress code is set to '+LEVELS[ui.level]+'.';
+    case 'rough':return 'You’re keeping it nice, so it’s hidden while Rough night is on.';
+    case 'pin':return 'You said never to pair it with '+o.name+'.';
+    case 'casual':return 'It stops at '+LEVELS[it.hi]+'. '+o.name+' starts at '+LEVELS[o.lo]+'.';
+    case 'smart':return 'It starts at '+LEVELS[it.lo]+'. '+o.name+' stops at '+LEVELS[o.hi]+'.';
+    case 'season':return 'It’s for '+(it.season==='warm'?'warm':'cold')+' weather and '+o.name+' is for '+(o.season==='warm'?'warm':'cold')+' weather.';
+    case 'tone':return 'It and '+o.name+' are both statement pieces.';
+  }
+  return '';
+}
+function tagHTML(it,sel,c){
+  var label=it.name+', '+colourName(it)+', '+rangeSpoken(it)+(c?'. Ruled out: '+shortWhy(c):'');
+  return '<button type="button" class="tag'+(sel?' is-sel':'')+(c?' is-out':'')+'" data-act="'+(c?'why':'pick')+'" data-id="'+esc(it.id)+'"'
+    +(c?'':' aria-pressed="'+(sel?'true':'false')+'"')+' aria-label="'+esc(label)+'">'+swatch(it)
+    +'<span class="tag-main"><span class="tag-name">'+esc(it.name)+'</span>'
+    +(c?'<span class="tag-why">'+esc(shortWhy(c))+'</span>':bar(it.lo,it.hi))+'</span></button>';
+}
+function sanitizeSel(){
+  var kept=[];
+  LAYER_IDS.forEach(function(l){
+    var s=selItem(l);
+    if(!s){ui.sel[l]=null;return;}
+    for(var i=0;i<kept.length;i++){if(pairWhy(s,kept[i],state.pins)){ui.sel[l]=null;return;}}
+    kept.push(s);
+  });
+}
+function dropFiltered(){
+  LAYER_IDS.forEach(function(l){
+    var s=selItem(l);
+    if(!s)return;
+    if((ui.level&&!(s.lo<=ui.level&&ui.level<=s.hi))||(ui.rough&&s.care==='protect'))ui.sel[l]=null;
+  });
+}
+function renderBuild(A){
+  var anySel=LAYER_IDS.some(function(l){return !!selItem(l);});
+  var narrowing=anySel||ui.level>0||ui.rough;
+  var h='<section class="filters" aria-label="Narrow by occasion"><select id="flt-level" aria-label="Dress code">';
+  h+='<option value="0"'+(ui.level?'':' selected')+'>Any dress code</option>';
+  for(var x=1;x<=5;x++)h+='<option value="'+x+'"'+(ui.level===x?' selected':'')+'>'+LEVELS[x]+'</option>';
+  h+='</select><button type="button" class="chip'+(ui.rough?' is-on':'')+'" data-act="rough" aria-pressed="'+(ui.rough?'true':'false')+'">Rough night</button></section>';
+  if(state.loaded&&state.items.length){
+    h+='<p class="hint">'+(ui.rough?'Rough night is on, so anything you’re keeping nice is ruled out. ':'')
+      +(anySel?'Tap another layer to keep building, or tap a picked piece to drop it.':'Tap any piece to start. Every other layer narrows to what still works with it.')+'</p>';
+  }
+  LAYERS.forEach(function(L){
+    var arr=A.by[L.id].slice().sort(orderItems),on=[],out=[];
+    arr.forEach(function(it){
+      var sel=ui.sel[L.id]===it.id,c=sel?[]:conflictsFor(it);
+      (c.length?out:on).push({it:it,sel:sel,c:c});
+    });
+    on.sort(function(a,b){return (b.sel?1:0)-(a.sel?1:0);});
+    var count='';
+    if(state.loaded&&arr.length)count=narrowing?on.length+' of '+arr.length+' work':arr.length+' '+L.units[arr.length===1?0:1];
+    h+='<section class="rail"><div class="rail-head"><h2>'+L.name+'</h2><span class="rail-count">'+count+'</span>'
+      +(db&&canWrite&&state.loaded?'<button type="button" class="mini" data-act="add" data-layer="'+L.id+'">Add</button>':'')+'</div>';
+    if(!state.loaded){
+      if(state.phase!=='nodb')h+='<div class="ph" aria-hidden="true"><i></i><i></i><i></i></div>';
+    }else if(!arr.length){
+      h+='<p class="empty">No '+L.name.toLowerCase()+' added yet.'+(L.req?'':' This layer is optional.')+'</p>';
+    }else{
+      if(on.length)h+='<div class="tags">'+on.map(function(o){return tagHTML(o.it,o.sel,null);}).join('')+'</div>';
+      else h+='<p class="empty">Nothing here works with what you’ve picked.</p>';
+      if(out.length){
+        h+='<details class="ruled" data-layer="'+L.id+'"'+(ui.open[L.id]?' open':'')+'><summary>'+out.length+' ruled out</summary><div class="tags">'
+          +out.map(function(o){return tagHTML(o.it,false,o.c[0]);}).join('')+'</div></details>';
+      }
+    }
+    h+='</section>';
+  });
+  view.innerHTML=h;
+}
+function levelList(lo,hi){var a=[];for(var x=lo;x<=hi;x++)a.push(LEVELS[x]);return a.join(', ');}
+function joinAnd(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];}
+function setTrayH(px){document.documentElement.style.setProperty('--tray-h',px+'px');}
+function renderTray(A){
+  var picks=LAYER_IDS.map(selItem).filter(Boolean);
+  if(ui.tab!=='build'||!picks.length){tray.hidden=true;tray.innerHTML='';setTrayH(0);return;}
+  var lo=1,hi=5;
+  picks.forEach(function(p){if(p.lo>lo)lo=p.lo;if(p.hi<hi)hi=p.hi;});
+  var missing=REQ.filter(function(l){return A.by[l].length>0&&!selItem(l);}).map(function(l){return LAYER_MAP[l].need;});
+  var status=missing.length?'Still needs '+joinAnd(missing):'Complete outfit';
+  tray.innerHTML='<div class="tray-text"><div class="tray-title">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+esc(status)+'</div>'
+    +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own exception')+'</div></div>'
+    +(picks.length>1&&db&&canWrite?'<button type="button" class="btn inv" data-act="clash">Mark a clash</button>':'')
+    +'<button type="button" class="btn inv" data-act="clear">Clear</button>';
+  tray.hidden=false;
+  setTrayH(tray.offsetHeight);
+}
+
+/* ---------- Wardrobe ---------- */
+function rowHTML(it,A){
+  var meta=[];
+  if(it.type)meta.push(esc(it.type));
+  meta.push(esc(colourName(it)));
+  meta.push(esc(rangeText(it)));
+  var badges=[];
+  if(it.care==='protect')badges.push('Keep nice');
+  if(it.care==='beater')badges.push('Beater');
+  if(it.tone==='statement')badges.push('Statement');
+  if(it.season==='warm')badges.push('Warm weather');
+  if(it.season==='cold')badges.push('Cold weather');
+  var right='',n;
+  if(it.status==='resting')right='<span class="row-n">Out of rotation</span>';
+  else if(A.blockedMap[it.id])right='<span class="pill crit">Blocked</span>';
+  else if(LAYER_MAP[it.layer].req){
+    if(A.base.total!==null){n=A.base.perItem[it.id]||0;right='<span class="row-n">'+n+(n===1?' outfit':' outfits')+'</span>';}
+  }else if(A.base.total){n=A.addOn[it.id]||0;right='<span class="row-n">goes over '+n+'</span>';}
+  return '<li><button type="button" class="row'+(it.status==='resting'?' is-rest':'')+'" data-act="edit" data-id="'+esc(it.id)+'">'+swatch(it,true)
+    +'<span class="row-main"><span class="row-name">'+esc(it.name)+'</span><span class="row-meta">'+meta.join(' · ')+'</span>'
+    +(badges.length?'<span class="badges">'+badges.map(function(b){return '<span class="badge">'+b+'</span>';}).join('')+'</span>':'')
+    +'</span>'+right+'</button></li>';
+}
+function renderWardrobe(A){
+  var h='';
+  if(!state.loaded){
+    view.innerHTML=state.phase==='nodb'?'':'<p class="empty">Opening your wardrobe…</p>';
+    return;
+  }
+  var edit=db&&canWrite;
+  if(edit)h+='<div class="actions"><button type="button" class="btn primary" data-act="add">Add a piece</button></div>';
+  h+='<p class="sub">'+(edit?'Tap a piece to edit it. Mark a layer’s audit done once everything you own in it is here: Gaps only checks finished layers for holes.':'Only the owner can change this wardrobe.')+'</p>';
+  LAYERS.forEach(function(L){
+    var arr=state.items.filter(function(it){return it.layer===L.id;}).sort(function(a,b){
+      return (a.status==='resting'?1:0)-(b.status==='resting'?1:0)||orderItems(a,b);
+    });
+    var done=!!state.audit[L.id];
+    h+='<section class="group"><div class="group-head"><h2>'+L.name+' <span class="n">'+arr.length+'</span></h2>';
+    if(edit)h+='<button type="button" class="mini'+(done?' is-on':'')+'" data-act="audit" data-layer="'+L.id+'" aria-pressed="'+(done?'true':'false')+'">'+(done?'Audit done':'Mark audit done')+'</button>';
+    h+='</div>';
+    h+=arr.length?'<ul class="rows">'+arr.map(function(it){return rowHTML(it,A);}).join('')+'</ul>':'<p class="empty">Nothing added yet.</p>';
+    h+='</section>';
+  });
+  if(state.pinList.length){
+    h+='<section class="group"><div class="group-head"><h2>Your exceptions <span class="n">'+state.pinList.length+'</span></h2></div><ul class="rows">';
+    state.pinList.forEach(function(p){
+      var a=itemById(p.a),b=itemById(p.b);
+      h+='<li class="exc"><span><b>'+(p.kind==='block'?'Never':'Always')+'</b> '+esc(a?a.name:'a removed piece')+' with '+esc(b?b.name:'a removed piece')+'</span>'
+        +(edit?'<button type="button" class="mini" data-act="unpin" data-key="'+esc(p.key)+'">Remove</button>':'')+'</li>';
+    });
+    h+='</ul></section>';
+  }
+  h+='<section class="group"><div class="group-head"><h2>Your data</h2></div><p class="sub">'
+    +(LOCAL?'Your wardrobe is saved on this device only. '+backupLine()+' ':'')
+    +'A backup is one file holding every piece, exception and audit mark. Import it into another copy of this app to move your wardrobe there.</p><div class="actions">'
+    +'<button type="button" class="btn" data-act="backup"'+(state.items.length?'':' disabled')+'>Back up</button>'
+    +(edit?'<button type="button" class="btn" data-act="import">Import a backup</button>':'')
+    +(dl&&state.items.length?'<button type="button" class="btn" data-act="export">Export CSV</button>':'')+'</div></section>';
+  view.innerHTML=h;
+}
+
+/* ---------- Gaps ---------- */
+function blockText(b,by){
+  var it=b.item;
+  if(b.layer==='*')return 'It doesn’t go over any outfit you can build.';
+  if(!b.layer)return 'Each layer has something that pairs with it, but nothing lines up as a full outfit.';
+  var arr=by[b.layer],ln=LAYER_MAP[b.layer].name.toLowerCase();
+  var maxHi=Math.max.apply(null,arr.map(function(o){return o.hi;})),minLo=Math.min.apply(null,arr.map(function(o){return o.lo;}));
+  if(maxHi<it.lo)return 'Needs '+ln+' at '+LEVELS[it.lo]+' or above. Yours stop at '+LEVELS[maxHi]+'.';
+  if(minLo>it.hi)return 'Needs '+ln+' at '+LEVELS[it.hi]+' or below. Yours start at '+LEVELS[minLo]+'.';
+  return 'None of your '+ln+' pair with it, because of dress code, season, colour role or your own exceptions.';
+}
+function candHTML(x,i){
+  var c=x.c,facts=['<li><b>+'+x.delta+'</b> '+(x.delta===1?'outfit':'outfits')+'</li>'];
+  if(x.freed.length)facts.push('<li>Frees <b>'+x.freed.map(function(f){return esc(f.name);}).join(', ')+'</b></li>');
+  if(x.opened.length)facts.push('<li>Opens <b>'+x.opened.map(function(v){return LEVELS[v];}).join(', ')+'</b></li>');
+  return '<li class="cand"><div class="cand-top"><span class="rank">'+(i+1)+'</span><div class="cand-name"><h3>'+c.name+'</h3><p>'
+    +LAYER_MAP[c.layer].name+' · '+rangeText(c)+' · e.g. '+c.eg+'</p></div></div><ul class="facts">'+facts.join('')+'</ul></li>';
+}
+function renderGaps(A){
+  if(!state.loaded){
+    view.innerHTML=state.phase==='nodb'?'':'<p class="empty">Opening your wardrobe…</p>';
+    return;
+  }
+  var h='',x;
+  var todo=REQ.filter(function(l){return !state.audit[l];});
+  if(todo.length){
+    h+='<p class="note">Still to audit: <b>'+todo.map(function(l){return LAYER_MAP[l].name;}).join(', ')+'</b>. Counts use what’s in so far, and a layer is only checked for holes once its audit is marked done in Wardrobe.</p>';
+  }
+  var live=A.base.live.map(function(l){return LAYER_MAP[l].name.toLowerCase();});
+  var liveNote=A.base.total===null?'needs two layers':live.length===REQ.length?'you can build':live.join(' + ')+' only';
+  h+='<section class="panel"><h2>Coverage</h2><p class="sub">How many pieces you have for each dress code, layer by layer. An outfit needs shoes, bottoms and a top that share a level.</p>';
+  h+='<div class="scroll-x"><table class="cov"><thead><tr><th scope="col"><span class="vh">Layer</span></th>';
+  for(x=1;x<=5;x++)h+='<th scope="col">'+LEVELS[x]+'</th>';
+  h+='</tr></thead><tbody>';
+  LAYERS.forEach(function(L){
+    var n=A.by[L.id].length;
+    h+='<tr><th scope="row">'+L.name+'<small>'+(L.req?(state.audit[L.id]?'audited':n?'in progress':'not started'):'optional')+'</small></th>';
+    for(var v=1;v<=5;v++){
+      var c=A.cov[L.id][v],hole=A.holes[L.id+':'+v];
+      h+='<td class="'+(hole?'hole':c===0?'z':c===1?'c1':c<4?'c2':'c3')+'">'+(c===0&&!hole?'<span aria-hidden="true">·</span><span class="vh">0</span>':c)+'</td>';
+    }
+    h+='</tr>';
+  });
+  h+='<tr class="sum"><th scope="row">Outfits<small>'+liveNote+'</small></th>';
+  for(x=1;x<=5;x++){
+    var o=A.base.total===null?null:A.base.perLevel[x];
+    h+='<td class="'+(o?'has':'z')+'">'+(o===null?'–':o)+'</td>';
+  }
+  h+='</tr></tbody></table></div>';
+  if(Object.keys(A.holes).length)h+='<p class="legend"><span class="key-hole"></span><span>A hole: other layers are ready for that dress code and this one has nothing, so nothing at that level can be worn.</span></p>';
+  h+='</section>';
+
+  h+='<section class="panel"><h2>Blocked pieces</h2>';
+  if(A.blocked.length){
+    h+='<p class="sub">Things you own that can’t go into any outfit right now.</p><ul class="list">';
+    A.blocked.forEach(function(b){
+      h+='<li class="blk"><div class="blk-top">'+swatch(b.item)+'<b>'+esc(b.item.name)+'</b><span class="pill crit">Blocked</span></div><p>'+esc(blockText(b,A.by))+'</p></li>';
+    });
+    h+='</ul>';
+  }else{
+    h+='<p class="sub">'+(A.base.total===null?'Add a second layer and anything you can’t currently wear will show up here.':'Nothing is blocked'+(todo.length?' so far.':'.'))+'</p>';
+  }
+  h+='</section>';
+
+  var unlock=A.candidates.filter(function(c){return c.freed.length||c.opened.length;});
+  var variety=A.candidates.filter(function(c){return !(c.freed.length||c.opened.length);});
+  h+='<section class="panel"><h2>Next best buy</h2>';
+  if(A.base.total===null)h+='<p class="sub">Needs at least two layers before it can score anything.</p>';
+  else if(!REQ.some(function(l){return state.audit[l];}))h+='<p class="sub">Mark a layer’s audit done and this will score what to add to it.</p>';
+  else if(unlock.length)h+='<p class="sub">Ranked by what each would unlock, scored against what you own now and assuming a neutral colour. Only finished layers are scored.</p><ol class="cands">'+unlock.slice(0,4).map(candHTML).join('')+'</ol>';
+  else if(variety.length)h+='<p class="sub">Nothing is blocked, so new pieces would add variety without unlocking anything. The biggest adds:</p><ol class="cands">'+variety.slice(0,3).map(candHTML).join('')+'</ol>';
+  else h+='<p class="sub">Nothing to suggest yet.</p>';
+  h+='</section>';
+
+  h+='<section class="panel"><h2>Load-bearing pieces</h2>';
+  if(A.base.total){
+    h+='<p class="sub">What most of your outfits depend on. Look after these, or keep a backup.</p><ul class="list bearing">';
+    A.bearing.forEach(function(b){
+      var pct=Math.round(100*b.n/A.base.total);
+      h+='<li><div class="bear-top">'+swatch(b.item)+'<span class="bear-name">'+esc(b.item.name)+'</span><span class="bear-n">'+b.n+' of '+A.base.total+'</span></div><div class="meter" aria-hidden="true"><i style="width:'+pct+'%"></i></div></li>';
+    });
+    h+='</ul>';
+  }else{
+    h+='<p class="sub">Shows up once you can build at least one outfit.</p>';
+  }
+  h+='</section>';
+
+  h+='<section class="panel"><h2>Dress codes</h2><ol class="key">';
+  for(x=1;x<=5;x++)h+='<li>'+bar(x,x)+'<b>'+LEVELS[x]+'</b><span>'+LEVEL_NOTES[x]+'</span></li>';
+  h+='</ol></section>';
+  view.innerHTML=h;
+}
+
+/* ---------- Chrome ---------- */
+function renderChrome(A){
+  var links=document.querySelectorAll('.tabs a'),i;
+  for(i=0;i<links.length;i++){
+    if(links[i].getAttribute('data-tab')===ui.tab)links[i].setAttribute('aria-current','page');
+    else links[i].removeAttribute('aria-current');
+  }
+  var n=state.items.filter(function(it){return it.status==='active';}).length;
+  tallyEl.textContent=state.loaded?n+(n===1?' piece':' pieces')+(A.base.total!==null?' · '+A.base.total+(A.base.total===1?' outfit':' outfits'):''):'';
+  var h='';
+  if(state.phase==='nodb')h='<div class="notice"><span>Your wardrobe loads when this page is open in Claude and you’re signed in.</span></div>';
+  else if(state.dead)h='<div class="notice err"><span>Lost the connection to your wardrobe.</span><button type="button" class="btn" data-act="reconnect">Reconnect</button></div>';
+  else if(state.slow)h='<div class="notice"><span>'+(state.loaded?'Showing your last saved copy. It may be out of date.':'Can’t reach your wardrobe yet. Still trying.')+'</span></div>';
+  if(noticeEl.innerHTML!==h)noticeEl.innerHTML=h;
+}
+function render(){
+  pending=false;
+  sanitizeSel();
+  var A=analyse(state.items,state.pins,state.audit);
+  renderChrome(A);
+  if(ui.tab==='wardrobe')renderWardrobe(A);
+  else if(ui.tab==='gaps')renderGaps(A);
+  else renderBuild(A);
+  renderTray(A);
+  if(ui.focus){
+    var els=view.querySelectorAll('.tag'),i;
+    for(i=0;i<els.length;i++){
+      if(els[i].getAttribute('data-id')===ui.focus){try{els[i].focus({preventScroll:true});}catch(e){}break;}
+    }
+    ui.focus=null;
+  }
+  if(ui.focusSel){ui.focusSel=false;var s=$('flt-level');if(s){try{s.focus({preventScroll:true});}catch(e){}}}
+}
+function schedule(){
+  if(pending)return;
+  pending=true;
+  setTimeout(render,0);
+}
+function toast(msg){
+  toastEl.textContent=msg;
+  toastEl.hidden=false;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){toastEl.hidden=true;},2800);
+}
+
+/* ---------- Sheets ---------- */
+function openSheet(html){
+  sheet.innerHTML='<div class="sheet-in">'+html+'</div>';
+  try{
+    if(!sheet.open){
+      if(typeof sheet.showModal==='function')sheet.showModal();
+      else sheet.setAttribute('open','');
+    }
+  }catch(e){sheet.setAttribute('open','');}
+  sheet.scrollTop=0;
+}
+function closeSheet(){
+  ui.form=null;
+  try{if(typeof sheet.close==='function'&&sheet.open)sheet.close();else sheet.removeAttribute('open');}
+  catch(e){sheet.removeAttribute('open');}
+  sheet.innerHTML='';
+}
+function head(title){
+  return '<div class="sheet-head"><h2>'+title+'</h2><button type="button" class="x" data-act="close" aria-label="Close">×</button></div>';
+}
+function radio(name,value,label,checked){
+  return '<label class="segl"><input type="radio" name="'+name+'" id="f-'+name+'-'+value+'" value="'+value+'"'+(checked?' checked':'')+'><span>'+label+'</span></label>';
+}
+function levelOpts(sel){
+  var h='';
+  for(var x=1;x<=5;x++)h+='<option value="'+x+'"'+(x===sel?' selected':'')+'>'+LEVELS[x]+'</option>';
+  return h;
+}
+function typeOpts(layer){
+  return (TYPES[layer]||[]).map(function(t){return '<option value="'+t+'"></option>';}).join('');
+}
+function openForm(it,layer){
+  var ro=!db||!canWrite;
+  ui.form={id:it?it.id:null,createdAt:it?it.createdAt:0,toneTouched:!!it,armed:false};
+  var v=it||{name:'',layer:layer||'',type:'',colour:'',tone:'neutral',lo:2,hi:3,season:'all',care:'normal',status:'active',notes:''};
+  var cn=COLOUR_MAP[v.colour]?COLOUR_MAP[v.colour].name:'';
+  var h='<form id="item-form" class="form" novalidate>'+head(it?(ro?'Piece':'Edit piece'):'Add a piece')+'<fieldset class="all"'+(ro?' disabled':'')+'>';
+  h+='<label class="fld" for="f-name"><span class="lbl">Name</span><input id="f-name" name="name" type="text" maxlength="80" autocomplete="off" placeholder="e.g. Black slim jeans" value="'+esc(v.name)+'"></label>';
+  h+='<fieldset class="fld"><legend class="lbl">Layer</legend><div class="seg">'+LAYERS.map(function(L){return radio('layer',L.id,L.name,v.layer===L.id);}).join('')+'</div></fieldset>';
+  h+='<label class="fld" for="f-type"><span class="lbl">Type <em>optional</em></span><input id="f-type" name="type" type="text" maxlength="40" list="f-types" autocomplete="off" placeholder="e.g. Trainers, Jeans, Shirt" value="'+esc(v.type)+'"><datalist id="f-types">'+typeOpts(v.layer)+'</datalist></label>';
+  h+='<fieldset class="fld"><legend class="lbl">Colour <span class="lbl-val" id="f-colour-name">'+esc(cn)+'</span></legend><div class="swatches">'
+    +COLOURS.map(function(c){
+      return '<label class="swl" title="'+c.name+'"><input type="radio" name="colour" id="f-colour-'+c.key+'" value="'+c.key+'"'+(v.colour===c.key?' checked':'')+'>'
+        +'<span class="sw'+(c.hex?'':' pat')+'"'+(c.hex?' style="--sw:'+c.hex+'"':'')+'></span><span class="vh">'+c.name+'</span></label>';
+    }).join('')+'</div></fieldset>';
+  h+='<fieldset class="fld"><legend class="lbl">Colour role</legend><div class="seg">'+radio('tone','neutral','Neutral',v.tone!=='statement')+radio('tone','statement','Statement',v.tone==='statement')
+    +'</div><p class="help">Neutrals go with anything. Two statement pieces aren’t paired unless you allow it.</p></fieldset>';
+  h+='<fieldset class="fld"><legend class="lbl">Dress codes it covers</legend><div class="range"><label for="f-lo">From<select id="f-lo" name="lo">'+levelOpts(v.lo)+'</select></label>'
+    +'<label for="f-hi">To<select id="f-hi" name="hi">'+levelOpts(v.hi)+'</select></label></div>'
+    +'<div class="range-show"><span id="f-bar">'+bar(v.lo,v.hi,'big')+'</span><span class="help" id="f-range">'+esc(rangeText(v))+'</span></div>'
+    +'<details class="lv-key"><summary>What the levels mean</summary><ul>'
+    +[1,2,3,4,5].map(function(x){return '<li><b>'+LEVELS[x]+'</b>: '+LEVEL_NOTES[x]+'</li>';}).join('')+'</ul></details></fieldset>';
+  h+='<fieldset class="fld"><legend class="lbl">Season</legend><div class="seg">'+radio('season','all','All year',v.season==='all')+radio('season','warm','Warm',v.season==='warm')+radio('season','cold','Cold',v.season==='cold')+'</div></fieldset>';
+  h+='<fieldset class="fld"><legend class="lbl">How precious</legend><div class="seg">'+radio('care','protect','Keep nice',v.care==='protect')+radio('care','normal','Everyday',v.care==='normal')+radio('care','beater','Beater',v.care==='beater')
+    +'</div><p class="help">Keep-nice pieces are ruled out when Rough night is on.</p></fieldset>';
+  h+='<label class="check" for="f-rest"><input type="checkbox" id="f-rest" name="rest"'+(v.status==='resting'?' checked':'')+'>Out of rotation (doesn’t fit, needs repair)</label>';
+  h+='<label class="fld" for="f-notes"><span class="lbl">Notes <em>optional</em></span><textarea id="f-notes" name="notes" rows="2" maxlength="300">'+esc(v.notes)+'</textarea></label>';
+  h+='</fieldset><p class="form-err" id="f-err" role="alert" hidden></p>';
+  if(!ro){
+    h+='<div class="sheet-foot">'+(it?'<button type="button" class="btn danger" id="f-del" data-act="del">Delete</button>':'')
+      +'<button type="submit" class="btn primary" id="f-save">'+(it?'Save changes':'Add to wardrobe')+'</button></div>';
+  }
+  h+='</form>';
+  openSheet(h);
+}
+function formErr(msg){var e=$('f-err');if(e){e.textContent=msg;e.hidden=false;}}
+function newId(name){
+  var s=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'piece';
+  return s+'-'+Math.random().toString(36).slice(2,6);
+}
+function writeFailed(e){
+  var code=e&&e.code;
+  if(code==='quota_exceeded')toast('Couldn’t save: this wardrobe’s storage is full.');
+  else if(code==='invalid_argument'||code==='revoked'||code==='not_granted')toast('Couldn’t save. You may not have permission to change this wardrobe.');
+  else toast('Couldn’t save. Check your connection and try again.');
+}
+function canChange(){
+  if(!db){toast('Not connected to your wardrobe yet.');return false;}
+  if(!canWrite){toast('Only the owner can change this wardrobe.');return false;}
+  return true;
+}
+function submitForm(form){
+  if(!ui.form||!canChange())return;
+  var fd=new FormData(form),name=String(fd.get('name')||'').trim(),layer=String(fd.get('layer')||'');
+  if(!name){formErr('Give it a name.');try{$('f-name').focus();}catch(e){}return;}
+  if(LAYER_IDS.indexOf(layer)<0){formErr('Pick which layer it belongs to.');return;}
+  var lo=clampLevel(fd.get('lo'),2),hi=clampLevel(fd.get('hi'),lo),t;
+  if(lo>hi){t=lo;lo=hi;hi=t;}
+  var season=String(fd.get('season')||'all'),care=String(fd.get('care')||'normal'),colour=String(fd.get('colour')||'');
+  var data={name:name.slice(0,80),layer:layer,type:String(fd.get('type')||'').trim().slice(0,40),
+    colour:COLOUR_MAP[colour]?colour:'',tone:fd.get('tone')==='statement'?'statement':'neutral',lo:lo,hi:hi,
+    season:season==='warm'||season==='cold'?season:'all',care:care==='protect'||care==='beater'?care:'normal',
+    status:fd.get('rest')?'resting':'active',notes:String(fd.get('notes')||'').trim().slice(0,300),
+    createdAt:ui.form.createdAt||Date.now()};
+  var id=ui.form.id||newId(name),btn=$('f-save'),isNew=!ui.form.id;
+  if(btn)btn.disabled=true;
+  var p;
+  try{p=db.doc('items/'+id).set(data);}catch(e){p=Promise.reject(e);}
+  p.then(function(){closeSheet();toast(isNew?'Added to your wardrobe':'Saved');},function(e){
+    if(btn)btn.disabled=false;
+    formErr('That didn’t save. Check your connection and try again.');
+    if(e&&(e.code==='invalid_argument'||e.code==='revoked'))formErr('That didn’t save. You may not have permission to change this wardrobe.');
+  });
+}
+function deleteItem(id){
+  if(!canChange())return;
+  var ops;
+  try{
+    ops=[db.doc('items/'+id).delete()];
+    state.pinList.forEach(function(p){if(p.a===id||p.b===id)ops.push(db.doc('pins/'+p.key).delete());});
+  }catch(e){writeFailed(e);return;}
+  Promise.all(ops).then(function(){closeSheet();toast('Deleted');},writeFailed);
+}
+function writePin(a,b,kind){
+  try{return db.doc('pins/'+pinKey(a,b)).set({a:a,b:b,kind:kind,createdAt:Date.now()});}
+  catch(e){return Promise.reject(e);}
+}
+function removePin(key){
+  if(!canChange())return;
+  var doc=null;
+  state.pinList.forEach(function(p){if(p.key===key||pinKey(p.a,p.b)===key)doc=p.key;});
+  if(!doc)return;
+  var p;
+  try{p=db.doc('pins/'+doc).delete();}catch(e){p=Promise.reject(e);}
+  p.then(function(){if(sheet.open)closeSheet();toast('Exception removed');},writeFailed);
+}
+function openWhy(id){
+  var it=itemById(id);
+  if(!it)return;
+  var cs=conflictsFor(it),edit=db&&canWrite;
+  var h=head('Why it’s ruled out')+'<div class="why-item">'+swatch(it,true)+'<div><b>'+esc(it.name)+'</b><div class="help">'+esc(rangeText(it))+'</div></div></div><ul class="whys">';
+  cs.forEach(function(c){
+    h+='<li><p>'+esc(longWhy(it,c))+'</p>';
+    if(c.other&&edit){
+      if(c.code==='pin')h+='<button type="button" class="btn" data-act="unpin" data-key="'+esc(pinKey(it.id,c.other.id))+'">Remove that exception</button>';
+      else h+='<button type="button" class="btn" data-act="allow" data-a="'+esc(it.id)+'" data-b="'+esc(c.other.id)+'">Allow it with '+esc(c.other.name)+'</button>';
+    }
+    h+='</li>';
+  });
+  h+='</ul><div class="sheet-foot"><button type="button" class="btn primary" data-act="restart" data-id="'+esc(it.id)+'">Start a new outfit from this</button></div>';
+  openSheet(h);
+}
+function openClash(){
+  var picks=LAYER_IDS.map(selItem).filter(Boolean),i,j;
+  var h=head('Mark a clash')+'<p class="help">Pick the two that don’t work together. They won’t be paired again, whatever the tags say. You can undo it under Wardrobe.</p><ul class="whys">';
+  for(i=0;i<picks.length;i++){
+    for(j=i+1;j<picks.length;j++){
+      h+='<li><p>'+esc(picks[i].name)+' with '+esc(picks[j].name)+'</p><button type="button" class="btn" data-act="block" data-a="'+esc(picks[i].id)+'" data-b="'+esc(picks[j].id)+'">Never together</button></li>';
+    }
+  }
+  h+='</ul>';
+  openSheet(h);
+}
+function toggleAudit(layer){
+  if(!canChange()||LAYER_IDS.indexOf(layer)<0)return;
+  var next={};
+  LAYER_IDS.forEach(function(l){if(state.audit[l])next[l]=true;});
+  if(next[layer])delete next[layer];else next[layer]=true;
+  var p;
+  try{p=db.doc('meta/audit').set(next);}catch(e){p=Promise.reject(e);}
+  p.then(function(){toast(next[layer]?LAYER_MAP[layer].name+' audit marked done':LAYER_MAP[layer].name+' audit reopened');},writeFailed);
+}
+function csvCell(v){
+  var s=String(v==null?'':v);
+  if(/^[=+\-@]/.test(s))s='\''+s;
+  return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+}
+function exportCSV(){
+  if(!dl){toast('Export isn’t available in this view.');return;}
+  var rows=[['Name','Layer','Type','Colour','Colour role','From','To','Season','How precious','Status','Notes']];
+  state.items.slice().sort(function(a,b){return LAYER_IDS.indexOf(a.layer)-LAYER_IDS.indexOf(b.layer)||orderItems(a,b);}).forEach(function(it){
+    rows.push([it.name,LAYER_MAP[it.layer].name,it.type,COLOUR_MAP[it.colour]?COLOUR_MAP[it.colour].name:'',it.tone,LEVELS[it.lo],LEVELS[it.hi],
+      it.season==='all'?'All year':it.season,it.care==='protect'?'Keep nice':it.care==='beater'?'Beater':'Everyday',it.status==='resting'?'Out of rotation':'Active',it.notes]);
+  });
+  var csv=rows.map(function(r){return r.map(csvCell).join(',');}).join('\r\n');
+  dl.save({filename:'wardrobe.csv',data:csv}).then(function(){toast('Exported');},function(e){
+    if(e&&e.code==='declined')return;
+    toast('Export isn’t available in this view.');
+  });
+}
+
+/* ---------- Backup and import ---------- */
+function backupLine(){
+  var t=0;
+  try{t=Number(localStorage.getItem('wardrobe.lastBackup'))||0;}catch(e){}
+  if(!t)return 'No backup made yet.';
+  var d=Math.floor((Date.now()-t)/86400000);
+  return 'Last backup: '+(d<=0?'today':d===1?'yesterday':d+' days ago')+'.';
+}
+function markBackup(){try{localStorage.setItem('wardrobe.lastBackup',String(Date.now()));}catch(e){}}
+function itemData(it){
+  return {name:it.name,layer:it.layer,type:it.type,colour:COLOUR_MAP[it.colour]?it.colour:'',tone:it.tone,lo:it.lo,hi:it.hi,
+    season:it.season,care:it.care,status:it.status,notes:it.notes,createdAt:it.createdAt||Date.now()};
+}
+function backupData(){
+  var items={},pins={},audit={};
+  state.items.forEach(function(it){items[it.id]=itemData(it);});
+  state.pinList.forEach(function(p){pins[pinKey(p.a,p.b)]={a:p.a,b:p.b,kind:p.kind};});
+  LAYER_IDS.forEach(function(l){if(state.audit[l])audit[l]=true;});
+  return {app:'wardrobe',version:1,exportedAt:new Date().toISOString(),items:items,pins:pins,audit:audit};
+}
+function showBackupText(json){
+  openSheet(head('Copy your backup')+'<p class="help">Saving a file isn’t available in this view, so copy this text and keep it somewhere safe. Paste it into Import to restore it.</p>'
+    +'<textarea id="bk-text" class="code" rows="8" readonly>'+esc(json)+'</textarea>'
+    +'<div class="sheet-foot"><button type="button" class="btn primary" data-act="copybk">Copy</button></div>');
+}
+function doBackup(){
+  var json=JSON.stringify(backupData(),null,1);
+  if(!dl){showBackupText(json);return;}
+  dl.save({filename:'wardrobe-backup-'+new Date().toISOString().slice(0,10)+'.json',data:json}).then(function(){
+    markBackup();toast('Backup saved');schedule();
+  },function(e){
+    if(e&&e.code==='declined')return;
+    showBackupText(json);
+  });
+}
+function copyBackup(){
+  var t=$('bk-text');
+  if(!t)return;
+  function manual(){try{t.focus();t.select();}catch(e){}toast('Text selected. Copy it from here.');}
+  try{navigator.clipboard.writeText(t.value).then(function(){markBackup();toast('Copied');},manual);}
+  catch(e){manual();}
+}
+function openImport(){
+  openSheet(head('Import a backup')
+    +'<p class="help">Choose a backup file from this app, or paste its text. Pieces already here are updated and new ones are added.</p>'
+    +'<label class="fld" for="imp-file"><span class="lbl">Backup file</span><input type="file" id="imp-file" accept=".json,application/json,.txt,text/plain"></label>'
+    +'<label class="fld" for="imp-text"><span class="lbl">Or paste the text</span><textarea id="imp-text" class="code" rows="4" autocomplete="off" spellcheck="false"></textarea></label>'
+    +'<label class="check" for="imp-replace"><input type="checkbox" id="imp-replace">Remove anything here that isn’t in the backup</label>'
+    +'<p class="form-err" id="imp-err" role="alert" hidden></p>'
+    +'<div class="sheet-foot"><button type="button" class="btn primary" id="imp-go" data-act="doimport">Import</button></div>');
+}
+function readImportText(){
+  var f=$('imp-file'),t=$('imp-text'),file=f&&f.files&&f.files[0];
+  if(!file)return Promise.resolve(t?t.value:'');
+  if(typeof file.text==='function')return file.text();
+  return new Promise(function(res,rej){
+    var r=new FileReader();
+    r.onload=function(){res(String(r.result));};
+    r.onerror=function(){rej(r.error);};
+    r.readAsText(file);
+  });
+}
+var ID_OK=/^[A-Za-z0-9_\-.~:@+]{1,90}$/;
+/* A backup is outside input, so every row goes through the same checks as rows from the store. */
+function parseBackup(text){
+  var raw;
+  try{raw=JSON.parse(text);}catch(e){return {error:'That couldn’t be read as a wardrobe backup.'};}
+  if(!raw||typeof raw!=='object'||!raw.items||typeof raw.items!=='object')return {error:'That backup has no pieces in it.'};
+  var items=[],pins=[],audit={},seen=Object.create(null),skipped=0,list=Array.isArray(raw.items);
+  Object.keys(raw.items).forEach(function(k){
+    var d=raw.items[k],id=list?(d&&typeof d.id==='string'?d.id:''):k,it=normItem(id,d);
+    if(!it){skipped++;return;}
+    if(!ID_OK.test(id)||id==='.'||id==='..'||seen[id])id=newId(it.name);
+    seen[id]=true;
+    items.push({id:id,data:itemData(it)});
+  });
+  if(!items.length)return {error:'That backup has no pieces this app can read.'};
+  if(raw.pins&&typeof raw.pins==='object'){
+    Object.keys(raw.pins).forEach(function(k){
+      var p=raw.pins[k];
+      if(p&&(p.kind==='block'||p.kind==='allow')&&typeof p.a==='string'&&typeof p.b==='string'&&p.a!==p.b
+        &&(seen[p.a]||itemById(p.a))&&(seen[p.b]||itemById(p.b))){
+        pins.push({id:pinKey(p.a,p.b),data:{a:p.a,b:p.b,kind:p.kind,createdAt:Date.now()}});
+      }
+    });
+  }
+  if(raw.audit&&typeof raw.audit==='object')LAYER_IDS.forEach(function(l){if(raw.audit[l]===true)audit[l]=true;});
+  return {items:items,pins:pins,audit:audit,skipped:skipped};
+}
+function doImport(){
+  if(!canChange())return;
+  var btn=$('imp-go'),err=$('imp-err'),box=$('imp-replace'),replace=!!(box&&box.checked);
+  function fail(msg){
+    if(btn)btn.disabled=false;
+    if(err){err.textContent=msg;err.hidden=false;}
+  }
+  if(btn)btn.disabled=true;
+  if(err)err.hidden=true;
+  readImportText().then(function(text){
+    if(!String(text).trim()){fail('Choose a file or paste the backup text first.');return;}
+    var b=parseBackup(String(text));
+    if(b.error){fail(b.error);return;}
+    var ops=[],keep=Object.create(null),keepPin=Object.create(null),audit={};
+    b.items.forEach(function(x){keep[x.id]=true;ops.push(function(){return db.doc('items/'+x.id).set(x.data);});});
+    b.pins.forEach(function(x){keepPin[x.id]=true;ops.push(function(){return db.doc('pins/'+x.id).set(x.data);});});
+    LAYER_IDS.forEach(function(l){if(b.audit[l]||(!replace&&state.audit[l]))audit[l]=true;});
+    ops.push(function(){return db.doc('meta/audit').set(audit);});
+    if(replace){
+      state.items.forEach(function(it){if(!keep[it.id])ops.push(function(){return db.doc('items/'+it.id).delete();});});
+      state.pinList.forEach(function(p){if(!keepPin[p.key])ops.push(function(){return db.doc('pins/'+p.key).delete();});});
+    }
+    var i=0;
+    (function next(){
+      if(i>=ops.length){
+        closeSheet();
+        toast('Imported '+b.items.length+(b.items.length===1?' piece':' pieces')+(b.skipped?', skipped '+b.skipped:''));
+        return;
+      }
+      var p;
+      try{p=ops[i++]();}catch(e){p=Promise.reject(e);}
+      p.then(next,function(){fail('The import stopped partway. Run it again: nothing gets duplicated.');});
+    })();
+  },function(){fail('That file couldn’t be read.');});
+}
+
+/* ---------- Events ---------- */
+document.addEventListener('click',function(e){
+  var el=e.target&&e.target.closest?e.target.closest('[data-act],[data-tab]'):null;
+  if(!el){if(e.target===sheet)closeSheet();return;}
+  var tab=el.getAttribute('data-tab');
+  if(tab){ui.tab=tab;render();window.scrollTo(0,0);return;}
+  var act=el.getAttribute('data-act'),id=el.getAttribute('data-id'),it,a,b;
+  switch(act){
+    case 'pick':
+      it=itemById(id);
+      if(!it)break;
+      ui.sel[it.layer]=ui.sel[it.layer]===id?null:id;
+      ui.focus=id;
+      render();
+      break;
+    case 'why':openWhy(id);break;
+    case 'rough':ui.rough=!ui.rough;dropFiltered();render();break;
+    case 'clear':ui.sel={};render();break;
+    case 'clash':openClash();break;
+    case 'restart':
+      it=itemById(id);
+      if(!it)break;
+      ui.sel={};ui.level=0;ui.rough=false;ui.sel[it.layer]=id;
+      closeSheet();render();
+      break;
+    case 'block':
+      if(!canChange())break;
+      a=el.getAttribute('data-a');b=el.getAttribute('data-b');
+      writePin(a,b,'block').then(function(){
+        var ib=itemById(b);
+        if(ib&&ui.sel[ib.layer]===b)ui.sel[ib.layer]=null;
+        closeSheet();schedule();toast('Saved. Those two won’t be paired again.');
+      },writeFailed);
+      break;
+    case 'allow':
+      if(!canChange())break;
+      writePin(el.getAttribute('data-a'),el.getAttribute('data-b'),'allow').then(function(){
+        closeSheet();schedule();toast('Allowed. They’ll pair from now on.');
+      },writeFailed);
+      break;
+    case 'unpin':removePin(el.getAttribute('data-key'));break;
+    case 'add':if(canChange())openForm(null,el.getAttribute('data-layer')||'');break;
+    case 'edit':it=itemById(id);if(it)openForm(it);break;
+    case 'del':
+      if(!ui.form||!ui.form.id)break;
+      if(!ui.form.armed){
+        ui.form.armed=true;
+        el.textContent='Tap again to delete';
+        setTimeout(function(){
+          if(ui.form&&ui.form.armed){ui.form.armed=false;var d=$('f-del');if(d)d.textContent='Delete';}
+        },4000);
+      }else deleteItem(ui.form.id);
+      break;
+    case 'close':closeSheet();break;
+    case 'audit':toggleAudit(el.getAttribute('data-layer'));break;
+    case 'export':exportCSV();break;
+    case 'backup':doBackup();break;
+    case 'copybk':copyBackup();break;
+    case 'import':if(canChange())openImport();break;
+    case 'doimport':doImport();break;
+    case 'reconnect':subscribe();render();break;
+  }
+});
+view.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='flt-level'){
+    ui.level=Number(e.target.value)||0;
+    ui.focusSel=true;
+    dropFiltered();
+    render();
+  }
+});
+view.addEventListener('toggle',function(e){
+  var d=e.target;
+  if(d&&d.classList&&d.classList.contains('ruled'))ui.open[d.getAttribute('data-layer')]=d.open;
+},true);
+sheet.addEventListener('change',function(e){
+  var t=e.target;
+  if(!t||!t.name||!ui.form)return;
+  if(t.name==='colour'){
+    var c=COLOUR_MAP[t.value],label=$('f-colour-name');
+    if(label)label.textContent=c?c.name:'';
+    if(c&&!ui.form.toneTouched){var r=$('f-tone-'+c.tone);if(r)r.checked=true;}
+  }else if(t.name==='tone'){
+    ui.form.toneTouched=true;
+  }else if(t.name==='lo'||t.name==='hi'){
+    var lo=$('f-lo'),hi=$('f-hi');
+    if(Number(lo.value)>Number(hi.value)){if(t.name==='lo')hi.value=lo.value;else lo.value=hi.value;}
+    var o={lo:Number(lo.value),hi:Number(hi.value)};
+    $('f-bar').innerHTML=bar(o.lo,o.hi,'big');
+    $('f-range').textContent=rangeText(o);
+  }else if(t.name==='layer'){
+    var list=$('f-types');
+    if(list)list.innerHTML=typeOpts(t.value);
+  }
+});
+sheet.addEventListener('submit',function(e){
+  e.preventDefault();
+  if(e.target&&e.target.id==='item-form')submitForm(e.target);
+});
+sheet.addEventListener('close',function(){ui.form=null;sheet.innerHTML='';});
+window.addEventListener('hashchange',function(){ui.tab=readTab();render();});
+window.addEventListener('resize',function(){if(!tray.hidden)setTrayH(tray.offsetHeight);});
+
+/* ---------- Data ---------- */
+function readTab(){
+  var h=(location.hash||'').replace('#','');
+  return h==='wardrobe'||h==='gaps'?h:'build';
+}
+function mark(key,snap){
+  if(!(snap&&snap.metadata&&snap.metadata.fromCache)){
+    conf[key]=true;
+    if(conf.items&&conf.pins&&conf.audit){clearTimeout(slowTimer);state.slow=false;}
+  }
+  schedule();
+}
+function subscribe(){
+  unsubs.forEach(function(u){try{u();}catch(e){}});
+  unsubs=[];
+  conf={items:false,pins:false,audit:false};
+  state.dead=false;state.slow=false;
+  clearTimeout(slowTimer);
+  slowTimer=setTimeout(function(){
+    if(!(conf.items&&conf.pins&&conf.audit)){state.slow=true;schedule();}
+  },10000);
+  function onErr(){state.dead=true;state.slow=false;clearTimeout(slowTimer);schedule();}
+  try{
+    unsubs.push(db.collection('items').onSnapshot(function(s){
+      state.items=s.docs.map(function(d){return normItem(d.id,d.data());}).filter(Boolean);
+      state.loaded=true;
+      mark('items',s);
+    },onErr));
+    unsubs.push(db.collection('pins').onSnapshot(function(s){
+      var map=Object.create(null),list=[];
+      s.docs.forEach(function(d){
+        var x=d.data();
+        if(x&&(x.kind==='block'||x.kind==='allow')&&typeof x.a==='string'&&typeof x.b==='string'){
+          map[pinKey(x.a,x.b)]=x.kind;
+          list.push({key:d.id,a:x.a,b:x.b,kind:x.kind});
+        }
+      });
+      state.pins=map;state.pinList=list;
+      mark('pins',s);
+    },onErr));
+    unsubs.push(db.doc('meta/audit').onSnapshot(function(s){
+      var x=s&&s.exists?s.data():null,next={};
+      LAYER_IDS.forEach(function(l){if(x&&x[l]===true)next[l]=true;});
+      state.audit=next;
+      mark('audit',s);
+    },onErr));
+  }catch(e){onErr();}
+}
+function use(name){
+  try{
+    if(window.claude&&typeof window.claude.use==='function'){
+      return Promise.resolve(window.claude.use(name)).then(function(ns){return ns||null;},function(){return null;});
+    }
+  }catch(e){}
+  return Promise.resolve(null);
+}
+
+ui.tab=readTab();
+render();
+use('db').then(function(ns){
+  if(!ns){state.phase='nodb';render();return;}
+  db=ns;state.phase='loading';
+  subscribe();
+  render();
+});
+use('user').then(function(u){
+  if(!u)return;
+  Promise.all([u.canEdit(),u.isOwner()]).then(function(r){
+    canWrite=!!(r[0]||r[1]);
+    schedule();
+  },function(){});
+});
+use('downloads').then(function(ns){dl=ns;if(ns)schedule();});
+})();
+</script>
+</body>
+</html>
