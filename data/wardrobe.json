@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:47:39.789Z",
+ "updatedAt": "2026-11-22T15:47:41.610Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3688,6 +3688,12 @@
    "b": "blue-crew-t-shirt-dc6i",
    "kind": "no",
    "createdAt": 1795362457281
+  },
+  "black-suit-trousers-ylj4__blue-crew-t-shirt-dc6i": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "blue-crew-t-shirt-dc6i",
+   "kind": "no",
+   "createdAt": 1795362461008
   }
  },
  "audit": {
