@@ -135,6 +135,18 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .ofit-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
 .ofit-list li span:nth-child(2){flex:1;min-width:0}
 .ofit-warn{font-size:13.5px;color:var(--crit)}
+.ctx-strip{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--accent);border-radius:8px;background:var(--accent-soft);font-size:14.5px}
+.ctx-strip span{flex:1;min-width:0}
+.ctx-strip b{font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  #view.from-right{animation:tab-in-right .26s ease-out}
+  #view.from-left{animation:tab-in-left .26s ease-out}
+  .rail.pulse{animation:rail-pulse 1.4s ease-out}
+}
+@keyframes tab-in-right{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes tab-in-left{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes rail-pulse{0%{box-shadow:0 0 0 0 var(--accent);background:var(--accent-soft)}60%{background:var(--accent-soft)}100%{box-shadow:0 0 0 0 transparent;background:transparent}}
+.rail.pulse{border-radius:8px}
 .pair-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px}
 .pair-foot .btn{min-height:40px}
 .pair-reset{align-self:flex-start;margin-top:6px;min-height:38px}
@@ -1080,7 +1092,12 @@ function renderBuild(A){
   if(ui.rate&&anchorItem()){renderRate(A);return;}
   var anySel=LAYER_IDS.some(function(l){return !!selItem(l);});
   var narrowing=anySel||ui.level>0||careMode()!=='all',showCare=ui.level<3;
-  var h='<section class="filters" aria-label="Narrow by occasion"><select id="flt-level" aria-label="Dress code">';
+  var h='';
+  if(ui.fromGaps){
+    var fg=ui.fromGaps,what=fg.layer?LAYER_MAP[fg.layer].name.toLowerCase():'everything';
+    h+='<div class="ctx-strip" role="status"><span>From Gaps: <b>'+what+' at '+LEVELS[fg.level]+'</b>'+(fg.layer?'. Other layers are folded.':'.')+'</span><button type="button" class="mini" data-act="backgaps">Back to Gaps</button></div>';
+  }
+  h+='<section class="filters" aria-label="Narrow by occasion"><select id="flt-level" aria-label="Dress code">';
   h+='<option value="0"'+(ui.level?'':' selected')+'>Any dress code</option>';
   for(var x=1;x<=MAXL;x++)h+='<option value="'+x+'"'+(ui.level===x?' selected':'')+'>'+LEVELS[x]+'</option>';
   h+='</select>'+(showCare?'<div class="segctl" role="group" aria-label="How precious">'+CARE_MODES.map(function(m){
@@ -1106,7 +1123,7 @@ function renderBuild(A){
     var filtered=arr.length<all.length;
     if(state.loaded&&all.length)count=(narrowing||filtered)?on.length+' of '+all.length+' shown':all.length+' '+L.units[all.length===1?0:1];
     var shut=!!FOLD['b-'+L.id],chosen=shut?on.filter(function(o){return o.sel;}):[];
-    h+='<section class="rail"><div class="rail-head"><button type="button" class="fold" data-act="fold" data-layer="b-'+L.id+'" aria-expanded="'+(shut?'false':'true')+'"><span class="chev" aria-hidden="true"></span><h2>'+L.name+'</h2></button><span class="rail-count">'+count+'</span>'
+    h+='<section class="rail'+(ui.pulse===L.id?' pulse':'')+'"><div class="rail-head"><button type="button" class="fold" data-act="fold" data-layer="b-'+L.id+'" aria-expanded="'+(shut?'false':'true')+'"><span class="chev" aria-hidden="true"></span><h2>'+L.name+'</h2></button><span class="rail-count">'+count+'</span>'
       +(db&&canWrite&&state.loaded?'<button type="button" class="mini" data-act="add" data-layer="'+L.id+'">Add</button>':'')+'</div>';
     if(shut){
       if(chosen.length)h+='<div class="tags">'+chosen.map(function(o){return tagHTML(o.it,true,null,null);}).join('')+'</div>';
@@ -1135,6 +1152,7 @@ function renderBuild(A){
     h+='</section>';
   });
   view.innerHTML=h;
+  ui.pulse='';
 }
 /* Rating mode: one piece, every other layer, filters off. The order is frozen when you start
    and only re-sorts when you tap Done, so nothing jumps while you're tapping. */
@@ -1524,11 +1542,19 @@ function renderChrome(A){
   else if(state.slow)h='<div class="notice"><span>'+(state.loaded?'Showing your last saved copy. It may be out of date.':'Can’t reach your wardrobe yet. Still trying.')+'</span></div>';
   if(noticeEl.innerHTML!==h)noticeEl.innerHTML=h;
 }
+var lastTab='';
 function render(){
   pending=false;
   sanitizeSel();
   var A=analyse(state.items,state.pins);
   renderChrome(A);
+  var TABS=['build','outfits','wardrobe','gaps'],moved=lastTab&&lastTab!==ui.tab?(TABS.indexOf(ui.tab)>TABS.indexOf(lastTab)?'from-right':'from-left'):'';
+  lastTab=ui.tab;
+  if(moved){
+    view.classList.remove('from-right','from-left');
+    void view.offsetWidth;
+    view.classList.add(moved);
+  }
   if(ui.tab==='wardrobe')renderWardrobe(A);
   else if(ui.tab==='outfits')renderOutfits(A);
   else if(ui.tab==='gaps')renderGaps(A);
@@ -1957,12 +1983,13 @@ document.addEventListener('click',function(e){
   var el=e.target&&e.target.closest?e.target.closest('[data-act],[data-tab]'):null;
   if(!el){if(e.target===sheet)closeSheet();return;}
   var tab=el.getAttribute('data-tab');
-  if(tab){ui.tab=tab;ui.rate=false;ui.frozen={};render();window.scrollTo(0,0);return;}
+  if(tab){ui.tab=tab;ui.rate=false;ui.frozen={};ui.fromGaps=null;render();window.scrollTo(0,0);return;}
   var act=el.getAttribute('data-act'),id=el.getAttribute('data-id'),it,a,b;
   switch(act){
     case 'pick':
       it=itemById(id);
       if(!it)break;
+      ui.fromGaps=null;
       ui.sel[it.layer]=ui.sel[it.layer]===id?null:id;
       if(ui.sel[it.layer])ui.anchor=id;
       if(!picked().length)ui.rate=false;
@@ -2057,13 +2084,26 @@ document.addEventListener('click',function(e){
       break;
     case 'covgo':
       /* From the Coverage grid: open Build at that dress code, with that layer open and the rest folded. */
-      var gl=el.getAttribute('data-layer'),gv=Number(el.getAttribute('data-level'))||0;
+      var gl=el.getAttribute('data-layer'),gv=Number(el.getAttribute('data-level'))||0,saved={};
+      LAYER_IDS.forEach(function(l){if(FOLD['b-'+l])saved['b-'+l]=true;});
+      ui.fromGaps={layer:gl,level:gv,folds:saved,prev:{sel:ui.sel,level:ui.level,care:ui.care,topType:ui.topType},scroll:window.scrollY};
+      ui.pulse=gl||'';
       ui.sel={};ui.rate=false;ui.care='all';ui.topType='all';ui.level=gv;
       LAYER_IDS.forEach(function(l){if(gl&&l!==gl)FOLD['b-'+l]=true;else delete FOLD['b-'+l];});
       try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e10){}
       ui.tab='build';
       try{history.replaceState(null,'','#build');}catch(e11){}
       render();window.scrollTo(0,0);
+      break;
+    case 'backgaps':
+      var fg=ui.fromGaps;
+      if(!fg)break;
+      LAYER_IDS.forEach(function(l){if(fg.folds['b-'+l])FOLD['b-'+l]=true;else delete FOLD['b-'+l];});
+      try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e12){}
+      ui.sel=fg.prev.sel;ui.level=fg.prev.level;ui.care=fg.prev.care;ui.topType=fg.prev.topType;
+      ui.fromGaps=null;ui.tab='gaps';
+      try{history.replaceState(null,'','#gaps');}catch(e13){}
+      render();window.scrollTo(0,fg.scroll||0);
       break;
     case 'morebear':ui.allBearing=!ui.allBearing;slideRender('[data-act="morebear"]',el);break;
     case 'saveoutfit':openSaveOutfit();break;
@@ -2141,6 +2181,7 @@ view.addEventListener('change',function(e){
   if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-suit')){ui.suitKeep[e.target.getAttribute('data-suit')]=e.target.checked;return;}
   if(e.target&&e.target.id==='flt-level'){
     ui.level=Number(e.target.value)||0;
+    ui.fromGaps=null;
     dropFiltered();
     render();
   }
