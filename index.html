@@ -259,6 +259,9 @@ body.rating{background:var(--accent-soft)}
 .cov td.c2{background:var(--accent-soft);background:color-mix(in srgb,var(--accent) 24%,var(--surface))}
 .cov td.c3{background:var(--accent-soft);background:color-mix(in srgb,var(--accent) 38%,var(--surface))}
 .cov td.hole{background:var(--crit-soft);color:var(--crit);box-shadow:inset 0 0 0 1.5px var(--crit)}
+.cov td{padding:0}
+.cov-btn{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:38px;border:0;border-radius:3px;background:transparent;color:inherit;font:inherit;font-weight:inherit}
+.cov-btn:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
 .cov tr.sum td{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
 .cov tr.sum td.has{background:var(--ink);color:var(--bg);box-shadow:none}
 .legend{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
@@ -1433,7 +1436,7 @@ function renderGaps(A){
   var h='',x;
   var live=A.base.live.map(function(l){return LAYER_MAP[l].name.toLowerCase();});
   var liveNote=A.base.total===null?'needs two layers':live.length===REQ.length?'you can build':live.join(' + ')+' only';
-  h+='<section class="panel"><h2>Coverage</h2><p class="sub">How many pieces you have for each dress code, layer by layer. An outfit needs shoes, bottoms and a top that share a level. Pairs you’ve rated Doesn’t work aren’t counted.</p>';
+  h+='<section class="panel"><h2>Coverage</h2><p class="sub">How many pieces you have for each dress code, layer by layer. An outfit needs shoes, bottoms and a top that share a level. Pairs you’ve rated Doesn’t work aren’t counted. Tap a number to see those pieces in Build.</p>';
   h+='<div class="scroll-x"><table class="cov"><thead><tr><th scope="col"><span class="vh">Layer</span></th>';
   for(x=1;x<=MAXL;x++)h+='<th scope="col">'+LEVELS[x]+'</th>';
   h+='</tr></thead><tbody>';
@@ -1442,14 +1445,14 @@ function renderGaps(A){
     h+='<tr><th scope="row">'+L.name+'<small>'+(L.req?n+(n===1?' piece':' pieces'):'optional')+'</small></th>';
     for(var v=1;v<=MAXL;v++){
       var c=A.cov[L.id][v],hole=A.holes[L.id+':'+v];
-      h+='<td class="'+(hole?'hole':c===0?'z':c===1?'c1':c<4?'c2':'c3')+'">'+(c===0&&!hole?'<span aria-hidden="true">·</span><span class="vh">0</span>':c)+'</td>';
+      h+='<td class="'+(hole?'hole':c===0?'z':c===1?'c1':c<4?'c2':'c3')+'"><button type="button" class="cov-btn" data-act="covgo" data-layer="'+L.id+'" data-level="'+v+'" aria-label="Show '+L.name.toLowerCase()+' at '+LEVELS[v]+' in Build">'+(c===0&&!hole?'<span aria-hidden="true">·</span><span class="vh">0</span>':c)+'</button></td>';
     }
     h+='</tr>';
   });
   h+='<tr class="sum"><th scope="row">Outfits<small>'+liveNote+'</small></th>';
   for(x=1;x<=MAXL;x++){
     var o=A.base.total===null?null:A.base.perLevel[x];
-    h+='<td class="'+(o?'has':'z')+'">'+(o===null?'–':o)+'</td>';
+    h+='<td class="'+(o?'has':'z')+'">'+(o===null?'–':'<button type="button" class="cov-btn" data-act="covgo" data-layer="" data-level="'+x+'" aria-label="Show everything at '+LEVELS[x]+' in Build">'+o+'</button>')+'</td>';
   }
   h+='</tr></tbody></table></div>';
   if(Object.keys(A.holes).length)h+='<p class="legend"><span class="key-hole"></span><span>A hole: other layers are ready for that dress code and this one has nothing, so nothing at that level can be worn.</span></p>';
@@ -1789,6 +1792,28 @@ function saveKey(){
   });
 }
 
+/* Folding redraws the page, so the slide is done afterwards: the section that holds the tapped arrow
+   starts at its old height and eases to its new one. Skipped when the phone asks for reduced motion. */
+function slideBox(btn){return btn&&btn.closest('li.ofit, .pair-row, section, .pair-group')&&(btn.closest('.pair-row')?btn.closest('li'):btn.closest('section, .pair-group'));}
+function slideRender(selector,btn){
+  var box=slideBox(btn),h0=box?box.offsetHeight:0,reduce=false;
+  try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+  render();
+  if(reduce||!h0)return;
+  var nb=view.querySelector(selector),nbox=slideBox(nb);
+  if(!nbox)return;
+  var h1=nbox.offsetHeight;
+  if(Math.abs(h1-h0)<2)return;
+  nbox.style.height=h0+'px';nbox.style.overflow='hidden';
+  void nbox.offsetHeight;
+  nbox.style.transition='height .28s ease';
+  nbox.style.height=h1+'px';
+  var done=function(){nbox.style.height='';nbox.style.overflow='';nbox.style.transition='';nbox.removeEventListener('transitionend',done);};
+  nbox.addEventListener('transitionend',done);
+  setTimeout(done,400);
+  try{nb.focus({preventScroll:true});}catch(e){}
+}
+
 /* ---------- Backup and import ---------- */
 function backupLine(){
   var t=0;
@@ -1990,7 +2015,7 @@ document.addEventListener('click',function(e){
       var fl=el.getAttribute('data-layer');
       if(FOLD[fl])delete FOLD[fl];else FOLD[fl]=true;
       try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e2){}
-      render();
+      slideRender('[data-act="fold"][data-layer="'+fl+'"]',el);
       break;
     case 'ttype':ui.topType=el.getAttribute('data-val')||'all';dropFiltered();render();break;
     case 'more':
@@ -2030,7 +2055,17 @@ document.addEventListener('click',function(e){
         sp.then(nextS,writeFailed);
       })();
       break;
-    case 'morebear':ui.allBearing=!ui.allBearing;render();break;
+    case 'covgo':
+      /* From the Coverage grid: open Build at that dress code, with that layer open and the rest folded. */
+      var gl=el.getAttribute('data-layer'),gv=Number(el.getAttribute('data-level'))||0;
+      ui.sel={};ui.rate=false;ui.care='all';ui.topType='all';ui.level=gv;
+      LAYER_IDS.forEach(function(l){if(gl&&l!==gl)FOLD['b-'+l]=true;else delete FOLD['b-'+l];});
+      try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e10){}
+      ui.tab='build';
+      try{history.replaceState(null,'','#build');}catch(e11){}
+      render();window.scrollTo(0,0);
+      break;
+    case 'morebear':ui.allBearing=!ui.allBearing;slideRender('[data-act="morebear"]',el);break;
     case 'saveoutfit':openSaveOutfit();break;
     case 'ofold':
       var card=el.closest('.ofit'),k='o-'+id,shutNow=!FOLD[k];
@@ -2057,7 +2092,7 @@ document.addEventListener('click',function(e){
       break;
     case 'openpiece':
       if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
-      render();
+      slideRender('[data-act="openpiece"][data-id="'+id+'"]',el);
       break;
     case 'resetpiece':
       if(ui.armReset!==id){ui.armReset=id;render();setTimeout(function(){if(ui.armReset===id){ui.armReset=null;schedule();}},4000);break;}
