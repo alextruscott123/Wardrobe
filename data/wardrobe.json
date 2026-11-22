@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:10:10.961Z",
+ "updatedAt": "2026-11-22T14:10:17.424Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2749,6 +2749,12 @@
    "b": "white-airforces-2nd-hand-fats",
    "kind": "maybe",
    "createdAt": 1795356608456
+  },
+  "black-suit-trousers-ylj4__white-airforces-nice-1u3h": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "white-airforces-nice-1u3h",
+   "kind": "no",
+   "createdAt": 1795356614917
   }
  },
  "audit": {
