@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:16:14.437Z",
+ "updatedAt": "2026-11-22T14:17:02.962Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2947,6 +2947,24 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356971929
+  },
+  "beige-north-face-coat-64z6__black-suit-trousers-ylj4": {
+   "a": "beige-north-face-coat-64z6",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795357018829
+  },
+  "black-suit-trousers-ylj4__grey-mont-bell-anorak-qzqa": {
+   "a": "grey-mont-bell-anorak-qzqa",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795357019583
+  },
+  "black-suit-trousers-ylj4__carhartt-coat-5o25": {
+   "a": "carhartt-coat-5o25",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795357020453
   }
  },
  "audit": {
