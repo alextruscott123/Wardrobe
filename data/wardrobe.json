@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:08:18.181Z",
+ "updatedAt": "2026-11-22T14:08:53.902Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2509,6 +2509,24 @@
    "b": "beige-nikes-5fwc",
    "kind": "maybe",
    "createdAt": 1795356495676
+  },
+  "black-sambas-debd__black-tommy-hilfiger-shirt-40sq": {
+   "a": "black-tommy-hilfiger-shirt-40sq",
+   "b": "black-sambas-debd",
+   "kind": "yes",
+   "createdAt": 1795356528566
+  },
+  "black-sambas-debd__black-zara-t-shirt-boxy-fit-wn84": {
+   "a": "black-zara-t-shirt-boxy-fit-wn84",
+   "b": "black-sambas-debd",
+   "kind": "yes",
+   "createdAt": 1795356531060
+  },
+  "black-sambas-debd__white-zara-t-shirt-normal-fit-q898": {
+   "a": "white-zara-t-shirt-normal-fit-q898",
+   "b": "black-sambas-debd",
+   "kind": "yes",
+   "createdAt": 1795356531395
   }
  },
  "audit": {
