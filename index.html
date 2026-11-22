@@ -110,6 +110,9 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .pair-list{display:flex;flex-direction:column;gap:4px}
 .pair-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
 .pair-list li span:not(.sw){flex:1;min-width:0}
+.more-btn{align-self:flex-start;margin-left:0}
+.pair-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px}
+.pair-foot .btn{min-height:40px}
 .pair-reset{align-self:flex-start;margin-top:6px;min-height:38px}
 .mini.danger-on{border-color:var(--crit);color:var(--crit)}
 .mini.is-on{background:var(--good-soft);border-color:var(--good);color:var(--good)}
@@ -261,18 +264,16 @@ body.rating{background:var(--accent-soft)}
 .key b{font-weight:600}
 .key li > span:last-child{color:var(--ink-2)}
 
-.tray{position:fixed;left:0;right:0;bottom:calc(var(--tabs-h) + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tray{position:fixed;left:0;right:0;bottom:calc(var(--tabs-h) + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:10px;background:var(--surface);color:var(--ink);border-top:1px solid var(--line);padding:7px max(16px,env(safe-area-inset-right,0px)) 7px max(16px,env(safe-area-inset-left,0px))}
+.tray .tray-title{font-weight:500;font-size:14px}
+.tray .tray-sub{font-size:12.5px;color:var(--ink-2);opacity:1}
+.tray .tray-done{color:var(--good);font-weight:600}
 .tray-text{flex:1;min-width:0}
 .tray-title{font-weight:600;font-size:15px;line-height:1.25}
 .tray-sub{font-size:13px;line-height:1.3;opacity:.82}
 .tray .btn{white-space:nowrap;flex:none}
 .tray-btns{display:flex;gap:8px;flex:none}
-@media (max-width:599px){
-  .tray{flex-wrap:wrap}
-  .tray-text{flex-basis:100%}
-  .tray-btns{flex:1 1 100%}
-  .tray-btns .btn{flex:1 1 0;min-width:0}
-}
+
 
 dialog.sheet{width:100%;max-width:560px;max-height:92vh;max-height:92dvh;margin:auto auto 0;padding:0;border:0;border-radius:12px 12px 0 0;background:var(--surface);color:var(--ink);overflow:auto}
 dialog.sheet::backdrop{background:var(--scrim)}
@@ -818,7 +819,6 @@ function analyse(items,pins){
       by[l].forEach(function(it){if(base.perItem[it.id])bearing.push({item:it,n:base.perItem[it.id]});});
     });
     bearing.sort(function(a,b){return b.n-a.n;});
-    bearing=bearing.slice(0,5);
   }
   return {by:by,base:base,cov:cov,holes:holes,blockedMap:blockedMap,blocked:blocked,addOn:addOn,candidates:candidates,bearing:bearing};
 }
@@ -917,7 +917,6 @@ function rateLayers(anchor){
 }
 function judgedAgainst(it){
   if(ui.rate){var a=anchorItem();return a&&rateable(a,it)?[a]:[];}
-  if(ui.sel[it.layer]&&selItem(it.layer))return [];
   return picked().filter(function(s){return s.layer!==it.layer;});
 }
 /* Amber "not rated" only appears on pairs you can actually rate: shoes or bottoms against a layer above them. */
@@ -936,8 +935,12 @@ function affinity(it){
     var r=rating(it,s),st,why=null;
     if(r==='yes')st='good';
     else if(r==='no'){st='bad';why={code:'pin',other:s};}
-    else if(r==='maybe')st='plain';
-    else{var w=pairWhy(it,s,state.pins);if(w){st='bad';why={code:w.code,other:s};}else st=(ui.rate||worthRating(it,s))?'todo':'plain';}
+    else{
+      /* Neutral and unrated pairs still answer to the rules (dress code, season). */
+      var w=pairWhy(it,s,state.pins);
+      if(w){st='bad';why={code:w.code,other:s};}
+      else st=r==='maybe'?'plain':(ui.rate||worthRating(it,s))?'todo':'plain';
+    }
     if(R[st]>R[res.st]){res.st=st;if(why)res.why=why;}
   });
   return res;
@@ -964,9 +967,11 @@ function conflictsFor(it){
   return out;
 }
 /* The care switch: Keep it nice hides Rough pieces, Getting messy hides Keep-nice pieces. */
+function careMode(){return ui.level>=3?'nice':ui.care;}
 function careOut(it){
-  if(ui.care==='nice'&&it.care==='beater')return 'nice';
-  if(ui.care==='messy'&&it.care==='protect')return 'messy';
+  var m=careMode();
+  if(m==='nice'&&it.care==='beater')return 'nice';
+  if(m==='messy'&&it.care==='protect')return 'messy';
   return '';
 }
 function topHidden(it){
@@ -1036,15 +1041,15 @@ function dropFiltered(){
 function renderBuild(A){
   if(ui.rate&&anchorItem()){renderRate(A);return;}
   var anySel=LAYER_IDS.some(function(l){return !!selItem(l);});
-  var narrowing=anySel||ui.level>0||ui.care!=='all';
+  var narrowing=anySel||ui.level>0||careMode()!=='all',showCare=ui.level<3;
   var h='<section class="filters" aria-label="Narrow by occasion"><select id="flt-level" aria-label="Dress code">';
   h+='<option value="0"'+(ui.level?'':' selected')+'>Any dress code</option>';
   for(var x=1;x<=MAXL;x++)h+='<option value="'+x+'"'+(ui.level===x?' selected':'')+'>'+LEVELS[x]+'</option>';
-  h+='</select><div class="segctl" role="group" aria-label="How precious">'+CARE_MODES.map(function(m){
+  h+='</select>'+(showCare?'<div class="segctl" role="group" aria-label="How precious">'+CARE_MODES.map(function(m){
     return '<button type="button" class="segbtn'+(ui.care===m[0]?' is-on':'')+'" data-act="care" data-val="'+m[0]+'" aria-pressed="'+(ui.care===m[0]?'true':'false')+'">'+venn(m[0])+'<span>'+m[1]+'</span></button>';
-  }).join('')+'</div></section>';
+  }).join('')+'</div>':'')+'</section>';
   if(state.loaded&&state.items.length){
-    h+='<p class="hint">'+(ui.care==='nice'?'Keep it nice is on, so Rough pieces are ruled out. ':ui.care==='messy'?'Getting messy is on, so Keep-nice pieces are ruled out. ':'')
+    h+='<p class="hint">'+(!showCare?'Rough pieces are left out at this dress code. ':ui.care==='nice'?'Keep it nice is on, so Rough pieces are ruled out. ':ui.care==='messy'?'Getting messy is on, so Keep-nice pieces are ruled out. ':'')
       +(anySel?'Green works, red doesn’t, amber isn’t rated yet. Tap to keep building, or tap a picked piece to drop it.':'Tap any piece to start. The layers you haven’t picked from light up green, amber or red.')+'</p>';
   }
   LAYERS.forEach(function(L){
@@ -1052,7 +1057,9 @@ function renderBuild(A){
     var RANK={good:0,plain:1,todo:2,bad:3};
     arr.forEach(function(it){
       var sel=ui.sel[L.id]===it.id,c=sel?[]:filterOut(it);
-      (c.length?out:on).push({it:it,sel:sel,c:c,aff:sel||c.length?null:affinity(it)});
+      var af=sel||c.length?null:affinity(it);
+      if(af&&af.st!=='bad'&&selItem(L.id))af=null;
+      (c.length?out:on).push({it:it,sel:sel,c:c,aff:af});
     });
     on.sort(function(a,b){
       return (b.sel?1:0)-(a.sel?1:0)||(a.aff?RANK[a.aff.st]:1)-(b.aff?RANK[b.aff.st]:1);
@@ -1123,11 +1130,9 @@ function renderTray(A){
   picks.forEach(function(p){if(p.lo>lo)lo=p.lo;if(p.hi<hi)hi=p.hi;});
   var missing=REQ.filter(function(l){return A.by[l].length>0&&!selItem(l);}).map(function(l){return LAYER_MAP[l].need;});
   var status=missing.length?'Still needs '+joinAnd(missing):'Complete outfit';
-  /* Rating works on one piece at a time, so Rate only appears with a single piece picked. */
-  tray.innerHTML='<div class="tray-text"><div class="tray-title">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+esc(status)+'</div>'
-    +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own rating')+'</div></div>'
-    +'<div class="tray-btns">'+(picks.length===1&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate this piece</button>':'')
-    +'<button type="button" class="btn inv" data-act="clear">Clear outfit</button></div>';
+  tray.innerHTML='<div class="tray-text"><div class="tray-title">'+(missing.length?esc(status):'<span class="tray-done">Complete outfit</span>')+'</div>'
+    +'<div class="tray-sub">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+(lo<=hi?'works for '+levelList(lo,hi):'paired by your own rating')+'</div></div>'
+    +'<button type="button" class="mini" data-act="clear">Clear outfit</button>';
   tray.hidden=false;
   setTrayH(tray.offsetHeight);
 }
@@ -1275,7 +1280,7 @@ function pairingsHTML(edit){
           }
           h+='<div class="pair-block"><p class="pair-kind kind k-yes">Works with</p>'+byLayerHTML(o,r.yes,true,edit)+'</div>';
           h+='<div class="pair-block"><p class="pair-kind kind k-no">Doesn’t work with</p>'+byLayerHTML(o,r.no,true,edit)+'</div>';
-          if(edit&&(r.yes.length||r.no.length||r.maybe))h+='<button type="button" class="btn danger pair-reset" data-act="resetpiece" data-id="'+esc(o.id)+'">'+(ui.armReset===o.id?'Tap again to clear all '+(r.yes.length+r.no.length+r.maybe):'Clear all ratings for this piece')+'</button>';
+          if(edit&&(r.yes.length||r.no.length||r.maybe))h+='<div class="pair-foot"><button type="button" class="btn" data-act="ratepiece" data-id="'+esc(o.id)+'">Edit ratings</button><button type="button" class="btn danger" data-act="resetpiece" data-id="'+esc(o.id)+'">'+(ui.armReset===o.id?'Tap again to clear all '+(r.yes.length+r.no.length+r.maybe):'Clear all ratings')+'</button></div>';
           h+='</div>';
         }
         h+='</li>';
@@ -1381,11 +1386,12 @@ function renderGaps(A){
   h+='<section class="panel"><h2>Load-bearing pieces</h2>';
   if(A.base.total){
     h+='<p class="sub">What most of your outfits depend on. Look after these, or keep a backup.</p><ul class="list bearing">';
-    A.bearing.forEach(function(b){
+    (ui.allBearing?A.bearing:A.bearing.slice(0,5)).forEach(function(b){
       var pct=Math.round(100*b.n/A.base.total);
       h+='<li><div class="bear-top">'+swatch(b.item)+'<span class="bear-name">'+esc(b.item.name)+'</span><span class="bear-n">'+b.n+' of '+A.base.total+'</span></div><div class="meter" aria-hidden="true"><i style="width:'+pct+'%"></i></div></li>';
     });
     h+='</ul>';
+    if(A.bearing.length>5)h+='<button type="button" class="mini more-btn" data-act="morebear">'+(ui.allBearing?'Show top 5':'Show all '+A.bearing.length)+'</button>';
   }else{
     h+='<p class="sub">Shows up once you can build at least one outfit.</p>';
   }
@@ -1429,7 +1435,6 @@ function render(){
     }
     ui.focus=null;
   }
-  if(ui.focusSel){ui.focusSel=false;var s=$('flt-level');if(s){try{s.focus({preventScroll:true});}catch(e){}}}
 }
 function schedule(){
   if(pending)return;
@@ -1910,6 +1915,7 @@ document.addEventListener('click',function(e){
         sp.then(nextS,writeFailed);
       })();
       break;
+    case 'morebear':ui.allBearing=!ui.allBearing;render();break;
     case 'openpiece':
       if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
       render();
@@ -1961,7 +1967,6 @@ view.addEventListener('change',function(e){
   if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-suit')){ui.suitKeep[e.target.getAttribute('data-suit')]=e.target.checked;return;}
   if(e.target&&e.target.id==='flt-level'){
     ui.level=Number(e.target.value)||0;
-    ui.focusSel=true;
     dropFiltered();
     render();
   }
