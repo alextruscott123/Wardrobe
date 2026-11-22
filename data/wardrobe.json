@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T17:36:12.085Z",
+ "updatedAt": "2026-11-22T18:09:25.457Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -345,6 +345,10 @@
    "name": "Volcom Button-Up Fleece",
    "layer": "mid",
    "type": "",
+   "colours": [
+    "pattern",
+    "black"
+   ],
    "colour": "pattern",
    "tone": "statement",
    "lo": 2,
@@ -353,6 +357,7 @@
    "care": "normal",
    "status": "active",
    "notes": "",
+   "suitOk": true,
    "createdAt": 1795346129971
   },
   "brown-sweater-5fv9": {
