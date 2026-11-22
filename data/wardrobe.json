@@ -1,8 +1,23 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:38:27.716Z",
- "items": {},
+ "updatedAt": "2026-11-22T10:54:47.418Z",
+ "items": {
+  "black-sambas-debd": {
+   "name": "Black Sambas",
+   "layer": "shoes",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795344884916
+  }
+ },
  "pins": {},
  "audit": {}
 }
