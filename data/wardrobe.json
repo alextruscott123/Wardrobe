@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T18:09:25.457Z",
+ "updatedAt": "2026-11-22T22:15:12.648Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4773,6 +4773,17 @@
     "grandad-s-watch-3q9z"
    ],
    "createdAt": 1795368374507
+  },
+  "wifey-s-favourite-fit-n86l": {
+   "name": "Wifey’s Favourite Fit",
+   "pieces": [
+    "beige-nikes-5fwc",
+    "blue-chords-ozq1",
+    "dragon-t-shirt-9uk9",
+    "black-sfa-hoodie-9x9z",
+    "carhartt-coat-5o25"
+   ],
+   "createdAt": 1795385710135
   }
  },
  "audit": {
