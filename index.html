@@ -119,6 +119,18 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .ofit{display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 .ofit-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .ofit-dots{display:flex;gap:6px}
+/* Compact view: the piece list slides shut; name, dress codes, colours and buttons stay. */
+.ofit-body{display:grid;grid-template-rows:1fr;margin-top:0}
+.ofit.compact .ofit-body{grid-template-rows:0fr;margin-top:-10px}
+.ofit-inner{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px}
+.ofit.compact .ofit-inner{visibility:hidden}
+@media (prefers-reduced-motion:no-preference){
+  .ofit-body{transition:grid-template-rows .28s ease,margin-top .28s ease}
+  .ofit-inner{transition:visibility 0s linear .28s}
+  .ofit:not(.compact) .ofit-inner{transition:visibility 0s}
+}
+.ofit-head .fold{min-height:0}
+.ofit-head .fold h3{margin:0}
 .ofit-list{display:flex;flex-direction:column;gap:5px}
 .ofit-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
 .ofit-list li span:nth-child(2){flex:1;min-width:0}
@@ -1090,8 +1102,13 @@ function renderBuild(A){
     var count='';
     var filtered=arr.length<all.length;
     if(state.loaded&&all.length)count=(narrowing||filtered)?on.length+' of '+all.length+' shown':all.length+' '+L.units[all.length===1?0:1];
-    h+='<section class="rail"><div class="rail-head"><h2>'+L.name+'</h2><span class="rail-count">'+count+'</span>'
+    var shut=!!FOLD['b-'+L.id],chosen=shut?on.filter(function(o){return o.sel;}):[];
+    h+='<section class="rail"><div class="rail-head"><button type="button" class="fold" data-act="fold" data-layer="b-'+L.id+'" aria-expanded="'+(shut?'false':'true')+'"><span class="chev" aria-hidden="true"></span><h2>'+L.name+'</h2></button><span class="rail-count">'+count+'</span>'
       +(db&&canWrite&&state.loaded?'<button type="button" class="mini" data-act="add" data-layer="'+L.id+'">Add</button>':'')+'</div>';
+    if(shut){
+      if(chosen.length)h+='<div class="tags">'+chosen.map(function(o){return tagHTML(o.it,true,null,null);}).join('')+'</div>';
+      h+='</section>';return;
+    }
     if(L.hint)h+='<p class="rail-hint">'+L.hint+'</p>';
     if(L.id==='tops'&&state.loaded&&all.length){
       h+='<div class="segctl sm" role="group" aria-label="Which tops">'+[['all','All'],['tee','T-shirts'],['shirt','Shirts']].map(function(m){
@@ -1376,10 +1393,13 @@ function renderOutfits(A){
     var live=ps.filter(Boolean).sort(function(a,b){return LAYER_IDS.indexOf(a.layer)-LAYER_IDS.indexOf(b.layer);});
     var lo=1,hi=MAXL;live.forEach(function(p){if(p.lo>lo)lo=p.lo;if(p.hi<hi)hi=p.hi;});
     var armed=ui.armOutfit===o.id;
-    h+='<li class="ofit"><div class="ofit-head"><h3>'+esc(o.name||'Untitled outfit')+'</h3><span class="help">'+(lo<=hi?esc(rangeText({lo:lo,hi:hi})):'')+'</span></div>'
+    var compact=!!FOLD['o-'+o.id];
+    h+='<li class="ofit'+(compact?' compact':'')+'" data-ofit="'+esc(o.id)+'"><div class="ofit-head"><button type="button" class="fold" data-act="ofold" data-id="'+esc(o.id)+'" aria-expanded="'+(compact?'false':'true')+'"><span class="chev" aria-hidden="true"></span><h3>'+esc(o.name||'Untitled outfit')+'</h3></button><span class="help">'+(lo<=hi?esc(rangeText({lo:lo,hi:hi})):'')+'</span></div>'
       +'<div class="ofit-dots" aria-hidden="true">'+live.map(function(p){return swatch(p,true);}).join('')+'</div>'
+      +'<div class="ofit-body"><div class="ofit-inner">'
       +'<ul class="ofit-list">'+live.map(function(p){return '<li>'+swatch(p)+'<span>'+esc(p.name)+'</span><span class="help">'+LAYER_MAP[p.layer].name+'</span></li>';}).join('')+'</ul>'
       +(gone||resting?'<p class="ofit-warn">'+(gone?gone+(gone===1?' piece has':' pieces have')+' been deleted. ':'')+(resting?resting+(resting===1?' piece is':' pieces are')+' out of rotation.':'')+'</p>':'')
+      +'</div></div>'
       +'<div class="pair-foot"><button type="button" class="btn primary" data-act="wear" data-id="'+esc(o.id)+'"'+(live.length?'':' disabled')+'>Wear</button>'
       +(edit?'<button type="button" class="btn danger" data-act="deloutfit" data-id="'+esc(o.id)+'">'+(armed?'Tap again to delete':'Delete')+'</button>':'')+'</div></li>';
   });
@@ -2012,6 +2032,13 @@ document.addEventListener('click',function(e){
       break;
     case 'morebear':ui.allBearing=!ui.allBearing;render();break;
     case 'saveoutfit':openSaveOutfit();break;
+    case 'ofold':
+      var card=el.closest('.ofit'),k='o-'+id,shutNow=!FOLD[k];
+      if(shutNow)FOLD[k]=true;else delete FOLD[k];
+      try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e9){}
+      if(card)card.classList.toggle('compact',shutNow);
+      el.setAttribute('aria-expanded',shutNow?'false':'true');
+      break;
     case 'wear':
       var wo=state.outfits.filter(function(o){return o.id===id;})[0];
       if(!wo)break;
