@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T17:25:17.790Z",
+ "updatedAt": "2026-11-22T17:26:17.019Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4756,6 +4756,18 @@
     "beige-north-face-coat-64z6"
    ],
    "createdAt": 1795368315278
+  },
+  "best-work-outfit-udf6": {
+   "name": "Best Work Outfit",
+   "pieces": [
+    "black-sambas-debd",
+    "black-zara-jeans-ykmu",
+    "white-zara-t-shirt-boxy-fit-wm89",
+    "brown-sweater-5fv9",
+    "carhartt-coat-5o25",
+    "grandad-s-watch-3q9z"
+   ],
+   "createdAt": 1795368374507
   }
  },
  "audit": {
