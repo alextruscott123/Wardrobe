@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:01:44.720Z",
+ "updatedAt": "2026-11-22T14:01:49.499Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -233,7 +233,10 @@
   "brown-pull-bear-shirt-wjuo": {
    "name": "Brown Pull & Bear Shirt",
    "layer": "tops",
-   "type": "",
+   "type": "Shirt",
+   "colours": [
+    "brown"
+   ],
    "colour": "brown",
    "tone": "neutral",
    "lo": 3,
