@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:15:19.817Z",
+ "updatedAt": "2026-11-22T14:15:25.221Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2929,6 +2929,18 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356917309
+  },
+  "black-suit-trousers-ylj4__grey-splice-hoodie-xzbj": {
+   "a": "grey-splice-hoodie-xzbj",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356922055
+  },
+  "black-sfa-hoodie-9x9z__black-suit-trousers-ylj4": {
+   "a": "black-sfa-hoodie-9x9z",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356922712
   }
  },
  "audit": {
