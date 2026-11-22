@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:02:14.338Z",
+ "updatedAt": "2026-11-22T14:02:37.870Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -158,7 +158,7 @@
    "createdAt": 1795345416590
   },
   "dragon-t-shirt-9uk9": {
-   "name": "Dragon T-shirt",
+   "name": "Dragon T-Shirt",
    "layer": "tops",
    "type": "T-shirt",
    "colours": [
