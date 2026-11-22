@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:01:54.612Z",
+ "updatedAt": "2026-11-22T14:01:59.730Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -160,8 +160,11 @@
   "dragon-t-shirt-9uk9": {
    "name": "Dragon T-shirt",
    "layer": "tops",
-   "type": "",
-   "colour": "charcoal",
+   "type": "T-shirt",
+   "colours": [
+    "grey"
+   ],
+   "colour": "grey",
    "tone": "neutral",
    "lo": 2,
    "hi": 3,
