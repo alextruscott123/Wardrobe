@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:27:54.240Z",
+ "updatedAt": "2026-11-22T14:28:03.542Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3223,6 +3223,18 @@
    "b": "blue-jorts-7chg",
    "kind": "maybe",
    "createdAt": 1795357671735
+  },
+  "gymshark-gym-shorts-wjae__klaviyo-jersey-t4kr": {
+   "a": "klaviyo-jersey-t4kr",
+   "b": "gymshark-gym-shorts-wjae",
+   "kind": "yes",
+   "createdAt": 1795357678989
+  },
+  "gymshark-gym-shorts-wjae__vietnam-smoking-t-shirt-fud4": {
+   "a": "vietnam-smoking-t-shirt-fud4",
+   "b": "gymshark-gym-shorts-wjae",
+   "kind": "yes",
+   "createdAt": 1795357681033
   }
  },
  "audit": {
