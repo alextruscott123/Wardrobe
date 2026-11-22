@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:21:10.483Z",
+ "updatedAt": "2026-11-22T11:21:30.711Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -164,7 +164,7 @@
    "colour": "charcoal",
    "tone": "neutral",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
