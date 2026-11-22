@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:12:35.985Z",
+ "updatedAt": "2026-11-22T11:13:37.058Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -268,6 +268,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345953481
+  },
+  "grey-splice-hoodie-xzbj": {
+   "name": "Grey Splice Hoodie",
+   "layer": "mid",
+   "type": "",
+   "colour": "grey",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346014556
   }
  },
  "pins": {},
