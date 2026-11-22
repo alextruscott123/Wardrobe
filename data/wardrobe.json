@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:18:13.784Z",
+ "updatedAt": "2026-11-22T14:20:33.069Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2537,8 +2537,8 @@
   "black-sambas-debd__black-suit-trousers-ylj4": {
    "a": "black-suit-trousers-ylj4",
    "b": "black-sambas-debd",
-   "kind": "maybe",
-   "createdAt": 1795356538854
+   "kind": "no",
+   "createdAt": 1795357230561
   },
   "beige-shirt-ua7z__black-sambas-debd": {
    "a": "beige-shirt-ua7z",
