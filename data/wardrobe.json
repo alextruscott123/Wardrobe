@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:17:39.458Z",
+ "updatedAt": "2026-11-22T11:18:21.261Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -352,6 +352,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346238880
+  },
+  "grey-sweater-e83d": {
+   "name": "Grey Sweater",
+   "layer": "mid",
+   "type": "",
+   "colour": "grey",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346298758
   }
  },
  "pins": {},
