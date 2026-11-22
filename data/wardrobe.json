@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:13:50.946Z",
+ "updatedAt": "2026-11-22T11:14:32.212Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -296,6 +296,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346028443
+  },
+  "dickies-flannel-lxfo": {
+   "name": "Dickies Flannel",
+   "layer": "mid",
+   "type": "",
+   "colour": "grey",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "cold",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346069708
   }
  },
  "pins": {},
