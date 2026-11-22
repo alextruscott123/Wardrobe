@@ -1,21 +1,25 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:40:01.862Z",
+ "updatedAt": "2026-11-22T15:44:20.561Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
    "layer": "shoes",
    "type": "",
+   "colours": [
+    "black"
+   ],
    "colour": "black",
    "tone": "neutral",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795344884916
+   "createdAt": 1795344884916,
+   "suitOk": true
   },
   "white-airforces-nice-1u3h": {
    "name": "White Airforces (nice)",
@@ -91,15 +95,19 @@
    "name": "Black Zara Jeans",
    "layer": "bottoms",
    "type": "",
+   "colours": [
+    "black"
+   ],
    "colour": "black",
    "tone": "neutral",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345259966
+   "createdAt": 1795345259966,
+   "suitOk": true
   },
   "gymshark-gym-shorts-wjae": {
    "name": "Gymshark Gym Shorts",
@@ -147,15 +155,19 @@
    "name": "Black Jorts",
    "layer": "bottoms",
    "type": "",
+   "colours": [
+    "black"
+   ],
    "colour": "black",
    "tone": "neutral",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "warm",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345416590
+   "createdAt": 1795345416590,
+   "suitOk": true
   },
   "dragon-t-shirt-9uk9": {
    "name": "Dragon T-Shirt",
@@ -201,12 +213,13 @@
    "colour": "yellow",
    "tone": "statement",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345702280
+   "createdAt": 1795345702280,
+   "suitOk": true
   },
   "guess-top-awed": {
    "name": "Guess Top",
@@ -252,26 +265,31 @@
    "colour": "brown",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345841120
+   "createdAt": 1795345841120,
+   "suitOk": true
   },
   "carhartt-coat-5o25": {
    "name": "Carhartt Coat",
    "layer": "outer",
    "type": "",
+   "colours": [
+    "tan"
+   ],
    "colour": "tan",
    "tone": "statement",
    "lo": 2,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345953481
+   "createdAt": 1795345953481,
+   "suitOk": true
   },
   "grey-splice-hoodie-xzbj": {
    "name": "Grey Splice Hoodie",
@@ -333,43 +351,55 @@
    "name": "Brown Sweater",
    "layer": "mid",
    "type": "",
+   "colours": [
+    "brown"
+   ],
    "colour": "brown",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795346203148
+   "createdAt": 1795346203148,
+   "suitOk": true
   },
   "passenger-overshirt-10m7": {
    "name": "Passenger Overshirt",
    "layer": "mid",
    "type": "",
+   "colours": [
+    "tan"
+   ],
    "colour": "tan",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795346238880
+   "createdAt": 1795346238880,
+   "suitOk": true
   },
   "grey-sweater-e83d": {
    "name": "Grey Sweater",
    "layer": "mid",
    "type": "",
+   "colours": [
+    "grey"
+   ],
    "colour": "grey",
    "tone": "neutral",
-   "lo": 4,
-   "hi": 4,
+   "lo": 3,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795346298758
+   "createdAt": 1795346298758,
+   "suitOk": true
   },
   "navy-vietnam-shirt-w32w": {
    "name": "Navy Vietnam Shirt",
@@ -386,7 +416,8 @@
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795346320834
+   "createdAt": 1795346320834,
+   "suitOk": true
   },
   "red-adidas-1-4-zip-ohq0": {
    "name": "Red Adidas 1/4 Zip",
@@ -592,12 +623,13 @@
    "colour": "white",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356325650
+   "createdAt": 1795356325650,
+   "suitOk": true
   },
   "navy-uniqlo-sweater-9u3k": {
    "name": "Navy Uniqlo Sweater",
@@ -614,7 +646,8 @@
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356359812
+   "createdAt": 1795356359812,
+   "suitOk": true
   },
   "black-zara-t-shirt-boxy-fit-wn84": {
    "name": "Black Zara T-Shirt (boxy fit)",
@@ -626,12 +659,13 @@
    "colour": "black",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356394071
+   "createdAt": 1795356394071,
+   "suitOk": true
   },
   "black-tommy-hilfiger-shirt-40sq": {
    "name": "Black Tommy Hilfiger Shirt",
@@ -648,7 +682,8 @@
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356424307
+   "createdAt": 1795356424307,
+   "suitOk": true
   },
   "beige-shirt-ua7z": {
    "name": "Beige Shirt",
@@ -660,12 +695,13 @@
    "colour": "beige",
    "tone": "neutral",
    "lo": 3,
-   "hi": 4,
+   "hi": 3,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356441385
+   "createdAt": 1795356441385,
+   "suitOk": true
   },
   "black-suit-trousers-ylj4": {
    "name": "Black Suit Trousers",
@@ -682,7 +718,8 @@
    "care": "protect",
    "status": "active",
    "notes": "",
-   "createdAt": 1795356472197
+   "createdAt": 1795356472197,
+   "suitOk": true
   },
   "black-the-blast-t-shirt-4hpf": {
    "name": "Black “The Blast” T-Shirt",
