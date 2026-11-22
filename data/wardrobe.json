@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T22:19:35.864Z",
+ "updatedAt": "2026-11-22T22:21:27.323Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -930,6 +930,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795363412476
+  },
+  "suit-shoes-0wgd": {
+   "name": "Suit Shoes",
+   "layer": "shoes",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 4,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795386084811
   }
  },
  "pins": {
