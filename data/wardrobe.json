@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:15:32.475Z",
+ "updatedAt": "2026-11-22T11:16:45.651Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -324,6 +324,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346129971
+  },
+  "brown-sweater-5fv9": {
+   "name": "Brown Sweater",
+   "layer": "mid",
+   "type": "",
+   "colour": "brown",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346203148
   }
  },
  "pins": {},
