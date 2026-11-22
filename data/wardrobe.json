@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:59:59.703Z",
+ "updatedAt": "2026-11-22T11:01:02.468Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -86,6 +86,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345197200
+  },
+  "black-zara-jeans-ykmu": {
+   "name": "Black Zara Jeans",
+   "layer": "bottoms",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345259966
   }
  },
  "pins": {},
