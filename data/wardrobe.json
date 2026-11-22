@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:03:56.944Z",
+ "updatedAt": "2026-11-22T14:04:19.945Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -564,6 +564,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356234438
+  },
+  "black-guess-t-shirt-9kab": {
+   "name": "Black Guess T-Shirt",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 1,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356257440
   }
  },
  "pins": {
