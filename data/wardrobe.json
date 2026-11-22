@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:20:26.005Z",
+ "updatedAt": "2026-11-22T11:21:10.483Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -408,6 +408,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346423502
+  },
+  "black-st-ssy-hoodie-5hd2": {
+   "name": "Black Stüssy Hoodie",
+   "layer": "mid",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 2,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346467980
   }
  },
  "pins": {},
