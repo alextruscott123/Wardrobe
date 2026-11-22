@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:08:24.783Z",
+ "updatedAt": "2026-11-22T11:09:11.006Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -198,6 +198,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345702280
+  },
+  "guess-top-awed": {
+   "name": "Guess Top",
+   "layer": "tops",
+   "type": "",
+   "colour": "pattern",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345748504
   }
  },
  "pins": {},
