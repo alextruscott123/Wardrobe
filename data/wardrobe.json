@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:06:36.577Z",
+ "updatedAt": "2026-11-22T14:07:06.813Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -632,6 +632,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356394071
+  },
+  "black-tommy-hilfiger-shirt-40sq": {
+   "name": "Black Tommy Hilfiger Shirt",
+   "layer": "tops",
+   "type": "Shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356424307
   }
  },
  "pins": {
