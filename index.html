@@ -84,11 +84,25 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .btn.inv{min-height:40px;padding:0 12px;background:transparent;color:inherit;border-color:var(--ink-2);border-color:color-mix(in srgb,currentColor 42%,transparent);white-space:nowrap}
 .btn[disabled]{opacity:.55;cursor:default}
 .mini{margin-left:auto;min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:5px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
-.pair-layer{margin-top:4px;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
-.pair-row{grid-template-columns:auto minmax(0,1fr) auto}
+.pair-group{display:flex;flex-direction:column;gap:8px}
+.pair-layer{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.pair-layer .n{margin-left:2px}
+.pill.ok{background:var(--good-soft);color:var(--good)}
+.pill.todo{background:var(--warn-soft);color:var(--warn)}
+.group-head .pill{margin-left:auto}
+.pair-row .pill{margin-right:4px}
+.pair-block{display:flex;flex-direction:column;gap:6px;padding-top:6px}
+.pair-sub{display:flex;flex-direction:column;gap:4px;padding-left:2px}
+.pair-sub-name{font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.pair-none{font-size:13.5px;color:var(--ink-2)}
+.pair-go{align-self:flex-start;margin-top:4px;min-height:40px}
+.k-todo{color:var(--warn)}
+.row.pair-row{grid-template-columns:auto minmax(0,1fr) auto auto}
+.rows .pair-list li + li{border-top:0}
 .pair-row .chev{display:inline-block;width:9px;height:9px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(-45deg);margin-right:6px}
 .pair-row[aria-expanded="true"] .chev{transform:rotate(45deg)}
-.pair-detail{display:flex;flex-direction:column;gap:6px;padding:4px 12px 14px 50px}
+.pair-detail{display:flex;flex-direction:column;gap:8px;padding:4px 12px 14px 50px}
+@media (max-width:599px){.pair-detail{padding-left:14px}}
 .pair-kind{font-size:13.5px;margin-top:4px}
 .pair-list{display:flex;flex-direction:column;gap:4px}
 .pair-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
@@ -248,6 +262,14 @@ body.rating{background:var(--accent-soft)}
 .tray-text{flex:1;min-width:0}
 .tray-title{font-weight:600;font-size:15px;line-height:1.25}
 .tray-sub{font-size:13px;line-height:1.3;opacity:.82}
+.tray .btn{white-space:nowrap;flex:none}
+.tray-btns{display:flex;gap:8px;flex:none}
+@media (max-width:599px){
+  .tray{flex-wrap:wrap}
+  .tray-text{flex-basis:100%}
+  .tray-btns{flex:1 1 100%}
+  .tray-btns .btn{flex:1 1 0;min-width:0}
+}
 
 dialog.sheet{width:100%;max-width:560px;max-height:92vh;max-height:92dvh;margin:auto auto 0;padding:0;border:0;border-radius:12px 12px 0 0;background:var(--surface);color:var(--ink);overflow:auto}
 dialog.sheet::backdrop{background:var(--scrim)}
@@ -1089,8 +1111,8 @@ function renderTray(A){
   /* Rating works on one piece at a time, so Rate only appears with a single piece picked. */
   tray.innerHTML='<div class="tray-text"><div class="tray-title">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+esc(status)+'</div>'
     +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own rating')+'</div></div>'
-    +(picks.length===1&&RATERS[picks[0].layer]&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate '+esc(picks[0].name.length>14?'this':picks[0].name)+'</button>':'')
-    +'<button type="button" class="btn inv" data-act="clear">Clear outfit</button>';
+    +'<div class="tray-btns">'+(picks.length===1&&RATERS[picks[0].layer]&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate this piece</button>':'')
+    +'<button type="button" class="btn inv" data-act="clear">Clear outfit</button></div>';
   tray.hidden=false;
   setTrayH(tray.offsetHeight);
 }
@@ -1137,9 +1159,11 @@ function renderWardrobe(A){
     h+=arr.length?'<ul class="rows">'+arr.map(function(it){return rowHTML(it,A);}).join('')+'</ul>':'<p class="empty">Nothing added yet.</p>';
     h+='</section>';
   });
-  if(state.pinList.length){
+  var tally=rateTally();
+  if(tally.pieces){
     var popen=!!FOLD.pairsOpen;
-    h+='<section class="group"><div class="group-head"><button type="button" class="fold" data-act="fold" data-layer="pairsOpen" aria-expanded="'+(popen?'true':'false')+'"><span class="chev" aria-hidden="true"></span><h2>Pairings</h2></button></div>';
+    h+='<section class="group"><div class="group-head"><button type="button" class="fold" data-act="fold" data-layer="pairsOpen" aria-expanded="'+(popen?'true':'false')+'"><span class="chev" aria-hidden="true"></span><h2>Pairings</h2></button>'
+      +(tally.todo?'<span class="pill todo">'+tally.todo+(tally.todo===1?' pair':' pairs')+' to rate</span>':'<span class="pill ok">All rated</span>')+'</div>';
     if(popen)h+=pairingsHTML(edit);
     h+='</section>';
   }
@@ -1153,49 +1177,90 @@ function renderWardrobe(A){
   view.innerHTML=h;
 }
 
-/* Pairings grouped by the piece that did the rating (the lower layer), with neutrals counted rather than listed. */
-function pairingsHTML(edit){
-  var owners={};
-  state.pinList.forEach(function(p){
-    var a=itemById(p.a),b=itemById(p.b);
-    if(!a||!b)return;
-    var own=LAYER_IDS.indexOf(a.layer)<=LAYER_IDS.indexOf(b.layer)?a:b,other=own===a?b:a;
-    var o=owners[own.id]||(owners[own.id]={it:own,yes:[],no:[],maybe:0});
-    if(p.kind==='maybe')o.maybe++;else o[p.kind].push({other:other,key:p.key});
+/* Rating progress for one shoe or bottom: what it's been rated against, and what's still to rate. */
+function rateStatus(own){
+  var r={it:own,yes:[],no:[],maybe:0,todo:[],total:0};
+  state.items.forEach(function(x){
+    if(x.status!=='active'||!above(own,x))return;
+    r.total++;
+    var k=rating(own,x),key=pinKey(own.id,x.id);
+    if(k==='yes')r.yes.push({other:x,key:key});
+    else if(k==='no')r.no.push({other:x,key:key});
+    else if(k==='maybe')r.maybe++;
+    else r.todo.push({other:x});
   });
-  var h='<p class="rail-hint">What you’ve rated in Build, by the piece you rated. Neutral pairs are counted, not listed.</p>';
+  return r;
+}
+function rateTally(){
+  var pieces=0,done=0,todo=0;
+  state.items.forEach(function(it){
+    if(it.status!=='active'||!RATERS[it.layer])return;
+    var r=rateStatus(it);pieces++;todo+=r.todo.length;if(!r.todo.length)done++;
+  });
+  return {pieces:pieces,done:done,todo:todo};
+}
+function statusPill(r){
+  if(!r.total)return '';
+  if(!r.todo.length)return '<span class="pill ok">All rated</span>';
+  if(r.todo.length===r.total)return '<span class="pill todo">Not started</span>';
+  return '<span class="pill todo">'+r.todo.length+' to rate</span>';
+}
+/* One group (works / doesn't work / still to rate), split by layer. Bottoms, tops and layers always show;
+   outerwear and accessories only when something's in them. */
+function byLayerHTML(own,list,withDelete,edit){
+  var h='',always=withDelete?{bottoms:1,tops:1,mid:1}:{};
   LAYERS.forEach(function(L){
-    var list=Object.keys(owners).map(function(k){return owners[k];}).filter(function(o){return o.it.layer===L.id;}).sort(function(x,y){return x.it.name.localeCompare(y.it.name);});
-    if(!list.length)return;
-    h+='<h3 class="pair-layer">'+L.name+'</h3><ul class="rows">';
-    list.forEach(function(o){
-      var open=!!ui.openPiece[o.it.id],sum=[];
-      if(o.yes.length)sum.push(o.yes.length+' work');
-      if(o.no.length)sum.push(o.no.length+' don’t');
-      if(o.maybe)sum.push(o.maybe+' neutral');
-      h+='<li><button type="button" class="row pair-row" data-act="openpiece" data-id="'+esc(o.it.id)+'" aria-expanded="'+(open?'true':'false')+'">'+swatch(o.it,true)
-        +'<span class="row-main"><span class="row-name">'+esc(o.it.name)+'</span><span class="row-meta">'+sum.join(' · ')+'</span></span><span class="chev" aria-hidden="true"></span></button>';
-      if(open){
-        h+='<div class="pair-detail">';
-        [['yes','Works with'],['no','Doesn’t work with']].forEach(function(g){
-          var arr=o[g[0]].slice().sort(function(x,y){return LAYER_IDS.indexOf(x.other.layer)-LAYER_IDS.indexOf(y.other.layer)||x.other.name.localeCompare(y.other.name);});
-          if(!arr.length)return;
-          h+='<p class="pair-kind kind k-'+g[0]+'">'+g[1]+'</p><ul class="pair-list">';
-          arr.forEach(function(r){
-            var armed=ui.armPin===r.key;
-            h+='<li>'+swatch(r.other)+'<span>'+esc(r.other.name)+'</span>'+(edit?'<button type="button" class="mini'+(armed?' danger-on':'')+'" data-act="unpin" data-key="'+esc(r.key)+'">'+(armed?'Tap to confirm':'Delete')+'</button>':'')+'</li>';
-          });
-          h+='</ul>';
-        });
-        if(!o.yes.length&&!o.no.length)h+='<p class="help">Everything is neutral.</p>';
-        if(edit)h+='<button type="button" class="btn danger pair-reset" data-act="resetpiece" data-id="'+esc(o.it.id)+'">'+(ui.armReset===o.it.id?'Tap again to clear all '+(o.yes.length+o.no.length+o.maybe):'Clear all ratings for this piece')+'</button>';
-        h+='</div>';
-      }
-      h+='</li>';
-    });
-    h+='</ul>';
+    if(LAYER_IDS.indexOf(L.id)<=LAYER_IDS.indexOf(own.layer))return;
+    var arr=list.filter(function(r){return r.other.layer===L.id;}).sort(function(x,y){return x.other.name.localeCompare(y.other.name);});
+    if(!arr.length&&!always[L.id])return;
+    h+='<div class="pair-sub"><p class="pair-sub-name">'+L.name+'</p>';
+    if(!arr.length)h+='<p class="pair-none">None</p>';
+    else{
+      h+='<ul class="pair-list">';
+      arr.forEach(function(r){
+        var armed=withDelete&&ui.armPin===r.key;
+        h+='<li>'+swatch(r.other)+'<span>'+esc(r.other.name)+'</span>'+(withDelete&&edit?'<button type="button" class="mini'+(armed?' danger-on':'')+'" data-act="unpin" data-key="'+esc(r.key)+'">'+(armed?'Tap to confirm':'Delete')+'</button>':'')+'</li>';
+      });
+      h+='</ul>';
+    }
+    h+='</div>';
   });
-  if(edit)h+='<div class="actions"><button type="button" class="btn danger" data-act="unpinall">'+(ui.armAll?'Tap again to delete all '+state.pinList.length:'Delete all pairings')+'</button></div>';
+  return h;
+}
+function pairingsHTML(edit){
+  var h='<p class="rail-hint">How far you’ve got rating your shoes and bottoms. Neutral pairs are counted, not listed.</p>';
+  ['shoes','bottoms'].forEach(function(lid){
+    var L=LAYER_MAP[lid],pieces=state.items.filter(function(it){return it.layer===lid&&it.status==='active';}).sort(function(x,y){return x.name.localeCompare(y.name);});
+    if(!pieces.length)return;
+    var rs=pieces.map(rateStatus),done=rs.filter(function(r){return !r.todo.length;}).length,shut=!!FOLD['pairs-'+lid];
+    h+='<div class="pair-group"><button type="button" class="fold pair-layer" data-act="fold" data-layer="pairs-'+lid+'" aria-expanded="'+(shut?'false':'true')+'"><span class="chev" aria-hidden="true"></span><span>'+L.name+'</span><span class="n">'+done+' of '+pieces.length+' fully rated</span></button>';
+    if(!shut){
+      h+='<ul class="rows">';
+      rs.forEach(function(r){
+        var o=r.it,open=!!ui.openPiece[o.id],sum=[];
+        if(r.yes.length)sum.push(r.yes.length+' work');
+        if(r.no.length)sum.push(r.no.length+' don’t');
+        if(r.maybe)sum.push(r.maybe+' neutral');
+        h+='<li><button type="button" class="row pair-row" data-act="openpiece" data-id="'+esc(o.id)+'" aria-expanded="'+(open?'true':'false')+'">'+swatch(o,true)
+          +'<span class="row-main"><span class="row-name">'+esc(o.name)+'</span><span class="row-meta">'+(sum.join(' · ')||'Nothing rated yet')+'</span></span>'+statusPill(r)+'<span class="chev" aria-hidden="true"></span></button>';
+        if(open){
+          h+='<div class="pair-detail">';
+          if(r.todo.length){
+            h+='<div class="pair-block"><p class="pair-kind kind k-todo">Still to rate ('+r.todo.length+')</p>'+byLayerHTML(o,r.todo,false,edit)
+              +(edit?'<button type="button" class="btn primary pair-go" data-act="ratepiece" data-id="'+esc(o.id)+'">Rate '+esc(o.name)+' now</button>':'')+'</div>';
+          }
+          h+='<div class="pair-block"><p class="pair-kind kind k-yes">Works with</p>'+byLayerHTML(o,r.yes,true,edit)+'</div>';
+          h+='<div class="pair-block"><p class="pair-kind kind k-no">Doesn’t work with</p>'+byLayerHTML(o,r.no,true,edit)+'</div>';
+          if(edit&&(r.yes.length||r.no.length||r.maybe))h+='<button type="button" class="btn danger pair-reset" data-act="resetpiece" data-id="'+esc(o.id)+'">'+(ui.armReset===o.id?'Tap again to clear all '+(r.yes.length+r.no.length+r.maybe):'Clear all ratings for this piece')+'</button>';
+          h+='</div>';
+        }
+        h+='</li>';
+      });
+      h+='</ul>';
+    }
+    h+='</div>';
+  });
+  if(edit&&state.pinList.length)h+='<div class="actions"><button type="button" class="btn danger" data-act="unpinall">'+(ui.armAll?'Tap again to delete all '+state.pinList.length:'Delete all pairings')+'</button></div>';
   return h;
 }
 function deletePins(keys,done){
@@ -1779,6 +1844,14 @@ document.addEventListener('click',function(e){
       var pk=el.getAttribute('data-key');
       if(ui.armPin!==pk){ui.armPin=pk;render();setTimeout(function(){if(ui.armPin===pk){ui.armPin=null;schedule();}},4000);break;}
       ui.armPin=null;removePin(pk);
+      break;
+    case 'ratepiece':
+      it=itemById(id);
+      if(!it||!canChange())break;
+      ui.tab='build';ui.sel={};ui.sel[it.layer]=id;ui.anchor=id;ui.level=0;ui.care='all';ui.topType='all';
+      ui.rate=true;ui.frozen={};ui.rateStart={};
+      try{history.replaceState(null,'','#build');}catch(e5){}
+      render();window.scrollTo(0,0);
       break;
     case 'openpiece':
       if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
