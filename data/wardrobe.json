@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:34:54.162Z",
+ "updatedAt": "2026-11-22T14:35:05.758Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -700,6 +700,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795358091657
+  },
+  "black-joggers-z75d": {
+   "name": "Black Joggers",
+   "layer": "bottoms",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795358103250
   }
  },
  "pins": {
