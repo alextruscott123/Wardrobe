@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:07:06.813Z",
+ "updatedAt": "2026-11-22T14:07:23.892Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -649,6 +649,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356424307
+  },
+  "beige-shirt-ua7z": {
+   "name": "Beige Shirt",
+   "layer": "tops",
+   "type": "Shirt",
+   "colours": [
+    "beige"
+   ],
+   "colour": "beige",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356441385
   }
  },
  "pins": {
