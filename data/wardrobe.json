@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:13:37.058Z",
+ "updatedAt": "2026-11-22T11:13:50.946Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -282,6 +282,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346014556
+  },
+  "black-sfa-hoodie-9x9z": {
+   "name": "Black SFA Hoodie",
+   "layer": "mid",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346028443
   }
  },
  "pins": {},
