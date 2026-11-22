@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:54:18.024Z",
+ "updatedAt": "2026-11-22T15:54:19.946Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4264,6 +4264,12 @@
    "b": "1985-graphic-t-shirt-lgci",
    "kind": "yes",
    "createdAt": 1795362855517
+  },
+  "1985-graphic-t-shirt-lgci__black-suit-trousers-ylj4": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "1985-graphic-t-shirt-lgci",
+   "kind": "no",
+   "createdAt": 1795362859101
   }
  },
  "audit": {
