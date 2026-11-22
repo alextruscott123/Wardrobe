@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:11:20.570Z",
+ "updatedAt": "2026-11-22T11:12:35.985Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -254,6 +254,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345878067
+  },
+  "carhartt-coat-5o25": {
+   "name": "Carhartt Coat",
+   "layer": "outer",
+   "type": "",
+   "colour": "tan",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345953481
   }
  },
  "pins": {},
