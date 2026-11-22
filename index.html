@@ -84,6 +84,9 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .btn.inv{min-height:40px;padding:0 12px;background:transparent;color:inherit;border-color:var(--ink-2);border-color:color-mix(in srgb,currentColor 42%,transparent);white-space:nowrap}
 .btn[disabled]{opacity:.55;cursor:default}
 .mini{margin-left:auto;min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:5px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.review{display:flex;flex-direction:column;gap:10px;padding:14px;border:1.5px solid var(--accent);border-radius:8px;background:var(--surface)}
+.review-list{display:flex;flex-direction:column;gap:2px}
+.review-list .check{gap:10px;min-height:40px}
 .pair-group{display:flex;flex-direction:column;gap:8px}
 .pair-layer{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .pair-layer .n{margin-left:2px}
@@ -625,7 +628,7 @@ var LAYER_IDS=LAYERS.map(function(l){return l.id;});
 var LAYER_MAP={};LAYERS.forEach(function(l){LAYER_MAP[l.id]=l;});
 var REQ=LAYER_IDS.filter(function(id){return LAYER_MAP[id].req;});
 var OPT=LAYER_IDS.filter(function(id){return !LAYER_MAP[id].req;});
-var LEVELS=['','Active','Casual','Smart-casual','Smart'];
+var LEVELS=['','Active','Casual','Smart-casual','Suit and tie'];
 var LV=[1,2,3,4],MAXL=4;
 /* Fixed type choices, only for the layers where a type is useful. */
 var TYPE_CHOICES={tops:['T-shirt','Shirt'],acc:['Watch','Belt','Other']};
@@ -636,12 +639,12 @@ var CANDIDATES=[
   {key:'smartshoes',layer:'shoes',name:'Smart shoes',eg:'derbies, loafers or Chelsea boots',lo:3,hi:4},
   {key:'dressshoes',layer:'shoes',name:'Dress shoes',eg:'black or dark brown Oxfords',lo:4,hi:4},
   {key:'jeans',layer:'bottoms',name:'Dark jeans',eg:'indigo or black, no rips',lo:2,hi:3},
-  {key:'chinos',layer:'bottoms',name:'Chinos',eg:'navy, stone or olive',lo:2,hi:4},
+  {key:'chinos',layer:'bottoms',name:'Chinos',eg:'navy, stone or olive',lo:2,hi:3},
   {key:'tailored',layer:'bottoms',name:'Tailored trousers',eg:'wool or suit trousers',lo:3,hi:4},
   {key:'shorts',layer:'bottoms',name:'Shorts',eg:'chino or tailored shorts',lo:2,hi:2,season:'warm'},
   {key:'tee',layer:'tops',name:'Plain T-shirt',eg:'white, black, grey or navy',lo:2,hi:3},
-  {key:'casualshirt',layer:'tops',name:'Casual shirt',eg:'Oxford, denim or flannel',lo:2,hi:4},
-  {key:'dressshirt',layer:'tops',name:'Dress shirt',eg:'white or light blue',lo:4,hi:4}
+  {key:'casualshirt',layer:'tops',name:'Casual shirt',eg:'Oxford, denim or flannel',lo:2,hi:3},
+  {key:'dressshirt',layer:'tops',name:'Dress shirt',eg:'white or light blue',lo:3,hi:4}
 ];
 
 function clampLevel(n,d){n=Math.round(Number(n));return n>=1&&n<=MAXL?n:(n>MAXL?MAXL:d);}
@@ -682,7 +685,9 @@ function normItem(id,d){
     season:d.season==='warm'||d.season==='cold'?d.season:'all',
     care:d.care==='protect'||d.care==='beater'?d.care:'normal',
     status:d.status==='resting'?'resting':'active',
-    notes:cleanStr(d.notes,300),createdAt:Number(d.createdAt)||0};
+    notes:cleanStr(d.notes,300),createdAt:Number(d.createdAt)||0,
+    /* Set once a piece reaching the top level has been checked against the new Suit and tie meaning. */
+    suitOk:d.suitOk===true};
 }
 
 function normKind(k){return k==='yes'||k==='allow'?'yes':k==='no'||k==='block'?'no':k==='maybe'?'maybe':'';}
@@ -830,11 +835,11 @@ var COLOURS=[
   ['purple','Purple','#6A49A3','statement',1]
 ].map(function(c){return {key:c[0],name:c[1],hex:c[2],tone:c[3],more:!!c[4]};});
 var COLOUR_MAP={};COLOURS.forEach(function(c){COLOUR_MAP[c.key]=c;});
-var LEVEL_NOTES=['','Fitness, walking, sport','Friends, gigs, streetwear','Nice events, going out','Posh: shirt and proper trousers'];
+var LEVEL_NOTES=['','Gym, running, walking','Streetwear, friends, gigs','A nice meal, work, a day in London','Weddings, Christmas dos, the Royal Albert Hall'];
 
 var state={items:[],pins:Object.create(null),pinList:[],audit:{},phase:'connecting',loaded:false,slow:false,dead:false};
 var FOLD={};try{FOLD=JSON.parse(localStorage.getItem('wardrobe.folded')||'{}')||{};}catch(e){FOLD={};}
-var ui={openPiece:{},tab:'build',sel:{},anchor:null,rate:false,frozen:{},rateStart:{},level:0,care:'all',topType:'all',open:{},form:null,focus:null,focusSel:false};
+var ui={suitKeep:{},openPiece:{},tab:'build',sel:{},anchor:null,rate:false,frozen:{},rateStart:{},level:0,care:'all',topType:'all',open:{},form:null,focus:null,focusSel:false};
 var db=null,dl=null,canWrite=true,unsubs=[],conf={},slowTimer=0,toastTimer=0,pending=false;
 /* Set by the standalone build, where the wardrobe is kept in this browser instead of in Claude. */
 var LOCAL=!!window.WARDROBE_LOCAL;
@@ -901,8 +906,17 @@ function anchorItem(){
 /* Rating works bottom-up: shoes rate everything above them, bottoms rate tops and up. */
 var RATERS={shoes:true,bottoms:true};
 function above(a,b){return LAYER_IDS.indexOf(b.layer)>LAYER_IDS.indexOf(a.layer);}
+/* Which pieces can be rated against which: shoes and bottoms against everything above them,
+   and any other piece against your shoes and bottoms. Each pair is stored once, so both routes fill the same gaps. */
+function rateable(anchor,x){
+  if(anchor.layer===x.layer)return false;
+  return RATERS[anchor.layer]?above(anchor,x):!!RATERS[x.layer];
+}
+function rateLayers(anchor){
+  return LAYER_IDS.filter(function(l){return l!==anchor.layer&&(RATERS[anchor.layer]?LAYER_IDS.indexOf(l)>LAYER_IDS.indexOf(anchor.layer):!!RATERS[l]);});
+}
 function judgedAgainst(it){
-  if(ui.rate){var a=anchorItem();return a&&above(a,it)?[a]:[];}
+  if(ui.rate){var a=anchorItem();return a&&rateable(a,it)?[a]:[];}
   if(ui.sel[it.layer]&&selItem(it.layer))return [];
   return picked().filter(function(s){return s.layer!==it.layer;});
 }
@@ -1080,8 +1094,9 @@ function renderRate(A){
     +'<span class="rate-title">'+swatch(an)+esc(an.name)+'</span>'
     +'<span class="rate-help">Tap what <b>works</b> (green) and what <b>doesn’t</b> (red). Tap again to undo. Done marks everything you didn’t tap as neutral.</span></div>'
     +'<div class="rate-acts"><button type="button" class="btn rate-done" data-act="ratedone">Done</button><button type="button" class="rate-exit" data-act="rateexit">Exit without saving the rest</button></div></section>';
+  var rl=rateLayers(an);
   LAYERS.forEach(function(L){
-    if(LAYER_IDS.indexOf(L.id)<=LAYER_IDS.indexOf(an.layer))return;
+    if(rl.indexOf(L.id)<0)return;
     var list=A.by[L.id].slice().sort(orderItems).map(function(it){return {it:it,aff:affinity(it)};});
     if(!ui.frozen[L.id]){
       list.sort(function(a,b){return (a.aff?RANK[a.aff.st]:1)-(b.aff?RANK[b.aff.st]:1);});
@@ -1111,7 +1126,7 @@ function renderTray(A){
   /* Rating works on one piece at a time, so Rate only appears with a single piece picked. */
   tray.innerHTML='<div class="tray-text"><div class="tray-title">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+esc(status)+'</div>'
     +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own rating')+'</div></div>'
-    +'<div class="tray-btns">'+(picks.length===1&&RATERS[picks[0].layer]&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate this piece</button>':'')
+    +'<div class="tray-btns">'+(picks.length===1&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate this piece</button>':'')
     +'<button type="button" class="btn inv" data-act="clear">Clear outfit</button></div>';
   tray.hidden=false;
   setTrayH(tray.offsetHeight);
@@ -1144,6 +1159,15 @@ function renderWardrobe(A){
     return;
   }
   var edit=db&&canWrite;
+  var review=state.items.filter(function(it){return it.hi===MAXL&&!it.suitOk;});
+  if(edit&&review.length){
+    h+='<section class="review"><h2>Smart is now Suit and tie</h2><p class="sub">These pieces went up to Smart. Tick the ones you’d wear with a suit and tie. The rest move down to Smart-casual. Your ratings aren’t affected.</p><ul class="review-list">';
+    review.slice().sort(function(a,b){return LAYER_IDS.indexOf(a.layer)-LAYER_IDS.indexOf(b.layer)||a.name.localeCompare(b.name);}).forEach(function(it){
+      var on=it.id in ui.suitKeep?ui.suitKeep[it.id]:/suit/i.test(it.name);
+      h+='<li><label class="check" for="sk-'+esc(it.id)+'"><input type="checkbox" id="sk-'+esc(it.id)+'" data-suit="'+esc(it.id)+'"'+(on?' checked':'')+'>'+swatch(it)+'<span><b>'+esc(it.name)+'</b><span class="help"> · '+LAYER_MAP[it.layer].name+'</span></span></label></li>';
+    });
+    h+='</ul><div class="actions"><button type="button" class="btn primary" data-act="applysuit">Apply to '+review.length+' pieces</button></div></section>';
+  }
   if(edit)h+='<div class="actions"><button type="button" class="btn primary" data-act="add">Add a piece</button></div>';
   h+='<p class="sub">'+(edit?'Tap a piece to edit it, or add new pieces at any time.':sync?'View only on this device. Add your GitHub key under Your data to make changes.':'Only the owner can change this wardrobe.')+'</p>';
   LAYERS.forEach(function(L){
@@ -1260,6 +1284,18 @@ function pairingsHTML(edit){
     }
     h+='</div>';
   });
+  var others=state.items.filter(function(it){return it.status==='active'&&!RATERS[it.layer];}).map(function(it){
+    var n=state.items.filter(function(x){return x.status==='active'&&RATERS[x.layer]&&!rating(it,x);}).length;
+    return {it:it,n:n};
+  }).filter(function(o){return o.n;}).sort(function(a,b){return LAYER_IDS.indexOf(a.it.layer)-LAYER_IDS.indexOf(b.it.layer)||a.it.name.localeCompare(b.it.name);});
+  if(others.length){
+    h+='<div class="pair-group"><p class="pair-layer">New pieces to rate</p><p class="rail-hint">Quickest way to fill the gaps: rate each one against your shoes and bottoms.</p><ul class="rows">';
+    others.forEach(function(o){
+      h+='<li class="exc">'+swatch(o.it,true)+'<span><b>'+esc(o.it.name)+'</b><br><span class="help">'+o.n+' to rate · '+LAYER_MAP[o.it.layer].name+'</span></span>'
+        +(edit?'<button type="button" class="mini" data-act="ratepiece" data-id="'+esc(o.it.id)+'">Rate now</button>':'')+'</li>';
+    });
+    h+='</ul></div>';
+  }
   if(edit&&state.pinList.length)h+='<div class="actions"><button type="button" class="btn danger" data-act="unpinall">'+(ui.armAll?'Tap again to delete all '+state.pinList.length:'Delete all pairings')+'</button></div>';
   return h;
 }
@@ -1509,13 +1545,21 @@ function submitForm(form){
   var data={name:name.slice(0,80),layer:layer,type:normType(layer,String(fd.get('type')||'')),
     colours:colours,colour:colours[0]||'',tone:fd.get('tone')==='statement'?'statement':'neutral',lo:lo,hi:hi,
     season:season==='warm'||season==='cold'?season:'all',care:care==='protect'||care==='beater'?care:'normal',
-    status:fd.get('rest')?'resting':'active',notes:String(fd.get('notes')||'').trim().slice(0,300),
+    status:fd.get('rest')?'resting':'active',notes:String(fd.get('notes')||'').trim().slice(0,300),suitOk:true,
     createdAt:ui.form.createdAt||Date.now()};
   var id=ui.form.id||newId(name),btn=$('f-save'),isNew=!ui.form.id;
   if(btn)btn.disabled=true;
   var p;
   try{p=db.doc('items/'+id).set(data);}catch(e){p=Promise.reject(e);}
-  p.then(function(){closeSheet();toast(isNew?'Added to your wardrobe':'Saved');},function(e){
+  p.then(function(){
+    closeSheet();
+    var saved=itemById(id);
+    var toRate=saved&&saved.status==='active'?state.items.filter(function(x){return x.status==='active'&&rateable(saved,x)&&!rating(saved,x);}).length:0;
+    if(isNew&&toRate){
+      openSheet(head('Added '+esc(name))+'<p class="sub">Rate it now against your '+(RATERS[layer]?'pieces above it':'shoes and bottoms')+'? That’s '+toRate+(toRate===1?' pair':' pairs')+'. Tap what works and what doesn’t; Done marks the rest neutral.</p>'
+        +'<div class="sheet-foot"><button type="button" class="btn" data-act="close">Later</button><button type="button" class="btn primary" data-act="ratepiece" data-id="'+esc(id)+'">Rate now</button></div>');
+    }else toast(isNew?'Added to your wardrobe':'Saved');
+  },function(e){
     if(btn)btn.disabled=false;
     formErr('That didn’t save. Check your connection and try again.');
     if(e&&(e.code==='invalid_argument'||e.code==='revoked'))formErr('That didn’t save. You may not have permission to change this wardrobe.');
@@ -1649,7 +1693,7 @@ function markBackup(){try{localStorage.setItem('wardrobe.lastBackup',String(Date
 function itemData(it){
   var cs=(it.colours||[]).filter(function(k){return COLOUR_MAP[k];});
   return {name:it.name,layer:it.layer,type:it.type,colours:cs,colour:cs[0]||'',tone:it.tone,lo:it.lo,hi:it.hi,
-    season:it.season,care:it.care,status:it.status,notes:it.notes,createdAt:it.createdAt||Date.now()};
+    season:it.season,care:it.care,status:it.status,notes:it.notes,createdAt:it.createdAt||Date.now(),suitOk:!!it.suitOk};
 }
 function backupData(){
   var items={},pins={},audit={};
@@ -1781,7 +1825,7 @@ document.addEventListener('click',function(e){
       render();
       break;
     case 'rate':
-      if(!ui.rate&&(!canChange()||picked().length!==1||!RATERS[picked()[0].layer]))break;
+      if(!ui.rate&&(!canChange()||picked().length!==1))break;
       ui.rate=!ui.rate;ui.frozen={};ui.rateStart={};
       if(ui.rate)ui.anchor=picked()[0].id;
       render();window.scrollTo(0,0);
@@ -1791,7 +1835,7 @@ document.addEventListener('click',function(e){
       var anc=anchorItem(),todo=[];
       if(act==='ratedone'&&anc&&canWrite){
         LAYER_IDS.forEach(function(l){
-          if(LAYER_IDS.indexOf(l)<=LAYER_IDS.indexOf(anc.layer))return;
+          if(rateLayers(anc).indexOf(l)<0)return;
           state.items.forEach(function(x){if(x.layer===l&&x.status==='active'&&!rating(x,anc))todo.push(x.id);});
         });
       }
@@ -1850,8 +1894,21 @@ document.addEventListener('click',function(e){
       if(!it||!canChange())break;
       ui.tab='build';ui.sel={};ui.sel[it.layer]=id;ui.anchor=id;ui.level=0;ui.care='all';ui.topType='all';
       ui.rate=true;ui.frozen={};ui.rateStart={};
+      if(sheet.open)closeSheet();
       try{history.replaceState(null,'','#build');}catch(e5){}
       render();window.scrollTo(0,0);
+      break;
+    case 'applysuit':
+      if(!canChange())break;
+      var rv=state.items.filter(function(x){return x.hi===MAXL&&!x.suitOk;}),ri2=0,kept=0;
+      (function nextS(){
+        if(ri2>=rv.length){toast('Done. '+kept+' kept at Suit and tie, '+(rv.length-kept)+' moved to Smart-casual.');return;}
+        var x=rv[ri2++],keep=x.id in ui.suitKeep?ui.suitKeep[x.id]:/suit/i.test(x.name),d=itemData(x);
+        d.suitOk=true;
+        if(keep)kept++;else{d.hi=MAXL-1;if(d.lo>d.hi)d.lo=d.hi;}
+        var sp;try{sp=db.doc('items/'+x.id).set(d);}catch(e6){sp=Promise.reject(e6);}
+        sp.then(nextS,writeFailed);
+      })();
       break;
     case 'openpiece':
       if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
@@ -1901,6 +1958,7 @@ document.addEventListener('click',function(e){
   }
 });
 view.addEventListener('change',function(e){
+  if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-suit')){ui.suitKeep[e.target.getAttribute('data-suit')]=e.target.checked;return;}
   if(e.target&&e.target.id==='flt-level'){
     ui.level=Number(e.target.value)||0;
     ui.focusSel=true;
@@ -1940,7 +1998,7 @@ sheet.addEventListener('submit',function(e){
   e.preventDefault();
   if(e.target&&e.target.id==='item-form')submitForm(e.target);
 });
-sheet.addEventListener('close',function(){ui.form=null;sheet.innerHTML='';});
+sheet.addEventListener('close',function(){if(sheet.open)return;ui.form=null;sheet.innerHTML='';});
 window.addEventListener('hashchange',function(){ui.tab=readTab();render();});
 window.addEventListener('resize',function(){if(!tray.hidden)setTrayH(tray.offsetHeight);});
 
