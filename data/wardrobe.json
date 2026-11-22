@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:06:02.318Z",
+ "updatedAt": "2026-11-22T14:06:36.577Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -615,6 +615,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356359812
+  },
+  "black-zara-t-shirt-boxy-fit-wn84": {
+   "name": "Black Zara T-Shirt (boxy fit)",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356394071
   }
  },
  "pins": {
