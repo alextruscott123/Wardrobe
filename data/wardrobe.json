@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T16:02:19.510Z",
+ "updatedAt": "2026-11-22T16:02:50.303Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -200,11 +200,12 @@
    "colour": "grey",
    "tone": "neutral",
    "lo": 2,
-   "hi": 3,
+   "hi": 2,
    "season": "all",
    "care": "normal",
    "status": "active",
    "notes": "",
+   "suitOk": true,
    "createdAt": 1795345634551
   },
   "mont-bell-shitt-c91q": {
