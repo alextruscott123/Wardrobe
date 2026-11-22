@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:51:11.680Z",
+ "updatedAt": "2026-11-22T15:51:15.807Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3946,6 +3946,12 @@
    "b": "uniqlo-light-jeans-iyvr",
    "kind": "no",
    "createdAt": 1795362669171
+  },
+  "black-sfa-hoodie-9x9z__uniqlo-light-jeans-iyvr": {
+   "a": "black-sfa-hoodie-9x9z",
+   "b": "uniqlo-light-jeans-iyvr",
+   "kind": "yes",
+   "createdAt": 1795362673299
   }
  },
  "audit": {
