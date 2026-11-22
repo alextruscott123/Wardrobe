@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:45:01.412Z",
+ "updatedAt": "2026-11-22T15:45:18.709Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3630,6 +3630,12 @@
    "b": "beige-nikes-5fwc",
    "kind": "no",
    "createdAt": 1795362298904
+  },
+  "black-joggers-z75d__black-sambas-debd": {
+   "a": "black-joggers-z75d",
+   "b": "black-sambas-debd",
+   "kind": "maybe",
+   "createdAt": 1795362316201
   }
  },
  "audit": {
