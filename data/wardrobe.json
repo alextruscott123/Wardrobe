@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:01:02.468Z",
+ "updatedAt": "2026-11-22T11:02:28.841Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -100,6 +100,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345259966
+  },
+  "gymshark-gym-shorts-wjae": {
+   "name": "Gymshark Gym Shorts",
+   "layer": "bottoms",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 1,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345346339
   }
  },
  "pins": {},
