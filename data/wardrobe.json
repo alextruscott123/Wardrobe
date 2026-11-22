@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:02:54.979Z",
+ "updatedAt": "2026-11-22T14:03:28.065Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -530,6 +530,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356085126
+  },
+  "klaviyo-jersey-t4kr": {
+   "name": "Klaviyo Jersey",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "white"
+   ],
+   "colour": "white",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356205559
   }
  },
  "pins": {
