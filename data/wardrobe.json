@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:03:39.093Z",
+ "updatedAt": "2026-11-22T11:05:11.333Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -156,6 +156,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345416590
+  },
+  "dragon-t-shirt-9uk9": {
+   "name": "Dragon T-shirt",
+   "layer": "tops",
+   "type": "",
+   "colour": "charcoal",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345508830
   }
  },
  "pins": {},
