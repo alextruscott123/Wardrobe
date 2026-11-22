@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:09:11.006Z",
+ "updatedAt": "2026-11-22T11:09:37.876Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -212,6 +212,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345748504
+  },
+  "1985-jersey-q9c3": {
+   "name": "1985 Jersey",
+   "layer": "tops",
+   "type": "",
+   "colour": "black",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345775373
   }
  },
  "pins": {},
