@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:16:45.651Z",
+ "updatedAt": "2026-11-22T11:17:21.383Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -338,6 +338,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346203148
+  },
+  "passenger-overshirt-10m7": {
+   "name": "Passenger Overshirt",
+   "layer": "mid",
+   "type": "",
+   "colour": "tan",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346238880
   }
  },
  "pins": {},
