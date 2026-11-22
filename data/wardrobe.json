@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:28:09.995Z",
+ "updatedAt": "2026-11-22T14:34:54.162Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -683,6 +683,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356472197
+  },
+  "black-the-blast-t-shirt-4hpf": {
+   "name": "Black “The Blast” T-Shirt",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795358091657
   }
  },
  "pins": {
