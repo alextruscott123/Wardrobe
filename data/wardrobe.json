@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:04:19.945Z",
+ "updatedAt": "2026-11-22T14:05:28.156Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -581,6 +581,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356257440
+  },
+  "white-zara-t-shirt-normal-fit-q898": {
+   "name": "White Zara T-Shirt (normal fit)",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "white"
+   ],
+   "colour": "white",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356325650
   }
  },
  "pins": {
