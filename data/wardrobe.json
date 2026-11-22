@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:59:37.477Z",
+ "updatedAt": "2026-11-22T10:59:59.703Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -72,6 +72,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345174975
+  },
+  "walking-boots-9kwv": {
+   "name": "Walking boots",
+   "layer": "shoes",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345197200
   }
  },
  "pins": {},
