@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:05:28.156Z",
+ "updatedAt": "2026-11-22T14:06:02.318Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -598,6 +598,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356325650
+  },
+  "navy-uniqlo-sweater-9u3k": {
+   "name": "Navy Uniqlo Sweater",
+   "layer": "mid",
+   "type": "",
+   "colours": [
+    "navy"
+   ],
+   "colour": "navy",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "cold",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356359812
   }
  },
  "pins": {
