@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:11:45.497Z",
+ "updatedAt": "2026-11-22T14:12:56.845Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2899,6 +2899,18 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356702988
+  },
+  "beige-shirt-ua7z__black-suit-trousers-ylj4": {
+   "a": "beige-shirt-ua7z",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356773427
+  },
+  "black-suit-trousers-ylj4__mont-bell-shitt-c91q": {
+   "a": "mont-bell-shitt-c91q",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356774338
   }
  },
  "audit": {
