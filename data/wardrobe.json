@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:26:46.272Z",
+ "updatedAt": "2026-11-22T11:27:16.651Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -492,6 +492,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346803768
+  },
+  "grey-mont-bell-anorak-qzqa": {
+   "name": "Grey Mont Bell Anorak",
+   "layer": "outer",
+   "type": "",
+   "colour": "grey",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346834148
   }
  },
  "pins": {},
