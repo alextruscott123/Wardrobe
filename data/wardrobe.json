@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:54:35.437Z",
+ "updatedAt": "2026-11-22T15:55:07.162Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -848,6 +848,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362851056
+  },
+  "gully-riddimz-t-shirt-z1tk": {
+   "name": "Gully Riddimz T-Shirt",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 1,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362904653
   }
  },
  "pins": {
