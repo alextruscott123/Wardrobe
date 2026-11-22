@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:07:23.892Z",
+ "updatedAt": "2026-11-22T14:07:54.702Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -666,6 +666,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795356441385
+  },
+  "black-suit-trousers-ylj4": {
+   "name": "Black Suit Trousers",
+   "layer": "bottoms",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356472197
   }
  },
  "pins": {
