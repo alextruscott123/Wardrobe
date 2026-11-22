@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:03:24.232Z",
+ "updatedAt": "2026-11-22T11:03:39.093Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -142,6 +142,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345401731
+  },
+  "black-jorts-bynf": {
+   "name": "Black Jorts",
+   "layer": "bottoms",
+   "type": "",
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "warm",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345416590
   }
  },
  "pins": {},
