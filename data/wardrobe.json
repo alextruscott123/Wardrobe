@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:27:23.605Z",
+ "updatedAt": "2026-11-22T11:27:33.993Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -512,6 +512,8 @@
  "audit": {
   "shoes": true,
   "bottoms": true,
-  "tops": true
+  "tops": true,
+  "mid": true,
+  "outer": true
  }
 }
