@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:20:33.069Z",
+ "updatedAt": "2026-11-22T14:20:45.326Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2453,8 +2453,8 @@
   "beige-nikes-5fwc__black-suit-trousers-ylj4": {
    "a": "black-suit-trousers-ylj4",
    "b": "beige-nikes-5fwc",
-   "kind": "maybe",
-   "createdAt": 1795356495666
+   "kind": "no",
+   "createdAt": 1795357242818
   },
   "beige-nikes-5fwc__beige-shirt-ua7z": {
    "a": "beige-shirt-ua7z",
