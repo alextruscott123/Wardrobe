@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T17:36:04.254Z",
+ "updatedAt": "2026-11-22T17:36:12.085Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -925,22 +925,6 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795363412476
-  },
-  "test-123-eged": {
-   "name": "Test 123",
-   "layer": "bottoms",
-   "type": "",
-   "colours": [],
-   "colour": "",
-   "tone": "neutral",
-   "lo": 2,
-   "hi": 3,
-   "season": "all",
-   "care": "normal",
-   "status": "active",
-   "notes": "",
-   "suitOk": true,
-   "createdAt": 1795368961742
   }
  },
  "pins": {
