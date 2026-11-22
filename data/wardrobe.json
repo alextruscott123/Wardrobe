@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:11:36.439Z",
+ "updatedAt": "2026-11-22T14:11:45.497Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2893,6 +2893,12 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356693931
+  },
+  "black-suit-trousers-ylj4__black-tommy-hilfiger-shirt-40sq": {
+   "a": "black-tommy-hilfiger-shirt-40sq",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356702988
   }
  },
  "audit": {
