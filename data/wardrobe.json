@@ -1,23 +1,8 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:32:30.142Z",
- "items": {
-  "test-3evh": {
-   "name": "Test",
-   "layer": "shoes",
-   "type": "",
-   "colour": "",
-   "tone": "neutral",
-   "lo": 2,
-   "hi": 3,
-   "season": "all",
-   "care": "normal",
-   "status": "active",
-   "notes": "",
-   "createdAt": 1795343547639
-  }
- },
+ "updatedAt": "2026-11-22T10:38:27.716Z",
+ "items": {},
  "pins": {},
  "audit": {}
 }
