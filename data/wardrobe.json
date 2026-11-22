@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:45:48.373Z",
+ "updatedAt": "2026-11-22T15:46:04.306Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3648,6 +3648,12 @@
    "b": "walking-boots-9kwv",
    "kind": "no",
    "createdAt": 1795362345863
+  },
+  "black-joggers-z75d__white-airforces-2nd-hand-fats": {
+   "a": "black-joggers-z75d",
+   "b": "white-airforces-2nd-hand-fats",
+   "kind": "yes",
+   "createdAt": 1795362361796
   }
  },
  "audit": {
