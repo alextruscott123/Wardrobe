@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:10:43.623Z",
+ "updatedAt": "2026-11-22T11:11:20.570Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -240,6 +240,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345841120
+  },
+  "og-bus-seat-shirt-cb4r": {
+   "name": "OG Bus Seat Shirt",
+   "layer": "tops",
+   "type": "",
+   "colour": "pattern",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 2,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345878067
   }
  },
  "pins": {},
