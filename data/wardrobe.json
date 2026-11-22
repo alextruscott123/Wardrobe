@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:17:02.962Z",
+ "updatedAt": "2026-11-22T14:17:33.467Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2959,12 +2959,6 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795357019583
-  },
-  "black-suit-trousers-ylj4__carhartt-coat-5o25": {
-   "a": "carhartt-coat-5o25",
-   "b": "black-suit-trousers-ylj4",
-   "kind": "no",
-   "createdAt": 1795357020453
   }
  },
  "audit": {
