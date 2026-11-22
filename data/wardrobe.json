@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:47:01.418Z",
+ "updatedAt": "2026-11-22T15:47:29.631Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -757,6 +757,25 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795358103250
+  },
+  "blue-crew-t-shirt-dc6i": {
+   "name": "Blue Crew T-Shirt",
+   "layer": "tops",
+   "type": "",
+   "colours": [
+    "navy",
+    "pattern"
+   ],
+   "colour": "navy",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362447120
   }
  },
  "pins": {
