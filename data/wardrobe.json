@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:48:43.243Z",
+ "updatedAt": "2026-11-22T15:49:08.108Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -794,6 +794,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362494531
+  },
+  "uniqlo-light-jeans-iyvr": {
+   "name": "Uniqlo Light Jeans",
+   "layer": "bottoms",
+   "type": "",
+   "colours": [
+    "denim"
+   ],
+   "colour": "denim",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362545600
   }
  },
  "pins": {
