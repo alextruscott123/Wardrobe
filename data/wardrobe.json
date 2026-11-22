@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:09:56.287Z",
+ "updatedAt": "2026-11-22T14:10:04.950Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2701,6 +2701,12 @@
    "b": "white-airforces-2nd-hand-fats",
    "kind": "no",
    "createdAt": 1795356594934
+  },
+  "long-sleeve-sofa-sound-t-shirt-258i__white-airforces-2nd-hand-fats": {
+   "a": "long-sleeve-sofa-sound-t-shirt-258i",
+   "b": "white-airforces-2nd-hand-fats",
+   "kind": "yes",
+   "createdAt": 1795356602444
   }
  },
  "audit": {
