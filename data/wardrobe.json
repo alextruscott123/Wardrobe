@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:45:41.320Z",
+ "updatedAt": "2026-11-22T15:45:48.373Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3642,6 +3642,12 @@
    "b": "running-shoes-0say",
    "kind": "maybe",
    "createdAt": 1795362338812
+  },
+  "black-joggers-z75d__walking-boots-9kwv": {
+   "a": "black-joggers-z75d",
+   "b": "walking-boots-9kwv",
+   "kind": "no",
+   "createdAt": 1795362345863
   }
  },
  "audit": {
