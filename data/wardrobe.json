@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:23:10.064Z",
+ "updatedAt": "2026-11-22T14:25:16.576Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3073,6 +3073,12 @@
    "b": "black-zara-jeans-ykmu",
    "kind": "yes",
    "createdAt": 1795357387556
+  },
+  "black-zara-jeans-ykmu__klaviyo-jersey-t4kr": {
+   "a": "klaviyo-jersey-t4kr",
+   "b": "black-zara-jeans-ykmu",
+   "kind": "no",
+   "createdAt": 1795357514067
   }
  },
  "audit": {
