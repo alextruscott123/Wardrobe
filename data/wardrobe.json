@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:24:59.550Z",
+ "updatedAt": "2026-11-22T11:25:22.878Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -436,6 +436,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346682357
+  },
+  "navy-have-a-nice-day-1-4-zip-et53": {
+   "name": "Navy “Have a Nice Day” 1/4 Zip",
+   "layer": "mid",
+   "type": "",
+   "colour": "navy",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 2,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346720373
   }
  },
  "pins": {},
