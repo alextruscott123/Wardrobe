@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T13:44:48.130Z",
+ "updatedAt": "2026-11-22T14:01:27.634Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -506,6 +506,23 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346834148
+  },
+  "long-sleeve-sofa-sound-t-shirt-258i": {
+   "name": "Long sleeve Sofa Sound T-Shirt",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 2,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795356085126
   }
  },
  "pins": {
