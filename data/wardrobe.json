@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:11:32.425Z",
+ "updatedAt": "2026-11-22T14:11:36.439Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2887,6 +2887,12 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356689916
+  },
+  "black-suit-trousers-ylj4__brown-pull-bear-shirt-wjuo": {
+   "a": "brown-pull-bear-shirt-wjuo",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356693931
   }
  },
  "audit": {
