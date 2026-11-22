@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T13:42:26.745Z",
+ "updatedAt": "2026-11-22T13:42:35.338Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -1738,6 +1738,12 @@
    "b": "black-jorts-bynf",
    "kind": "maybe",
    "createdAt": 1795354944241
+  },
+  "black-zara-jeans-ykmu__mont-bell-shitt-c91q": {
+   "a": "mont-bell-shitt-c91q",
+   "b": "black-zara-jeans-ykmu",
+   "kind": "yes",
+   "createdAt": 1795354952832
   }
  },
  "audit": {
