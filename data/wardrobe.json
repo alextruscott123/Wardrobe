@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:47:51.325Z",
+ "updatedAt": "2026-11-22T15:48:17.040Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -776,6 +776,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362447120
+  },
+  "black-splice-t-shirt-ciad": {
+   "name": "Black Splice T-Shirt",
+   "layer": "tops",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 2,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362494531
   }
  },
  "pins": {
