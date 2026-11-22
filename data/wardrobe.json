@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:02:03.365Z",
+ "updatedAt": "2026-11-22T14:02:07.970Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -211,7 +211,10 @@
   "guess-top-awed": {
    "name": "Guess Top",
    "layer": "tops",
-   "type": "",
+   "type": "T-shirt",
+   "colours": [
+    "pattern"
+   ],
    "colour": "pattern",
    "tone": "statement",
    "lo": 2,
