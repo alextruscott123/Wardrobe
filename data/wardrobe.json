@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:53:45.048Z",
+ "updatedAt": "2026-11-22T15:54:18.024Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -830,6 +830,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362787470
+  },
+  "1985-graphic-t-shirt-lgci": {
+   "name": "1985 Graphic T-Shirt",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362851056
   }
  },
  "pins": {
@@ -4228,6 +4246,24 @@
    "b": "white-zara-t-shirt-boxy-fit-wm89",
    "kind": "maybe",
    "createdAt": 1795362824637
+  },
+  "1985-graphic-t-shirt-lgci__black-sambas-debd": {
+   "a": "black-sambas-debd",
+   "b": "1985-graphic-t-shirt-lgci",
+   "kind": "yes",
+   "createdAt": 1795362853284
+  },
+  "1985-graphic-t-shirt-lgci__white-airforces-2nd-hand-fats": {
+   "a": "white-airforces-2nd-hand-fats",
+   "b": "1985-graphic-t-shirt-lgci",
+   "kind": "yes",
+   "createdAt": 1795362854316
+  },
+  "1985-graphic-t-shirt-lgci__white-airforces-nice-1u3h": {
+   "a": "white-airforces-nice-1u3h",
+   "b": "1985-graphic-t-shirt-lgci",
+   "kind": "yes",
+   "createdAt": 1795362855517
   }
  },
  "audit": {
