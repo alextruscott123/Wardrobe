@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:02:07.970Z",
+ "updatedAt": "2026-11-22T14:02:14.338Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -228,7 +228,10 @@
   "1985-jersey-q9c3": {
    "name": "1985 Jersey",
    "layer": "tops",
-   "type": "",
+   "type": "T-shirt",
+   "colours": [
+    "black"
+   ],
    "colour": "black",
    "tone": "statement",
    "lo": 2,
