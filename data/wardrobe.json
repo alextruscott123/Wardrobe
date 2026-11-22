@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:54:19.946Z",
+ "updatedAt": "2026-11-22T15:54:21.791Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4270,6 +4270,12 @@
    "b": "1985-graphic-t-shirt-lgci",
    "kind": "no",
    "createdAt": 1795362859101
+  },
+  "1985-graphic-t-shirt-lgci__black-jorts-bynf": {
+   "a": "black-jorts-bynf",
+   "b": "1985-graphic-t-shirt-lgci",
+   "kind": "yes",
+   "createdAt": 1795362860703
   }
  },
  "audit": {
