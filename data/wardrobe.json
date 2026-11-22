@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:46:15.230Z",
+ "updatedAt": "2026-11-22T15:46:52.922Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -226,7 +226,8 @@
    "layer": "tops",
    "type": "T-shirt",
    "colours": [
-    "pattern"
+    "pattern",
+    "red"
    ],
    "colour": "pattern",
    "tone": "statement",
@@ -236,6 +237,7 @@
    "care": "normal",
    "status": "active",
    "notes": "",
+   "suitOk": true,
    "createdAt": 1795345748504
   },
   "1985-jersey-q9c3": {
