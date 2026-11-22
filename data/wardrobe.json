@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:54:47.418Z",
+ "updatedAt": "2026-11-22T10:55:15.859Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -16,6 +16,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795344884916
+  },
+  "white-airforces-nice-1u3h": {
+   "name": "White Airforces (nice)",
+   "layer": "shoes",
+   "type": "",
+   "colour": "white",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795344913356
   }
  },
  "pins": {},
