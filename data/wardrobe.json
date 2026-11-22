@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:56:09.727Z",
+ "updatedAt": "2026-11-22T10:59:11.638Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -44,6 +44,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795344967225
+  },
+  "white-airforces-2nd-hand-fats": {
+   "name": "White Airforces (2nd hand)",
+   "layer": "shoes",
+   "type": "",
+   "colour": "white",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345149136
   }
  },
  "pins": {},
