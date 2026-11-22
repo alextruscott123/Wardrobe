@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T16:02:50.303Z",
+ "updatedAt": "2026-11-22T16:03:34.988Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -907,6 +907,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362966918
+  },
+  "grandad-s-watch-3q9z": {
+   "name": "Grandad’s Watch",
+   "layer": "acc",
+   "type": "Watch",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 3,
+   "hi": 4,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795363412476
   }
  },
  "pins": {
