@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:51:59.431Z",
+ "updatedAt": "2026-11-22T15:52:04.682Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4108,6 +4108,12 @@
    "b": "running-shoes-0say",
    "kind": "maybe",
    "createdAt": 1795362716922
+  },
+  "uniqlo-light-jeans-iyvr__walking-boots-9kwv": {
+   "a": "uniqlo-light-jeans-iyvr",
+   "b": "walking-boots-9kwv",
+   "kind": "no",
+   "createdAt": 1795362722173
   }
  },
  "audit": {
