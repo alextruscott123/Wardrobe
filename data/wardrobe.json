@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:03:02.831Z",
+ "updatedAt": "2026-11-22T11:03:24.232Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -128,6 +128,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345380328
+  },
+  "blue-jorts-7chg": {
+   "name": "Blue Jorts",
+   "layer": "bottoms",
+   "type": "",
+   "colour": "denim",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "warm",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345401731
   }
  },
  "pins": {},
