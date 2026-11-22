@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:55:07.162Z",
+ "updatedAt": "2026-11-22T15:55:08.995Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4348,6 +4348,12 @@
    "b": "1985-graphic-t-shirt-lgci",
    "kind": "maybe",
    "createdAt": 1795362872929
+  },
+  "gully-riddimz-t-shirt-z1tk__running-shoes-0say": {
+   "a": "running-shoes-0say",
+   "b": "gully-riddimz-t-shirt-z1tk",
+   "kind": "yes",
+   "createdAt": 1795362907811
   }
  },
  "audit": {
