@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:15:25.221Z",
+ "updatedAt": "2026-11-22T14:16:14.437Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2941,6 +2941,12 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "no",
    "createdAt": 1795356922712
+  },
+  "black-suit-trousers-ylj4__passenger-overshirt-10m7": {
+   "a": "passenger-overshirt-10m7",
+   "b": "black-suit-trousers-ylj4",
+   "kind": "no",
+   "createdAt": 1795356971929
   }
  },
  "audit": {
