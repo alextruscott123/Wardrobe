@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:02:28.841Z",
+ "updatedAt": "2026-11-22T11:03:02.831Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -114,6 +114,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345346339
+  },
+  "blue-chords-ozq1": {
+   "name": "Blue Chords",
+   "layer": "bottoms",
+   "type": "",
+   "colour": "navy",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795345380328
   }
  },
  "pins": {},
