@@ -23,8 +23,9 @@
 :root{
   --bg:#E8EBF0; --surface:#FBFCFD; --inset:#EEF1F5; --ink:#151B2B; --ink-2:#4B556A; --line:#C8CFDB;
   --accent:#2B3F9E; --on-accent:#FFFFFF; --accent-soft:#DDE3F8;
-  --crit:#AE3716; --crit-soft:#F7DFD6; --good:#17734F; --good-soft:#D6EEE3;
+  --crit:#AE3716; --crit-soft:#F7DFD6; --good:#17734F; --good-soft:#D6EEE3; --warn:#8F5A00; --warn-soft:#F6E8C9;
   --scrim:rgba(12,16,28,.52);
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%234B556A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --font-display:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
   --font-body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --tabs-h:58px;
@@ -33,16 +34,18 @@
   :root:not([data-theme="light"]){
     --bg:#0F131C; --surface:#181E2B; --inset:#1F2636; --ink:#E9EDF5; --ink-2:#A4AEC1; --line:#303A4E;
     --accent:#93A5FF; --on-accent:#0F131C; --accent-soft:#252F57;
-    --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427;
+    --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427; --warn:#F0B24A; --warn-soft:#3A2D12;
     --scrim:rgba(0,0,0,.6);
+    --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23A4AEC1' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0F131C; --surface:#181E2B; --inset:#1F2636; --ink:#E9EDF5; --ink-2:#A4AEC1; --line:#303A4E;
   --accent:#93A5FF; --on-accent:#0F131C; --accent-soft:#252F57;
-  --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427;
+  --crit:#FF9273; --crit-soft:#3B2018; --good:#62D3A6; --good-soft:#153427; --warn:#F0B24A; --warn-soft:#3A2D12;
   --scrim:rgba(0,0,0,.6);
+    --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23A4AEC1' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   color-scheme:dark;
 }
 
@@ -81,6 +84,17 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .btn.inv{min-height:40px;padding:0 12px;background:transparent;color:inherit;border-color:var(--ink-2);border-color:color-mix(in srgb,currentColor 42%,transparent);white-space:nowrap}
 .btn[disabled]{opacity:.55;cursor:default}
 .mini{margin-left:auto;min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:5px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.pair-layer{margin-top:4px;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.pair-row{grid-template-columns:auto minmax(0,1fr) auto}
+.pair-row .chev{display:inline-block;width:9px;height:9px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(-45deg);margin-right:6px}
+.pair-row[aria-expanded="true"] .chev{transform:rotate(45deg)}
+.pair-detail{display:flex;flex-direction:column;gap:6px;padding:4px 12px 14px 50px}
+.pair-kind{font-size:13.5px;margin-top:4px}
+.pair-list{display:flex;flex-direction:column;gap:4px}
+.pair-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
+.pair-list li span:not(.sw){flex:1;min-width:0}
+.pair-reset{align-self:flex-start;margin-top:6px;min-height:38px}
+.mini.danger-on{border-color:var(--crit);color:var(--crit)}
 .mini.is-on{background:var(--good-soft);border-color:var(--good);color:var(--good)}
 
 select,input[type="text"],input[type="password"],textarea{border:1px solid var(--line);border-radius:6px;background:var(--surface);min-height:44px;padding:0 12px;font-size:16px;max-width:100%}
@@ -107,6 +121,30 @@ textarea{width:100%;min-height:64px;padding:10px 12px;resize:vertical}
 .tag-main{display:flex;flex-direction:column;gap:6px;min-width:0}
 .tag-name{font-weight:500;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
 .tag.is-sel{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tag.aff-good{border-color:var(--good);background:var(--good-soft)}
+.tag.aff-todo{border-color:var(--warn);background:var(--warn-soft)}
+.tag.aff-bad{border-color:var(--crit);background:var(--crit-soft)}
+.tag-aff{font-size:12.5px;line-height:1.1}
+.aff-good .tag-aff{color:var(--good)}
+.aff-todo .tag-aff{color:var(--warn)}
+.aff-bad .tag-aff{color:var(--crit)}
+.rate-banner{position:sticky;top:env(safe-area-inset-top,0px);z-index:12;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:8px;background:var(--accent);color:var(--on-accent)}
+.rate-banner-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.rate-eyebrow{font-family:var(--font-display);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.rate-title{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:700;font-size:21px;line-height:1.1;overflow-wrap:anywhere}
+.rate-help{font-size:13.5px;line-height:1.35;opacity:.92}
+.rate-help b{font-weight:600}
+.rate-acts{flex:none;display:flex;flex-direction:column;align-items:stretch;gap:6px}
+.rate-exit{border:0;background:none;padding:2px 0;font-size:12.5px;line-height:1.2;color:var(--on-accent);opacity:.85;text-decoration:underline;max-width:110px;text-align:center}
+.rate-done{flex:none;background:var(--on-accent);border-color:var(--on-accent);color:var(--accent);min-width:84px}
+body.rating{background:var(--accent-soft)}
+.tray .btn.inv.is-on{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.rate3{display:flex;gap:6px;flex-wrap:wrap}
+.rate3 .btn{min-height:40px;padding:0 12px}
+.rate3 .btn.is-on.r-yes{background:var(--good);border-color:var(--good);color:var(--surface)}
+.rate3 .btn.is-on.r-maybe{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.rate3 .btn.is-on.r-no{background:var(--crit);border-color:var(--crit);color:var(--surface)}
+.kind{font-weight:600}.kind.k-yes{color:var(--good)}.kind.k-maybe{color:var(--ink-2)}.kind.k-no{color:var(--crit)}
 .tag.is-out{background:transparent;border-style:dashed;color:var(--ink-2)}
 .tag-why{font-size:12.5px;line-height:1.1;color:var(--crit)}
 .sw{flex:none;display:block;width:18px;height:18px;border-radius:50%;background:var(--sw,transparent);box-shadow:inset 0 0 0 1px var(--line);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 32%,transparent)}
@@ -120,6 +158,30 @@ textarea{width:100%;min-height:64px;padding:10px 12px;resize:vertical}
 .bar.big i{width:26px;height:6px}
 .tag.is-sel .bar i{background:var(--accent-soft);background:color-mix(in srgb,var(--on-accent) 34%,transparent)}
 .tag.is-sel .bar i.on{background:var(--on-accent)}
+.segctl{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:20px;background:var(--surface);overflow:hidden;max-width:100%}
+.segbtn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border:0;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.segbtn + .segbtn{border-left:1px solid var(--line)}
+.segbtn.is-on{background:var(--ink);color:var(--bg)}
+.segctl.sm .segbtn{min-height:34px;padding:0 11px;font-size:13.5px}
+.venn{flex:none;display:block}
+.rail .segctl{align-self:flex-start}
+.filters .segctl{display:flex;flex-wrap:nowrap;width:100%;border-radius:8px}
+.filters .segbtn{flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;gap:3px;min-height:54px;padding:6px 4px;font-size:13px;letter-spacing:.05em;text-align:center;line-height:1.1}
+.filters select{flex:1 1 100%}
+
+.fold{display:flex;align-items:center;gap:10px;min-height:36px;padding:0;border:0;background:none;text-align:left}
+.fold .chev{display:inline-block;width:9px;height:9px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(45deg) translate(-2px,-2px);transition:transform .15s}
+.fold[aria-expanded="false"] .chev{transform:rotate(-45deg)}
+.rail-hint{margin-top:-8px;font-size:13.5px;color:var(--ink-2)}
+.sw.duo{background:conic-gradient(var(--sw) 0 62%,var(--sw2) 0)}
+.sw.duo-pat{background:conic-gradient(var(--sw) 0 62%,#C4312A 0 72%,#E3C03B 0 82%,#2E7B4E 0 91%,#2D5BCB 0)}
+.swl.more{display:none}
+.swatches.show-more .swl.more{display:block}
+.swmore{position:relative;width:38px;height:38px;border:0;padding:0;background:transparent}
+.swmore::before{content:"";position:absolute;inset:6px;border-radius:50%;background:conic-gradient(#6C2132 0 14%,#2D5BCB 0 28%,#EDE5CF 0 42%,#DE7A2A 0 57%,#E3C03B 0 71%,#E1A0B7 0 85%,#6A49A3 0);box-shadow:inset 0 0 0 1px var(--line)}
+.swmore::after{content:"+";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.7)}
+.swatches.show-more .swmore::after{content:"\2212"}
+.swl input[type="checkbox"]:checked + .sw{outline:2px solid var(--ink);outline-offset:3px}
 .ruled summary{width:max-content;max-width:100%;padding:6px 0;font-size:13.5px;color:var(--ink-2);cursor:pointer}
 .ruled .tags{margin-top:4px}
 
@@ -198,7 +260,9 @@ dialog.sheet::backdrop{background:var(--scrim)}
 .lbl em{font-style:normal;font-weight:500;letter-spacing:.03em;text-transform:none;opacity:.85}
 .lbl-val{margin-left:6px;font-family:var(--font-body);font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink)}
 .fld input[type="text"],.fld input[type="password"]{width:100%;background:var(--bg)}
-.fld textarea,.fld select{background:var(--bg)}
+.fld textarea,.fld select{background-color:var(--bg)}
+/* Every dropdown draws its own arrow, kept 14px in from the edge. */
+select{-webkit-appearance:none;appearance:none;background-image:var(--chev);background-repeat:no-repeat;background-position:right 14px center;background-size:12px 8px;padding-right:40px}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .segl{position:relative;display:block}
 .segl input,.swl input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
@@ -531,30 +595,57 @@ var LAYERS=[
   {id:'shoes',name:'Shoes',req:true,units:['pair','pairs'],need:'shoes'},
   {id:'bottoms',name:'Bottoms',req:true,units:['piece','pieces'],need:'bottoms'},
   {id:'tops',name:'Tops',req:true,units:['piece','pieces'],need:'a top'},
-  {id:'mid',name:'Mid-layers',req:false,units:['piece','pieces'],need:'a mid-layer'},
-  {id:'outer',name:'Outerwear',req:false,units:['piece','pieces'],need:'outerwear'}
+  {id:'mid',name:'Layers',req:false,units:['piece','pieces'],need:'a layer',hint:'Hoodies, jumpers, fleeces, overshirts'},
+  {id:'outer',name:'Outerwear',req:false,units:['piece','pieces'],need:'outerwear',hint:'Coats, jackets, anoraks'},
+  {id:'acc',name:'Accessories',req:false,units:['piece','pieces'],need:'an accessory',hint:'Watches, belts'}
 ];
 var LAYER_IDS=LAYERS.map(function(l){return l.id;});
 var LAYER_MAP={};LAYERS.forEach(function(l){LAYER_MAP[l.id]=l;});
 var REQ=LAYER_IDS.filter(function(id){return LAYER_MAP[id].req;});
 var OPT=LAYER_IDS.filter(function(id){return !LAYER_MAP[id].req;});
-var LEVELS=['','Active','Casual','Smart-casual','Smart','Formal'];
+var LEVELS=['','Active','Casual','Smart-casual','Smart'];
+var LV=[1,2,3,4],MAXL=4;
+/* Fixed type choices, only for the layers where a type is useful. */
+var TYPE_CHOICES={tops:['T-shirt','Shirt'],acc:['Watch','Belt','Other']};
+var COLOUR_ALIAS={charcoal:'grey',olive:'khaki'};
 /* What-if purchases: common pieces, scored against the wardrobe as it stands. */
 var CANDIDATES=[
   {key:'trainers',layer:'shoes',name:'Casual trainers',eg:'clean leather or suede trainers',lo:2,hi:3},
   {key:'smartshoes',layer:'shoes',name:'Smart shoes',eg:'derbies, loafers or Chelsea boots',lo:3,hi:4},
-  {key:'dressshoes',layer:'shoes',name:'Dress shoes',eg:'black or dark brown Oxfords',lo:4,hi:5},
+  {key:'dressshoes',layer:'shoes',name:'Dress shoes',eg:'black or dark brown Oxfords',lo:4,hi:4},
   {key:'jeans',layer:'bottoms',name:'Dark jeans',eg:'indigo or black, no rips',lo:2,hi:3},
   {key:'chinos',layer:'bottoms',name:'Chinos',eg:'navy, stone or olive',lo:2,hi:4},
-  {key:'tailored',layer:'bottoms',name:'Tailored trousers',eg:'wool or suit trousers',lo:4,hi:5},
+  {key:'tailored',layer:'bottoms',name:'Tailored trousers',eg:'wool or suit trousers',lo:3,hi:4},
   {key:'shorts',layer:'bottoms',name:'Shorts',eg:'chino or tailored shorts',lo:2,hi:2,season:'warm'},
   {key:'tee',layer:'tops',name:'Plain T-shirt',eg:'white, black, grey or navy',lo:2,hi:3},
   {key:'casualshirt',layer:'tops',name:'Casual shirt',eg:'Oxford, denim or flannel',lo:2,hi:4},
-  {key:'dressshirt',layer:'tops',name:'Dress shirt',eg:'white or light blue',lo:4,hi:5}
+  {key:'dressshirt',layer:'tops',name:'Dress shirt',eg:'white or light blue',lo:4,hi:4}
 ];
 
-function clampLevel(n,d){n=Math.round(Number(n));return n>=1&&n<=5?n:d;}
+function clampLevel(n,d){n=Math.round(Number(n));return n>=1&&n<=MAXL?n:(n>MAXL?MAXL:d);}
 function cleanStr(s,max){return typeof s==='string'?s.trim().slice(0,max):'';}
+/* Older pieces have one colour in "colour"; newer ones a list in "colours", main colour first. */
+function normColours(d){
+  var src=Array.isArray(d.colours)?d.colours:(typeof d.colour==='string'&&d.colour?[d.colour]:[]),out=[];
+  src.forEach(function(c){
+    if(typeof c!=='string')return;
+    c=COLOUR_ALIAS[c]||c;
+    if(/^[a-z]{2,12}$/.test(c)&&out.indexOf(c)<0&&out.length<4)out.push(c);
+  });
+  return out;
+}
+function normType(layer,t){
+  var list=TYPE_CHOICES[layer];
+  if(!list||typeof t!=='string')return '';
+  var low=t.trim().toLowerCase();
+  if(layer==='tops'){
+    if(/t-?\s?shirt|tee/.test(low))return 'T-shirt';
+    if(/shirt/.test(low))return 'Shirt';
+    return '';
+  }
+  for(var i=0;i<list.length;i++){if(list[i].toLowerCase()===low)return list[i];}
+  return '';
+}
 
 /* Rows come from the shared store, so every field is checked before use. */
 function normItem(id,d){
@@ -563,7 +654,8 @@ function normItem(id,d){
   if(!name||LAYER_IDS.indexOf(d.layer)<0)return null;
   var lo=clampLevel(d.lo,2),hi=clampLevel(d.hi,lo),t;
   if(lo>hi){t=lo;lo=hi;hi=t;}
-  return {id:String(id),name:name,layer:d.layer,type:cleanStr(d.type,40),colour:cleanStr(d.colour,20),
+  var colours=normColours(d);
+  return {id:String(id),name:name,layer:d.layer,type:normType(d.layer,d.type),colours:colours,colour:colours[0]||'',
     tone:d.tone==='statement'?'statement':'neutral',lo:lo,hi:hi,
     season:d.season==='warm'||d.season==='cold'?d.season:'all',
     care:d.care==='protect'||d.care==='beater'?d.care:'normal',
@@ -571,18 +663,19 @@ function normItem(id,d){
     notes:cleanStr(d.notes,300),createdAt:Number(d.createdAt)||0};
 }
 
+function normKind(k){return k==='yes'||k==='allow'?'yes':k==='no'||k==='block'?'no':k==='maybe'?'maybe':'';}
 function pinKey(a,b){return a<b?a+'__'+b:b+'__'+a;}
 
 /* Why two pieces from different layers can't be worn together, or null if they can.
    Every rule is pairwise, so an outfit is valid exactly when all of its pairs are. */
 function pairWhy(a,b,pins){
   var p=pins?pins[pinKey(a.id,b.id)]:null;
-  if(p==='block')return {code:'pin'};
-  if(p==='allow')return null;
+  /* Your own rating of a pair beats the rules: Doesn't work blocks it, Works allows it, Maybe leaves it to the rules. */
+  if(p==='no')return {code:'pin'};
+  if(p==='yes')return null;
   if(a.hi<b.lo)return {code:'casual'};
   if(a.lo>b.hi)return {code:'smart'};
   if((a.season==='warm'&&b.season==='cold')||(a.season==='cold'&&b.season==='warm'))return {code:'season'};
-  if(a.tone==='statement'&&b.tone==='statement'&&Math.min(a.hi,b.hi)>=2)return {code:'tone'};
   return null;
 }
 
@@ -643,8 +736,9 @@ function findBlocked(by,res,pins,audit){
   return out;
 }
 
-function analyse(items,pins,audit){
-  audit=audit||{};
+function analyse(items,pins){
+  /* Every core layer is always checked for holes and blocked pieces. */
+  var audit={};REQ.forEach(function(l){audit[l]=true;});
   var by=activeBy(items),base=countOutfits(by,pins,true);
   var cov={},holes=Object.create(null),addOn=Object.create(null);
   LAYER_IDS.forEach(function(l){
@@ -653,7 +747,7 @@ function analyse(items,pins,audit){
   });
   REQ.forEach(function(l){
     if(!audit[l])return;
-    [1,2,3,4,5].forEach(function(x){
+    LV.forEach(function(x){
       if(cov[l][x]===0&&REQ.some(function(m){return m!==l&&cov[m][x]>0;}))holes[l+':'+x]=true;
     });
   });
@@ -684,7 +778,7 @@ function analyse(items,pins,audit){
       var r2=countOutfits(by2,pins,false),b2=findBlocked(by2,r2,pins,audit),delta=r2.total-base.total;
       if(delta<=0)return;
       var freed=blocked.filter(function(b){return b.layer!=='*'&&!b2[b.item.id];}).map(function(b){return b.item;});
-      var opened=[1,2,3,4,5].filter(function(x){return base.perLevel[x]===0&&r2.perLevel[x]>0;});
+      var opened=LV.filter(function(x){return base.perLevel[x]===0&&r2.perLevel[x]>0;});
       candidates.push({c:c,delta:delta,freed:freed,opened:opened});
     });
     candidates.sort(function(a,b){
@@ -704,26 +798,21 @@ function analyse(items,pins,audit){
 /*ENGINE-END*/
 
 var COLOURS=[
-  ['black','Black','#1C1C20','neutral'],['charcoal','Charcoal','#41444C','neutral'],['grey','Grey','#9197A1','neutral'],
-  ['white','White','#F6F6F2','neutral'],['cream','Cream','#EDE5CF','neutral'],['beige','Beige','#D3BF9C','neutral'],
-  ['tan','Tan','#B0875A','neutral'],['brown','Brown','#67462F','neutral'],['navy','Navy','#1E2A4C','neutral'],
-  ['denim','Denim blue','#4D6B93','neutral'],['lightblue','Light blue','#AAC5E5','neutral'],['olive','Olive','#6A6B3B','neutral'],
-  ['blue','Blue','#2D5BCB','statement'],['green','Green','#2E7B4E','statement'],['burgundy','Burgundy','#6C2132','statement'],
-  ['red','Red','#C4312A','statement'],['orange','Orange','#DE7A2A','statement'],['yellow','Yellow','#E3C03B','statement'],
-  ['pink','Pink','#E1A0B7','statement'],['purple','Purple','#6A49A3','statement'],['pattern','Pattern or multi','','statement']
-].map(function(c){return {key:c[0],name:c[1],hex:c[2],tone:c[3]};});
+  ['black','Black','#1C1C20','neutral'],['grey','Grey','#9197A1','neutral'],['white','White','#F6F6F2','neutral'],
+  ['beige','Beige','#D3BF9C','neutral'],['tan','Tan','#B0875A','neutral'],['brown','Brown','#67462F','neutral'],
+  ['navy','Navy','#1E2A4C','neutral'],['denim','Denim blue','#4D6B93','neutral'],['lightblue','Light blue','#AAC5E5','neutral'],
+  ['khaki','Khaki','#9C8F5E','neutral'],['green','Green','#2E7B4E','statement'],['red','Red','#C4312A','statement'],
+  ['pattern','Pattern or multi','','statement'],
+  ['burgundy','Burgundy','#6C2132','statement',1],['blue','Blue','#2D5BCB','statement',1],['cream','Cream','#EDE5CF','neutral',1],
+  ['orange','Orange','#DE7A2A','statement',1],['yellow','Yellow','#E3C03B','statement',1],['pink','Pink','#E1A0B7','statement',1],
+  ['purple','Purple','#6A49A3','statement',1]
+].map(function(c){return {key:c[0],name:c[1],hex:c[2],tone:c[3],more:!!c[4]};});
 var COLOUR_MAP={};COLOURS.forEach(function(c){COLOUR_MAP[c.key]=c;});
-var TYPES={
-  shoes:['Trainers','High-tops','Boots','Loafers','Derbies','Oxfords','Running shoes','Walking boots','Sandals'],
-  bottoms:['Jeans','Chinos','Trousers','Suit trousers','Shorts','Joggers'],
-  tops:['T-shirt','Long-sleeve tee','Shirt','Polo','Vest'],
-  mid:['Jumper','Cardigan','Hoodie','Sweatshirt','Overshirt','Waistcoat'],
-  outer:['Jacket','Coat','Blazer','Suit jacket','Gilet','Raincoat']
-};
-var LEVEL_NOTES=['','Fitness, walking, sport','Friends, gigs, streetwear','Nice events, going out','Posh: shirt and proper trousers','Suit'];
+var LEVEL_NOTES=['','Fitness, walking, sport','Friends, gigs, streetwear','Nice events, going out','Posh: shirt and proper trousers'];
 
 var state={items:[],pins:Object.create(null),pinList:[],audit:{},phase:'connecting',loaded:false,slow:false,dead:false};
-var ui={tab:'build',sel:{},level:0,rough:false,open:{},form:null,focus:null,focusSel:false};
+var FOLD={};try{FOLD=JSON.parse(localStorage.getItem('wardrobe.folded')||'{}')||{};}catch(e){FOLD={};}
+var ui={openPiece:{},tab:'build',sel:{},anchor:null,rate:false,frozen:{},rateStart:{},level:0,care:'all',topType:'all',open:{},form:null,focus:null,focusSel:false};
 var db=null,dl=null,canWrite=true,unsubs=[],conf={},slowTimer=0,toastTimer=0,pending=false;
 /* Set by the standalone build, where the wardrobe is kept in this browser instead of in Claude. */
 var LOCAL=!!window.WARDROBE_LOCAL;
@@ -746,29 +835,89 @@ function selItem(layer){
   var it=ui.sel[layer]?itemById(ui.sel[layer]):null;
   return it&&it.status==='active'?it:null;
 }
-function colourName(it){var c=COLOUR_MAP[it.colour];return c?c.name:'Colour not set';}
+function colourName(it){
+  var n=(it.colours||[]).map(function(k){return COLOUR_MAP[k]?COLOUR_MAP[k].name:'';}).filter(Boolean);
+  return n.length?n.join(' and '):'Colour not set';
+}
 function rangeText(o){return o.lo===o.hi?LEVELS[o.lo]+' only':LEVELS[o.lo]+' → '+LEVELS[o.hi];}
 function rangeSpoken(o){return o.lo===o.hi?LEVELS[o.lo]+' only':LEVELS[o.lo]+' to '+LEVELS[o.hi];}
 function orderItems(a,b){
   return (a.hi===1?1:0)-(b.hi===1?1:0)||b.hi-a.hi||a.lo-b.lo||a.name.localeCompare(b.name);
 }
 function swatch(it,big){
-  var c=COLOUR_MAP[it.colour],cls='sw'+(big?' big':'');
+  var ks=(it.colours||[]).filter(function(k){return COLOUR_MAP[k];}),c=COLOUR_MAP[ks[0]],c2=COLOUR_MAP[ks[1]],cls='sw'+(big?' big':''),t=esc(colourName(it));
   if(!c)return '<span class="'+cls+' none" title="Colour not set"></span>';
-  if(!c.hex)return '<span class="'+cls+' pat" title="'+c.name+'"></span>';
-  return '<span class="'+cls+'" style="--sw:'+c.hex+'" title="'+c.name+'"></span>';
+  if(!c.hex)return '<span class="'+cls+' pat" title="'+t+'"></span>';
+  if(c2)return '<span class="'+cls+(c2.hex?' duo':' duo-pat')+'" style="--sw:'+c.hex+';--sw2:'+(c2.hex||c.hex)+'" title="'+t+'"></span>';
+  return '<span class="'+cls+'" style="--sw:'+c.hex+'" title="'+t+'"></span>';
 }
 function bar(lo,hi,cls){
   var h='<span class="bar'+(cls?' '+cls:'')+'" aria-hidden="true">';
-  for(var x=1;x<=5;x++)h+='<i'+(x>=lo&&x<=hi?' class="on"':'')+'></i>';
+  for(var x=1;x<=MAXL;x++)h+='<i'+(x>=lo&&x<=hi?' class="on"':'')+'></i>';
   return h+'</span>';
 }
 
 /* ---------- Builder ---------- */
+/* Your own filters (dress code, care switch) tuck pieces away under "ruled out". */
+function filterOut(it){
+  var out=[];
+  if(ui.level&&!(it.lo<=ui.level&&ui.level<=it.hi))out.push({code:'level'});
+  var co=careOut(it);
+  if(co)out.push({code:co});
+  return out;
+}
+var KIND_NAME={yes:'Works',maybe:'Neutral',no:'Doesn’t work'};
+function rating(a,b){return state.pins[pinKey(a.id,b.id)]||'';}
+function picked(){return LAYER_IDS.map(selItem).filter(Boolean);}
+function anchorItem(){
+  var a=ui.anchor?itemById(ui.anchor):null;
+  if(a&&ui.sel[a.layer]===a.id&&a.status==='active')return a;
+  var p=picked();return p.length?p[p.length-1]:null;
+}
+/* Which picked pieces a piece is judged against. Building: only layers you haven't picked from yet.
+   Rating: everything outside the layer of the piece you're rating with. */
+/* Rating works bottom-up: shoes rate everything above them, bottoms rate tops and up. */
+var RATERS={shoes:true,bottoms:true};
+function above(a,b){return LAYER_IDS.indexOf(b.layer)>LAYER_IDS.indexOf(a.layer);}
+function judgedAgainst(it){
+  if(ui.rate){var a=anchorItem();return a&&above(a,it)?[a]:[];}
+  if(ui.sel[it.layer]&&selItem(it.layer))return [];
+  return picked().filter(function(s){return s.layer!==it.layer;});
+}
+/* Amber "not rated" only appears on pairs you can actually rate: shoes or bottoms against a layer above them. */
+function worthRating(a,b){
+  if(a.layer===b.layer)return false;
+  var low=LAYER_IDS.indexOf(a.layer)<LAYER_IDS.indexOf(b.layer)?a:b;
+  return !!RATERS[low.layer];
+}
+/* good: rated Works with every pick. bad: rated Doesn't work, or the rules rule it out.
+   todo (amber): a pair worth rating that you haven't rated. plain: everything else looks normal. */
+function affinity(it){
+  var against=judgedAgainst(it);
+  if(!against.length)return null;
+  var R={good:0,plain:1,todo:2,bad:3},res={st:'good',why:null,against:against};
+  against.forEach(function(s){
+    var r=rating(it,s),st,why=null;
+    if(r==='yes')st='good';
+    else if(r==='no'){st='bad';why={code:'pin',other:s};}
+    else if(r==='maybe')st='plain';
+    else{var w=pairWhy(it,s,state.pins);if(w){st='bad';why={code:w.code,other:s};}else st=(ui.rate||worthRating(it,s))?'todo':'plain';}
+    if(R[st]>R[res.st]){res.st=st;if(why)res.why=why;}
+  });
+  return res;
+}
+function affLabel(a){
+  var many=a.against.length>1;
+  if(a.st==='good')return many?'works with all':'works';
+  if(a.st==='bad')return (a.why.code==='pin'?'doesn’t work':shortWhy(a.why))+(many?' with '+a.why.other.name:'');
+  if(a.st==='todo')return 'not rated';
+  return '';
+}
 function conflictsFor(it){
   var out=[];
   if(ui.level&&!(it.lo<=ui.level&&ui.level<=it.hi))out.push({code:'level'});
-  if(ui.rough&&it.care==='protect')out.push({code:'rough'});
+  var co=careOut(it);
+  if(co)out.push({code:co});
   LAYER_IDS.forEach(function(l){
     if(l===it.layer)return;
     var s=selItem(l);
@@ -778,11 +927,28 @@ function conflictsFor(it){
   });
   return out;
 }
+/* The care switch: Keep it nice hides Rough pieces, Getting messy hides Keep-nice pieces. */
+function careOut(it){
+  if(ui.care==='nice'&&it.care==='beater')return 'nice';
+  if(ui.care==='messy'&&it.care==='protect')return 'messy';
+  return '';
+}
+function topHidden(it){
+  return it.layer==='tops'&&ui.topType!=='all'&&it.type!==(ui.topType==='tee'?'T-shirt':'Shirt');
+}
+var CARE_MODES=[['all','All'],['nice','Keep it nice'],['messy','Getting messy']];
+function venn(mode){
+  var l=mode!=='messy',r=mode!=='nice';
+  return '<svg class="venn" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true">'
+    +'<circle cx="10" cy="8" r="6.5" fill="'+(l?'currentColor':'none')+'" fill-opacity="'+(l?'.3':'0')+'" stroke="currentColor" stroke-width="1.4"/>'
+    +'<circle cx="18" cy="8" r="6.5" fill="'+(r?'currentColor':'none')+'" fill-opacity="'+(r?'.3':'0')+'" stroke="currentColor" stroke-width="1.4"/></svg>';
+}
 function shortWhy(c){
   switch(c.code){
     case 'level':return 'not for '+LEVELS[ui.level];
-    case 'rough':return 'keeping it nice';
-    case 'pin':return 'your exception';
+    case 'nice':return 'rough piece';
+    case 'messy':return 'keeping it nice';
+    case 'pin':return 'you said no';
     case 'casual':return 'too casual';
     case 'smart':return 'too smart';
     case 'season':return 'wrong season';
@@ -794,8 +960,9 @@ function longWhy(it,c){
   var o=c.other;
   switch(c.code){
     case 'level':return 'It covers '+rangeSpoken(it)+', so it’s out while the dress code is set to '+LEVELS[ui.level]+'.';
-    case 'rough':return 'You’re keeping it nice, so it’s hidden while Rough night is on.';
-    case 'pin':return 'You said never to pair it with '+o.name+'.';
+    case 'nice':return 'It’s marked Rough, so it’s hidden while Keep it nice is on.';
+    case 'messy':return 'You’re keeping it nice, so it’s hidden while Getting messy is on.';
+    case 'pin':return 'You rated it Doesn’t work with '+o.name+'.';
     case 'casual':return 'It stops at '+LEVELS[it.hi]+'. '+o.name+' starts at '+LEVELS[o.lo]+'.';
     case 'smart':return 'It starts at '+LEVELS[it.lo]+'. '+o.name+' stops at '+LEVELS[o.hi]+'.';
     case 'season':return 'It’s for '+(it.season==='warm'?'warm':'cold')+' weather and '+o.name+' is for '+(o.season==='warm'?'warm':'cold')+' weather.';
@@ -803,12 +970,16 @@ function longWhy(it,c){
   }
   return '';
 }
-function tagHTML(it,sel,c){
-  var label=it.name+', '+colourName(it)+', '+rangeSpoken(it)+(c?'. Ruled out: '+shortWhy(c):'');
-  return '<button type="button" class="tag'+(sel?' is-sel':'')+(c?' is-out':'')+'" data-act="'+(c?'why':'pick')+'" data-id="'+esc(it.id)+'"'
-    +(c?'':' aria-pressed="'+(sel?'true':'false')+'"')+' aria-label="'+esc(label)+'">'+swatch(it)
+function tagHTML(it,sel,c,aff){
+  var act=c?'why':ui.rate&&!sel&&aff?'rateset':aff&&aff.st==='bad'?'why':'pick';
+  if(aff&&aff.st==='plain'&&!ui.rate)aff=null;
+  if(aff&&aff.st==='plain')aff={st:'plain',against:aff.against,plain:true};
+  var note=c?shortWhy(c):aff&&!aff.plain?affLabel(aff):'';
+  var label=it.name+', '+colourName(it)+', '+rangeSpoken(it)+(note?'. '+note:'');
+  return '<button type="button" class="tag'+(sel?' is-sel':'')+(c?' is-out':'')+(aff&&!sel&&!aff.plain?' aff-'+aff.st:'')+'" data-act="'+act+'" data-id="'+esc(it.id)+'"'
+    +(act==='pick'?' aria-pressed="'+(sel?'true':'false')+'"':'')+' aria-label="'+esc(label)+'">'+swatch(it)
     +'<span class="tag-main"><span class="tag-name">'+esc(it.name)+'</span>'
-    +(c?'<span class="tag-why">'+esc(shortWhy(c))+'</span>':bar(it.lo,it.hi))+'</span></button>';
+    +(c?'<span class="tag-why">'+esc(note)+'</span>':aff&&!sel&&note?'<span class="tag-aff">'+esc(note)+'</span>':bar(it.lo,it.hi))+'</span></button>';
 }
 function sanitizeSel(){
   var kept=[];
@@ -823,43 +994,83 @@ function dropFiltered(){
   LAYER_IDS.forEach(function(l){
     var s=selItem(l);
     if(!s)return;
-    if((ui.level&&!(s.lo<=ui.level&&ui.level<=s.hi))||(ui.rough&&s.care==='protect'))ui.sel[l]=null;
+    if((ui.level&&!(s.lo<=ui.level&&ui.level<=s.hi))||careOut(s)||topHidden(s))ui.sel[l]=null;
   });
 }
 function renderBuild(A){
+  if(ui.rate&&anchorItem()){renderRate(A);return;}
   var anySel=LAYER_IDS.some(function(l){return !!selItem(l);});
-  var narrowing=anySel||ui.level>0||ui.rough;
+  var narrowing=anySel||ui.level>0||ui.care!=='all';
   var h='<section class="filters" aria-label="Narrow by occasion"><select id="flt-level" aria-label="Dress code">';
   h+='<option value="0"'+(ui.level?'':' selected')+'>Any dress code</option>';
-  for(var x=1;x<=5;x++)h+='<option value="'+x+'"'+(ui.level===x?' selected':'')+'>'+LEVELS[x]+'</option>';
-  h+='</select><button type="button" class="chip'+(ui.rough?' is-on':'')+'" data-act="rough" aria-pressed="'+(ui.rough?'true':'false')+'">Rough night</button></section>';
+  for(var x=1;x<=MAXL;x++)h+='<option value="'+x+'"'+(ui.level===x?' selected':'')+'>'+LEVELS[x]+'</option>';
+  h+='</select><div class="segctl" role="group" aria-label="How precious">'+CARE_MODES.map(function(m){
+    return '<button type="button" class="segbtn'+(ui.care===m[0]?' is-on':'')+'" data-act="care" data-val="'+m[0]+'" aria-pressed="'+(ui.care===m[0]?'true':'false')+'">'+venn(m[0])+'<span>'+m[1]+'</span></button>';
+  }).join('')+'</div></section>';
   if(state.loaded&&state.items.length){
-    h+='<p class="hint">'+(ui.rough?'Rough night is on, so anything you’re keeping nice is ruled out. ':'')
-      +(anySel?'Tap another layer to keep building, or tap a picked piece to drop it.':'Tap any piece to start. Every other layer narrows to what still works with it.')+'</p>';
+    h+='<p class="hint">'+(ui.care==='nice'?'Keep it nice is on, so Rough pieces are ruled out. ':ui.care==='messy'?'Getting messy is on, so Keep-nice pieces are ruled out. ':'')
+      +(anySel?'Green works, red doesn’t, amber isn’t rated yet. Tap to keep building, or tap a picked piece to drop it.':'Tap any piece to start. The layers you haven’t picked from light up green, amber or red.')+'</p>';
   }
   LAYERS.forEach(function(L){
-    var arr=A.by[L.id].slice().sort(orderItems),on=[],out=[];
+    var all=A.by[L.id].slice().sort(orderItems),arr=all.filter(function(it){return !topHidden(it);}),on=[],out=[];
+    var RANK={good:0,plain:1,todo:2,bad:3};
     arr.forEach(function(it){
-      var sel=ui.sel[L.id]===it.id,c=sel?[]:conflictsFor(it);
-      (c.length?out:on).push({it:it,sel:sel,c:c});
+      var sel=ui.sel[L.id]===it.id,c=sel?[]:filterOut(it);
+      (c.length?out:on).push({it:it,sel:sel,c:c,aff:sel||c.length?null:affinity(it)});
     });
-    on.sort(function(a,b){return (b.sel?1:0)-(a.sel?1:0);});
+    on.sort(function(a,b){
+      return (b.sel?1:0)-(a.sel?1:0)||(a.aff?RANK[a.aff.st]:1)-(b.aff?RANK[b.aff.st]:1);
+    });
     var count='';
-    if(state.loaded&&arr.length)count=narrowing?on.length+' of '+arr.length+' work':arr.length+' '+L.units[arr.length===1?0:1];
+    var filtered=arr.length<all.length;
+    if(state.loaded&&all.length)count=(narrowing||filtered)?on.length+' of '+all.length+' shown':all.length+' '+L.units[all.length===1?0:1];
     h+='<section class="rail"><div class="rail-head"><h2>'+L.name+'</h2><span class="rail-count">'+count+'</span>'
       +(db&&canWrite&&state.loaded?'<button type="button" class="mini" data-act="add" data-layer="'+L.id+'">Add</button>':'')+'</div>';
+    if(L.hint)h+='<p class="rail-hint">'+L.hint+'</p>';
+    if(L.id==='tops'&&state.loaded&&all.length){
+      h+='<div class="segctl sm" role="group" aria-label="Which tops">'+[['all','All'],['tee','T-shirts'],['shirt','Shirts']].map(function(m){
+        return '<button type="button" class="segbtn'+(ui.topType===m[0]?' is-on':'')+'" data-act="ttype" data-val="'+m[0]+'" aria-pressed="'+(ui.topType===m[0]?'true':'false')+'"><span>'+m[1]+'</span></button>';
+      }).join('')+'</div>';
+    }
     if(!state.loaded){
       if(state.phase!=='nodb')h+='<div class="ph" aria-hidden="true"><i></i><i></i><i></i></div>';
-    }else if(!arr.length){
+    }else if(!all.length){
       h+='<p class="empty">No '+L.name.toLowerCase()+' added yet.'+(L.req?'':' This layer is optional.')+'</p>';
+    }else if(!arr.length){
+      h+='<p class="empty">None of your tops are marked as '+(ui.topType==='tee'?'T-shirts':'shirts')+' yet. Set the type when you edit a top.</p>';
     }else{
-      if(on.length)h+='<div class="tags">'+on.map(function(o){return tagHTML(o.it,o.sel,null);}).join('')+'</div>';
+      if(on.length)h+='<div class="tags">'+on.map(function(o){return tagHTML(o.it,o.sel,null,o.aff);}).join('')+'</div>';
       else h+='<p class="empty">Nothing here works with what you’ve picked.</p>';
       if(out.length){
         h+='<details class="ruled" data-layer="'+L.id+'"'+(ui.open[L.id]?' open':'')+'><summary>'+out.length+' ruled out</summary><div class="tags">'
-          +out.map(function(o){return tagHTML(o.it,false,o.c[0]);}).join('')+'</div></details>';
+          +out.map(function(o){return tagHTML(o.it,false,o.c[0],null);}).join('')+'</div></details>';
       }
     }
+    h+='</section>';
+  });
+  view.innerHTML=h;
+}
+/* Rating mode: one piece, every other layer, filters off. The order is frozen when you start
+   and only re-sorts when you tap Done, so nothing jumps while you're tapping. */
+function renderRate(A){
+  var an=anchorItem(),RANK={good:0,plain:1,todo:2,bad:3};
+  var h='<section class="rate-banner" aria-live="polite"><div class="rate-banner-text"><span class="rate-eyebrow">Rating mode</span>'
+    +'<span class="rate-title">'+swatch(an)+esc(an.name)+'</span>'
+    +'<span class="rate-help">Tap what <b>works</b> (green) and what <b>doesn’t</b> (red). Tap again to undo. Done marks everything you didn’t tap as neutral.</span></div>'
+    +'<div class="rate-acts"><button type="button" class="btn rate-done" data-act="ratedone">Done</button><button type="button" class="rate-exit" data-act="rateexit">Exit without saving the rest</button></div></section>';
+  LAYERS.forEach(function(L){
+    if(LAYER_IDS.indexOf(L.id)<=LAYER_IDS.indexOf(an.layer))return;
+    var list=A.by[L.id].slice().sort(orderItems).map(function(it){return {it:it,aff:affinity(it)};});
+    if(!ui.frozen[L.id]){
+      list.sort(function(a,b){return (a.aff?RANK[a.aff.st]:1)-(b.aff?RANK[b.aff.st]:1);});
+      ui.frozen[L.id]=list.map(function(o){return o.it.id;});
+    }else{
+      var pos={};ui.frozen[L.id].forEach(function(id,i){pos[id]=i;});
+      list.sort(function(a,b){return (a.it.id in pos?pos[a.it.id]:1e6)-(b.it.id in pos?pos[b.it.id]:1e6);});
+    }
+    var rated=list.filter(function(o){return rating(o.it,an);}).length;
+    h+='<section class="rail"><div class="rail-head"><h2>'+L.name+'</h2><span class="rail-count">'+rated+' of '+list.length+' rated</span></div>';
+    h+=list.length?'<div class="tags">'+list.map(function(o){return tagHTML(o.it,false,null,o.aff);}).join('')+'</div>':'<p class="empty">Nothing here yet.</p>';
     h+='</section>';
   });
   view.innerHTML=h;
@@ -869,15 +1080,17 @@ function joinAnd(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and 
 function setTrayH(px){document.documentElement.style.setProperty('--tray-h',px+'px');}
 function renderTray(A){
   var picks=LAYER_IDS.map(selItem).filter(Boolean);
-  if(ui.tab!=='build'||!picks.length){tray.hidden=true;tray.innerHTML='';setTrayH(0);return;}
-  var lo=1,hi=5;
+  document.body.classList.toggle('rating',!!(ui.tab==='build'&&ui.rate&&anchorItem()));
+  if(ui.tab!=='build'||!picks.length||ui.rate){tray.hidden=true;tray.innerHTML='';setTrayH(0);return;}
+  var lo=1,hi=MAXL;
   picks.forEach(function(p){if(p.lo>lo)lo=p.lo;if(p.hi<hi)hi=p.hi;});
   var missing=REQ.filter(function(l){return A.by[l].length>0&&!selItem(l);}).map(function(l){return LAYER_MAP[l].need;});
   var status=missing.length?'Still needs '+joinAnd(missing):'Complete outfit';
+  /* Rating works on one piece at a time, so Rate only appears with a single piece picked. */
   tray.innerHTML='<div class="tray-text"><div class="tray-title">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+esc(status)+'</div>'
-    +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own exception')+'</div></div>'
-    +(picks.length>1&&db&&canWrite?'<button type="button" class="btn inv" data-act="clash">Mark a clash</button>':'')
-    +'<button type="button" class="btn inv" data-act="clear">Clear</button>';
+    +'<div class="tray-sub">'+(lo<=hi?'Works for '+levelList(lo,hi):'Paired by your own rating')+'</div></div>'
+    +(picks.length===1&&RATERS[picks[0].layer]&&db&&canWrite?'<button type="button" class="btn inv" data-act="rate">Rate '+esc(picks[0].name.length>14?'this':picks[0].name)+'</button>':'')
+    +'<button type="button" class="btn inv" data-act="clear">Clear outfit</button>';
   tray.hidden=false;
   setTrayH(tray.offsetHeight);
 }
@@ -890,10 +1103,7 @@ function rowHTML(it,A){
   meta.push(esc(rangeText(it)));
   var badges=[];
   if(it.care==='protect')badges.push('Keep nice');
-  if(it.care==='beater')badges.push('Beater');
   if(it.tone==='statement')badges.push('Statement');
-  if(it.season==='warm')badges.push('Warm weather');
-  if(it.season==='cold')badges.push('Cold weather');
   var right='',n;
   if(it.status==='resting')right='<span class="row-n">Out of rotation</span>';
   else if(A.blockedMap[it.id])right='<span class="pill crit">Blocked</span>';
@@ -913,35 +1123,89 @@ function renderWardrobe(A){
   }
   var edit=db&&canWrite;
   if(edit)h+='<div class="actions"><button type="button" class="btn primary" data-act="add">Add a piece</button></div>';
-  h+='<p class="sub">'+(edit?'Tap a piece to edit it. Mark a layer’s audit done once everything you own in it is here: Gaps only checks finished layers for holes.':sync?'View only on this device. Add your GitHub key under Your data to make changes.':'Only the owner can change this wardrobe.')+'</p>';
+  h+='<p class="sub">'+(edit?'Tap a piece to edit it, or add new pieces at any time.':sync?'View only on this device. Add your GitHub key under Your data to make changes.':'Only the owner can change this wardrobe.')+'</p>';
   LAYERS.forEach(function(L){
     var arr=state.items.filter(function(it){return it.layer===L.id;}).sort(function(a,b){
       return (a.status==='resting'?1:0)-(b.status==='resting'?1:0)||orderItems(a,b);
     });
-    var done=!!state.audit[L.id];
-    h+='<section class="group"><div class="group-head"><h2>'+L.name+' <span class="n">'+arr.length+'</span></h2>';
-    if(edit)h+='<button type="button" class="mini'+(done?' is-on':'')+'" data-act="audit" data-layer="'+L.id+'" aria-pressed="'+(done?'true':'false')+'">'+(done?'Audit done':'Mark audit done')+'</button>';
+    var shut=!!FOLD[L.id];
+    h+='<section class="group"><div class="group-head"><button type="button" class="fold" data-act="fold" data-layer="'+L.id+'" aria-expanded="'+(shut?'false':'true')+'"><span class="chev" aria-hidden="true"></span><h2>'+L.name+' <span class="n">'+arr.length+'</span></h2></button>';
+    if(edit)h+='<button type="button" class="mini" data-act="add" data-layer="'+L.id+'">Add</button>';
     h+='</div>';
+    if(shut){h+='</section>';return;}
+    if(L.hint)h+='<p class="rail-hint">'+L.hint+'</p>';
     h+=arr.length?'<ul class="rows">'+arr.map(function(it){return rowHTML(it,A);}).join('')+'</ul>':'<p class="empty">Nothing added yet.</p>';
     h+='</section>';
   });
   if(state.pinList.length){
-    h+='<section class="group"><div class="group-head"><h2>Your exceptions <span class="n">'+state.pinList.length+'</span></h2></div><ul class="rows">';
-    state.pinList.forEach(function(p){
-      var a=itemById(p.a),b=itemById(p.b);
-      h+='<li class="exc"><span><b>'+(p.kind==='block'?'Never':'Always')+'</b> '+esc(a?a.name:'a removed piece')+' with '+esc(b?b.name:'a removed piece')+'</span>'
-        +(edit?'<button type="button" class="mini" data-act="unpin" data-key="'+esc(p.key)+'">Remove</button>':'')+'</li>';
-    });
-    h+='</ul></section>';
+    var popen=!!FOLD.pairsOpen;
+    h+='<section class="group"><div class="group-head"><button type="button" class="fold" data-act="fold" data-layer="pairsOpen" aria-expanded="'+(popen?'true':'false')+'"><span class="chev" aria-hidden="true"></span><h2>Pairings</h2></button></div>';
+    if(popen)h+=pairingsHTML(edit);
+    h+='</section>';
   }
   h+='<section class="group"><div class="group-head"><h2>Your data</h2></div><p class="sub">'+dataNote()
-    +'A backup is one file holding every piece, exception and audit mark. Import it into another copy of this app to move your wardrobe there.</p><div class="actions">'
+    +'A backup is one file holding every piece and pairing. Import it into another copy of this app to move your wardrobe there.</p><div class="actions">'
     +(sync?'<button type="button" class="btn'+(sync.hasKey()?'':' primary')+'" data-act="key">'+(sync.hasKey()?'Change GitHub key':'Add your GitHub key')+'</button>'
       +'<button type="button" class="btn" data-act="syncnow">Sync now</button>':'')
     +'<button type="button" class="btn" data-act="backup"'+(state.items.length?'':' disabled')+'>Back up</button>'
     +(edit?'<button type="button" class="btn" data-act="import">Import a backup</button>':'')
     +(dl&&state.items.length?'<button type="button" class="btn" data-act="export">Export CSV</button>':'')+'</div></section>';
   view.innerHTML=h;
+}
+
+/* Pairings grouped by the piece that did the rating (the lower layer), with neutrals counted rather than listed. */
+function pairingsHTML(edit){
+  var owners={};
+  state.pinList.forEach(function(p){
+    var a=itemById(p.a),b=itemById(p.b);
+    if(!a||!b)return;
+    var own=LAYER_IDS.indexOf(a.layer)<=LAYER_IDS.indexOf(b.layer)?a:b,other=own===a?b:a;
+    var o=owners[own.id]||(owners[own.id]={it:own,yes:[],no:[],maybe:0});
+    if(p.kind==='maybe')o.maybe++;else o[p.kind].push({other:other,key:p.key});
+  });
+  var h='<p class="rail-hint">What you’ve rated in Build, by the piece you rated. Neutral pairs are counted, not listed.</p>';
+  LAYERS.forEach(function(L){
+    var list=Object.keys(owners).map(function(k){return owners[k];}).filter(function(o){return o.it.layer===L.id;}).sort(function(x,y){return x.it.name.localeCompare(y.it.name);});
+    if(!list.length)return;
+    h+='<h3 class="pair-layer">'+L.name+'</h3><ul class="rows">';
+    list.forEach(function(o){
+      var open=!!ui.openPiece[o.it.id],sum=[];
+      if(o.yes.length)sum.push(o.yes.length+' work');
+      if(o.no.length)sum.push(o.no.length+' don’t');
+      if(o.maybe)sum.push(o.maybe+' neutral');
+      h+='<li><button type="button" class="row pair-row" data-act="openpiece" data-id="'+esc(o.it.id)+'" aria-expanded="'+(open?'true':'false')+'">'+swatch(o.it,true)
+        +'<span class="row-main"><span class="row-name">'+esc(o.it.name)+'</span><span class="row-meta">'+sum.join(' · ')+'</span></span><span class="chev" aria-hidden="true"></span></button>';
+      if(open){
+        h+='<div class="pair-detail">';
+        [['yes','Works with'],['no','Doesn’t work with']].forEach(function(g){
+          var arr=o[g[0]].slice().sort(function(x,y){return LAYER_IDS.indexOf(x.other.layer)-LAYER_IDS.indexOf(y.other.layer)||x.other.name.localeCompare(y.other.name);});
+          if(!arr.length)return;
+          h+='<p class="pair-kind kind k-'+g[0]+'">'+g[1]+'</p><ul class="pair-list">';
+          arr.forEach(function(r){
+            var armed=ui.armPin===r.key;
+            h+='<li>'+swatch(r.other)+'<span>'+esc(r.other.name)+'</span>'+(edit?'<button type="button" class="mini'+(armed?' danger-on':'')+'" data-act="unpin" data-key="'+esc(r.key)+'">'+(armed?'Tap to confirm':'Delete')+'</button>':'')+'</li>';
+          });
+          h+='</ul>';
+        });
+        if(!o.yes.length&&!o.no.length)h+='<p class="help">Everything is neutral.</p>';
+        if(edit)h+='<button type="button" class="btn danger pair-reset" data-act="resetpiece" data-id="'+esc(o.it.id)+'">'+(ui.armReset===o.it.id?'Tap again to clear all '+(o.yes.length+o.no.length+o.maybe):'Clear all ratings for this piece')+'</button>';
+        h+='</div>';
+      }
+      h+='</li>';
+    });
+    h+='</ul>';
+  });
+  if(edit)h+='<div class="actions"><button type="button" class="btn danger" data-act="unpinall">'+(ui.armAll?'Tap again to delete all '+state.pinList.length:'Delete all pairings')+'</button></div>';
+  return h;
+}
+function deletePins(keys,done){
+  if(!canChange())return;
+  var i=0;
+  (function next(){
+    if(i>=keys.length){if(done)done();return;}
+    var dp;try{dp=db.doc('pins/'+keys[i++]).delete();}catch(e){dp=Promise.reject(e);}
+    dp.then(next,writeFailed);
+  })();
 }
 
 /* ---------- Gaps ---------- */
@@ -953,7 +1217,7 @@ function blockText(b,by){
   var maxHi=Math.max.apply(null,arr.map(function(o){return o.hi;})),minLo=Math.min.apply(null,arr.map(function(o){return o.lo;}));
   if(maxHi<it.lo)return 'Needs '+ln+' at '+LEVELS[it.lo]+' or above. Yours stop at '+LEVELS[maxHi]+'.';
   if(minLo>it.hi)return 'Needs '+ln+' at '+LEVELS[it.hi]+' or below. Yours start at '+LEVELS[minLo]+'.';
-  return 'None of your '+ln+' pair with it, because of dress code, season, colour role or your own exceptions.';
+  return 'None of your '+ln+' pair with it, because of dress code, season or your own ratings.';
 }
 function candHTML(x,i){
   var c=x.c,facts=['<li><b>+'+x.delta+'</b> '+(x.delta===1?'outfit':'outfits')+'</li>'];
@@ -968,27 +1232,23 @@ function renderGaps(A){
     return;
   }
   var h='',x;
-  var todo=REQ.filter(function(l){return !state.audit[l];});
-  if(todo.length){
-    h+='<p class="note">Still to audit: <b>'+todo.map(function(l){return LAYER_MAP[l].name;}).join(', ')+'</b>. Counts use what’s in so far, and a layer is only checked for holes once its audit is marked done in Wardrobe.</p>';
-  }
   var live=A.base.live.map(function(l){return LAYER_MAP[l].name.toLowerCase();});
   var liveNote=A.base.total===null?'needs two layers':live.length===REQ.length?'you can build':live.join(' + ')+' only';
-  h+='<section class="panel"><h2>Coverage</h2><p class="sub">How many pieces you have for each dress code, layer by layer. An outfit needs shoes, bottoms and a top that share a level.</p>';
+  h+='<section class="panel"><h2>Coverage</h2><p class="sub">How many pieces you have for each dress code, layer by layer. An outfit needs shoes, bottoms and a top that share a level. Pairs you’ve rated Doesn’t work aren’t counted.</p>';
   h+='<div class="scroll-x"><table class="cov"><thead><tr><th scope="col"><span class="vh">Layer</span></th>';
-  for(x=1;x<=5;x++)h+='<th scope="col">'+LEVELS[x]+'</th>';
+  for(x=1;x<=MAXL;x++)h+='<th scope="col">'+LEVELS[x]+'</th>';
   h+='</tr></thead><tbody>';
   LAYERS.forEach(function(L){
     var n=A.by[L.id].length;
-    h+='<tr><th scope="row">'+L.name+'<small>'+(L.req?(state.audit[L.id]?'audited':n?'in progress':'not started'):'optional')+'</small></th>';
-    for(var v=1;v<=5;v++){
+    h+='<tr><th scope="row">'+L.name+'<small>'+(L.req?n+(n===1?' piece':' pieces'):'optional')+'</small></th>';
+    for(var v=1;v<=MAXL;v++){
       var c=A.cov[L.id][v],hole=A.holes[L.id+':'+v];
       h+='<td class="'+(hole?'hole':c===0?'z':c===1?'c1':c<4?'c2':'c3')+'">'+(c===0&&!hole?'<span aria-hidden="true">·</span><span class="vh">0</span>':c)+'</td>';
     }
     h+='</tr>';
   });
   h+='<tr class="sum"><th scope="row">Outfits<small>'+liveNote+'</small></th>';
-  for(x=1;x<=5;x++){
+  for(x=1;x<=MAXL;x++){
     var o=A.base.total===null?null:A.base.perLevel[x];
     h+='<td class="'+(o?'has':'z')+'">'+(o===null?'–':o)+'</td>';
   }
@@ -1004,7 +1264,7 @@ function renderGaps(A){
     });
     h+='</ul>';
   }else{
-    h+='<p class="sub">'+(A.base.total===null?'Add a second layer and anything you can’t currently wear will show up here.':'Nothing is blocked'+(todo.length?' so far.':'.'))+'</p>';
+    h+='<p class="sub">'+(A.base.total===null?'Add a second layer and anything you can’t currently wear will show up here.':'Nothing is blocked.')+'</p>';
   }
   h+='</section>';
 
@@ -1012,8 +1272,7 @@ function renderGaps(A){
   var variety=A.candidates.filter(function(c){return !(c.freed.length||c.opened.length);});
   h+='<section class="panel"><h2>Next best buy</h2>';
   if(A.base.total===null)h+='<p class="sub">Needs at least two layers before it can score anything.</p>';
-  else if(!REQ.some(function(l){return state.audit[l];}))h+='<p class="sub">Mark a layer’s audit done and this will score what to add to it.</p>';
-  else if(unlock.length)h+='<p class="sub">Ranked by what each would unlock, scored against what you own now and assuming a neutral colour. Only finished layers are scored.</p><ol class="cands">'+unlock.slice(0,4).map(candHTML).join('')+'</ol>';
+  else if(unlock.length)h+='<p class="sub">Ranked by what each would unlock, scored against what you own now and assuming a neutral colour.</p><ol class="cands">'+unlock.slice(0,4).map(candHTML).join('')+'</ol>';
   else if(variety.length)h+='<p class="sub">Nothing is blocked, so new pieces would add variety without unlocking anything. The biggest adds:</p><ol class="cands">'+variety.slice(0,3).map(candHTML).join('')+'</ol>';
   else h+='<p class="sub">Nothing to suggest yet.</p>';
   h+='</section>';
@@ -1032,7 +1291,7 @@ function renderGaps(A){
   h+='</section>';
 
   h+='<section class="panel"><h2>Dress codes</h2><ol class="key">';
-  for(x=1;x<=5;x++)h+='<li>'+bar(x,x)+'<b>'+LEVELS[x]+'</b><span>'+LEVEL_NOTES[x]+'</span></li>';
+  for(x=1;x<=MAXL;x++)h+='<li>'+bar(x,x)+'<b>'+LEVELS[x]+'</b><span>'+LEVEL_NOTES[x]+'</span></li>';
   h+='</ol></section>';
   view.innerHTML=h;
 }
@@ -1056,7 +1315,7 @@ function renderChrome(A){
 function render(){
   pending=false;
   sanitizeSel();
-  var A=analyse(state.items,state.pins,state.audit);
+  var A=analyse(state.items,state.pins);
   renderChrome(A);
   if(ui.tab==='wardrobe')renderWardrobe(A);
   else if(ui.tab==='gaps')renderGaps(A);
@@ -1108,36 +1367,45 @@ function radio(name,value,label,checked){
 }
 function levelOpts(sel){
   var h='';
-  for(var x=1;x<=5;x++)h+='<option value="'+x+'"'+(x===sel?' selected':'')+'>'+LEVELS[x]+'</option>';
+  for(var x=1;x<=MAXL;x++)h+='<option value="'+x+'"'+(x===sel?' selected':'')+'>'+LEVELS[x]+'</option>';
   return h;
 }
-function typeOpts(layer){
-  return (TYPES[layer]||[]).map(function(t){return '<option value="'+t+'"></option>';}).join('');
+function typeField(layer,cur){
+  var list=TYPE_CHOICES[layer];
+  if(!list)return '';
+  return '<fieldset class="fld"><legend class="lbl">Type</legend><div class="seg">'+list.map(function(t){return radio('type',t.replace(/\W/g,''),t,cur===t).replace('value="'+t.replace(/\W/g,'')+'"','value="'+t+'"');}).join('')+'</div></fieldset>';
+}
+function colourLabel(){
+  return (ui.form&&ui.form.colours||[]).map(function(k,i){return COLOUR_MAP[k]?COLOUR_MAP[k].name+(i===0&&ui.form.colours.length>1?' (main)':''):'';}).filter(Boolean).join(', ');
+}
+function swatchInput(c,on){
+  return '<label class="swl'+(c.more?' more':'')+'" title="'+c.name+'"><input type="checkbox" name="colour" id="f-colour-'+c.key+'" value="'+c.key+'"'+(on?' checked':'')+'>'
+    +'<span class="sw'+(c.hex?'':' pat')+'"'+(c.hex?' style="--sw:'+c.hex+'"':'')+'></span><span class="vh">'+c.name+'</span></label>';
 }
 function openForm(it,layer){
   var ro=!db||!canWrite;
-  ui.form={id:it?it.id:null,createdAt:it?it.createdAt:0,toneTouched:!!it,armed:false};
-  var v=it||{name:'',layer:layer||'',type:'',colour:'',tone:'neutral',lo:2,hi:3,season:'all',care:'normal',status:'active',notes:''};
-  var cn=COLOUR_MAP[v.colour]?COLOUR_MAP[v.colour].name:'';
+  var v=it||{name:'',layer:layer||'',type:'',colours:[],tone:'neutral',lo:2,hi:3,season:'all',care:'normal',status:'active',notes:''};
+  ui.form={id:it?it.id:null,createdAt:it?it.createdAt:0,toneTouched:!!it,armed:false,colours:(v.colours||[]).filter(function(k){return COLOUR_MAP[k];})};
+  var showMore=ui.form.colours.some(function(k){return COLOUR_MAP[k].more;});
   var h='<form id="item-form" class="form" novalidate>'+head(it?(ro?'Piece':'Edit piece'):'Add a piece')+'<fieldset class="all"'+(ro?' disabled':'')+'>';
   h+='<label class="fld" for="f-name"><span class="lbl">Name</span><input id="f-name" name="name" type="text" maxlength="80" autocomplete="off" placeholder="e.g. Black slim jeans" value="'+esc(v.name)+'"></label>';
   h+='<fieldset class="fld"><legend class="lbl">Layer</legend><div class="seg">'+LAYERS.map(function(L){return radio('layer',L.id,L.name,v.layer===L.id);}).join('')+'</div></fieldset>';
-  h+='<label class="fld" for="f-type"><span class="lbl">Type <em>optional</em></span><input id="f-type" name="type" type="text" maxlength="40" list="f-types" autocomplete="off" placeholder="e.g. Trainers, Jeans, Shirt" value="'+esc(v.type)+'"><datalist id="f-types">'+typeOpts(v.layer)+'</datalist></label>';
-  h+='<fieldset class="fld"><legend class="lbl">Colour <span class="lbl-val" id="f-colour-name">'+esc(cn)+'</span></legend><div class="swatches">'
-    +COLOURS.map(function(c){
-      return '<label class="swl" title="'+c.name+'"><input type="radio" name="colour" id="f-colour-'+c.key+'" value="'+c.key+'"'+(v.colour===c.key?' checked':'')+'>'
-        +'<span class="sw'+(c.hex?'':' pat')+'"'+(c.hex?' style="--sw:'+c.hex+'"':'')+'></span><span class="vh">'+c.name+'</span></label>';
-    }).join('')+'</div></fieldset>';
+  h+='<div id="f-type-wrap">'+typeField(v.layer,v.type)+'</div>';
+  h+='<fieldset class="fld"><legend class="lbl">Colours <span class="lbl-val" id="f-colour-name">'+esc(colourLabel())+'</span></legend><div class="swatches'+(showMore?' show-more':'')+'" id="f-swatches">'
+    +COLOURS.filter(function(c){return !c.more;}).map(function(c){return swatchInput(c,ui.form.colours.indexOf(c.key)>=0);}).join('')
+    +'<button type="button" class="swmore" data-act="more" aria-expanded="'+(showMore?'true':'false')+'" title="More colours"><span class="vh">More colours</span></button>'
+    +COLOURS.filter(function(c){return c.more;}).map(function(c){return swatchInput(c,ui.form.colours.indexOf(c.key)>=0);}).join('')
+    +'</div><p class="help">Pick one or more. The first you pick is the main colour.</p></fieldset>';
   h+='<fieldset class="fld"><legend class="lbl">Colour role</legend><div class="seg">'+radio('tone','neutral','Neutral',v.tone!=='statement')+radio('tone','statement','Statement',v.tone==='statement')
-    +'</div><p class="help">Neutrals go with anything. Two statement pieces aren’t paired unless you allow it.</p></fieldset>';
+    +'</div><p class="help">A label to help you spot your standout pieces. It doesn’t change what pairs with what.</p></fieldset>';
   h+='<fieldset class="fld"><legend class="lbl">Dress codes it covers</legend><div class="range"><label for="f-lo">From<select id="f-lo" name="lo">'+levelOpts(v.lo)+'</select></label>'
     +'<label for="f-hi">To<select id="f-hi" name="hi">'+levelOpts(v.hi)+'</select></label></div>'
     +'<div class="range-show"><span id="f-bar">'+bar(v.lo,v.hi,'big')+'</span><span class="help" id="f-range">'+esc(rangeText(v))+'</span></div>'
     +'<details class="lv-key"><summary>What the levels mean</summary><ul>'
-    +[1,2,3,4,5].map(function(x){return '<li><b>'+LEVELS[x]+'</b>: '+LEVEL_NOTES[x]+'</li>';}).join('')+'</ul></details></fieldset>';
+    +LV.map(function(x){return '<li><b>'+LEVELS[x]+'</b>: '+LEVEL_NOTES[x]+'</li>';}).join('')+'</ul></details></fieldset>';
   h+='<fieldset class="fld"><legend class="lbl">Season</legend><div class="seg">'+radio('season','all','All year',v.season==='all')+radio('season','warm','Warm',v.season==='warm')+radio('season','cold','Cold',v.season==='cold')+'</div></fieldset>';
-  h+='<fieldset class="fld"><legend class="lbl">How precious</legend><div class="seg">'+radio('care','protect','Keep nice',v.care==='protect')+radio('care','normal','Everyday',v.care==='normal')+radio('care','beater','Beater',v.care==='beater')
-    +'</div><p class="help">Keep-nice pieces are ruled out when Rough night is on.</p></fieldset>';
+  h+='<fieldset class="fld"><legend class="lbl">How precious</legend><div class="seg">'+radio('care','protect','Keep nice',v.care==='protect')+radio('care','normal','Everyday',v.care==='normal')+radio('care','beater','Rough',v.care==='beater')
+    +'</div><p class="help">In Build, Keep it nice hides Rough pieces, and Getting messy hides Keep-nice pieces.</p></fieldset>';
   h+='<label class="check" for="f-rest"><input type="checkbox" id="f-rest" name="rest"'+(v.status==='resting'?' checked':'')+'>Out of rotation (doesn’t fit, needs repair)</label>';
   h+='<label class="fld" for="f-notes"><span class="lbl">Notes <em>optional</em></span><textarea id="f-notes" name="notes" rows="2" maxlength="300">'+esc(v.notes)+'</textarea></label>';
   h+='</fieldset><p class="form-err" id="f-err" role="alert" hidden></p>';
@@ -1171,9 +1439,10 @@ function submitForm(form){
   if(LAYER_IDS.indexOf(layer)<0){formErr('Pick which layer it belongs to.');return;}
   var lo=clampLevel(fd.get('lo'),2),hi=clampLevel(fd.get('hi'),lo),t;
   if(lo>hi){t=lo;lo=hi;hi=t;}
-  var season=String(fd.get('season')||'all'),care=String(fd.get('care')||'normal'),colour=String(fd.get('colour')||'');
-  var data={name:name.slice(0,80),layer:layer,type:String(fd.get('type')||'').trim().slice(0,40),
-    colour:COLOUR_MAP[colour]?colour:'',tone:fd.get('tone')==='statement'?'statement':'neutral',lo:lo,hi:hi,
+  var season=String(fd.get('season')||'all'),care=String(fd.get('care')||'normal');
+  var colours=(ui.form.colours||[]).filter(function(k){return COLOUR_MAP[k];}).slice(0,4);
+  var data={name:name.slice(0,80),layer:layer,type:normType(layer,String(fd.get('type')||'')),
+    colours:colours,colour:colours[0]||'',tone:fd.get('tone')==='statement'?'statement':'neutral',lo:lo,hi:hi,
     season:season==='warm'||season==='cold'?season:'all',care:care==='protect'||care==='beater'?care:'normal',
     status:fd.get('rest')?'resting':'active',notes:String(fd.get('notes')||'').trim().slice(0,300),
     createdAt:ui.form.createdAt||Date.now()};
@@ -1207,43 +1476,35 @@ function removePin(key){
   if(!doc)return;
   var p;
   try{p=db.doc('pins/'+doc).delete();}catch(e){p=Promise.reject(e);}
-  p.then(function(){if(sheet.open)closeSheet();toast('Exception removed');},writeFailed);
+  p.then(function(){if(sheet.open)closeSheet();toast('Pairing deleted');},writeFailed);
+}
+function rateButtons(a,b){
+  var cur=rating(a,b);
+  return '<div class="rate3">'+['yes','no','maybe'].map(function(k){
+    return '<button type="button" class="btn r-'+k+(cur===k?' is-on':'')+'" data-act="rateto" data-a="'+esc(a.id)+'" data-b="'+esc(b.id)+'" data-kind="'+(cur===k?'':k)+'" aria-pressed="'+(cur===k?'true':'false')+'">'+KIND_NAME[k]+'</button>';
+  }).join('')+'</div>';
 }
 function openWhy(id){
   var it=itemById(id);
   if(!it)return;
-  var cs=conflictsFor(it),edit=db&&canWrite;
-  var h=head('Why it’s ruled out')+'<div class="why-item">'+swatch(it,true)+'<div><b>'+esc(it.name)+'</b><div class="help">'+esc(rangeText(it))+'</div></div></div><ul class="whys">';
-  cs.forEach(function(c){
-    h+='<li><p>'+esc(longWhy(it,c))+'</p>';
-    if(c.other&&edit){
-      if(c.code==='pin')h+='<button type="button" class="btn" data-act="unpin" data-key="'+esc(pinKey(it.id,c.other.id))+'">Remove that exception</button>';
-      else h+='<button type="button" class="btn" data-act="allow" data-a="'+esc(it.id)+'" data-b="'+esc(c.other.id)+'">Allow it with '+esc(c.other.name)+'</button>';
-    }
-    h+='</li>';
-  });
+  var cs=filterOut(it),edit=db&&canWrite,aff=cs.length?null:affinity(it);
+  var h=head(cs.length?'Why it’s ruled out':'How it pairs')+'<div class="why-item">'+swatch(it,true)+'<div><b>'+esc(it.name)+'</b><div class="help">'+esc(rangeText(it))+'</div></div></div><ul class="whys">';
+  cs.forEach(function(c){h+='<li><p>'+esc(longWhy(it,c))+'</p></li>';});
+  if(aff){
+    aff.against.forEach(function(s){
+      var r=rating(it,s),w=r?null:pairWhy(it,s,state.pins);
+      h+='<li><p><b>With '+esc(s.name)+':</b> '+(r?'you rated it '+KIND_NAME[r]+'.':w?esc(longWhy(it,{code:w.code,other:s})):'not rated yet.')+'</p>'+(edit?rateButtons(it,s):'')+'</li>';
+    });
+  }
   h+='</ul><div class="sheet-foot"><button type="button" class="btn primary" data-act="restart" data-id="'+esc(it.id)+'">Start a new outfit from this</button></div>';
   openSheet(h);
 }
-function openClash(){
-  var picks=LAYER_IDS.map(selItem).filter(Boolean),i,j;
-  var h=head('Mark a clash')+'<p class="help">Pick the two that don’t work together. They won’t be paired again, whatever the tags say. You can undo it under Wardrobe.</p><ul class="whys">';
-  for(i=0;i<picks.length;i++){
-    for(j=i+1;j<picks.length;j++){
-      h+='<li><p>'+esc(picks[i].name)+' with '+esc(picks[j].name)+'</p><button type="button" class="btn" data-act="block" data-a="'+esc(picks[i].id)+'" data-b="'+esc(picks[j].id)+'">Never together</button></li>';
-    }
-  }
-  h+='</ul>';
-  openSheet(h);
-}
-function toggleAudit(layer){
-  if(!canChange()||LAYER_IDS.indexOf(layer)<0)return;
-  var next={};
-  LAYER_IDS.forEach(function(l){if(state.audit[l])next[l]=true;});
-  if(next[layer])delete next[layer];else next[layer]=true;
-  var p;
-  try{p=db.doc('meta/audit').set(next);}catch(e){p=Promise.reject(e);}
-  p.then(function(){toast(next[layer]?LAYER_MAP[layer].name+' audit marked done':LAYER_MAP[layer].name+' audit reopened');},writeFailed);
+function setRating(a,b,kind){
+  if(!canChange())return Promise.reject({code:'not_granted'});
+  var key=pinKey(a,b),p;
+  try{p=kind?db.doc('pins/'+key).set({a:a,b:b,kind:kind,createdAt:Date.now()}):db.doc('pins/'+key).delete();}
+  catch(e){p=Promise.reject(e);}
+  return p.then(null,function(e){writeFailed(e);throw e;});
 }
 function csvCell(v){
   var s=String(v==null?'':v);
@@ -1254,8 +1515,8 @@ function exportCSV(){
   if(!dl){toast('Export isn’t available in this view.');return;}
   var rows=[['Name','Layer','Type','Colour','Colour role','From','To','Season','How precious','Status','Notes']];
   state.items.slice().sort(function(a,b){return LAYER_IDS.indexOf(a.layer)-LAYER_IDS.indexOf(b.layer)||orderItems(a,b);}).forEach(function(it){
-    rows.push([it.name,LAYER_MAP[it.layer].name,it.type,COLOUR_MAP[it.colour]?COLOUR_MAP[it.colour].name:'',it.tone,LEVELS[it.lo],LEVELS[it.hi],
-      it.season==='all'?'All year':it.season,it.care==='protect'?'Keep nice':it.care==='beater'?'Beater':'Everyday',it.status==='resting'?'Out of rotation':'Active',it.notes]);
+    rows.push([it.name,LAYER_MAP[it.layer].name,it.type,colourName(it)==='Colour not set'?'':colourName(it),it.tone,LEVELS[it.lo],LEVELS[it.hi],
+      it.season==='all'?'All year':it.season,it.care==='protect'?'Keep nice':it.care==='beater'?'Rough':'Everyday',it.status==='resting'?'Out of rotation':'Active',it.notes]);
   });
   var csv=rows.map(function(r){return r.map(csvCell).join(',');}).join('\r\n');
   dl.save({filename:'wardrobe.csv',data:csv}).then(function(){toast('Exported');},function(e){
@@ -1321,7 +1582,8 @@ function backupLine(){
 }
 function markBackup(){try{localStorage.setItem('wardrobe.lastBackup',String(Date.now()));}catch(e){}}
 function itemData(it){
-  return {name:it.name,layer:it.layer,type:it.type,colour:COLOUR_MAP[it.colour]?it.colour:'',tone:it.tone,lo:it.lo,hi:it.hi,
+  var cs=(it.colours||[]).filter(function(k){return COLOUR_MAP[k];});
+  return {name:it.name,layer:it.layer,type:it.type,colours:cs,colour:cs[0]||'',tone:it.tone,lo:it.lo,hi:it.hi,
     season:it.season,care:it.care,status:it.status,notes:it.notes,createdAt:it.createdAt||Date.now()};
 }
 function backupData(){
@@ -1391,9 +1653,9 @@ function parseBackup(text){
   if(raw.pins&&typeof raw.pins==='object'){
     Object.keys(raw.pins).forEach(function(k){
       var p=raw.pins[k];
-      if(p&&(p.kind==='block'||p.kind==='allow')&&typeof p.a==='string'&&typeof p.b==='string'&&p.a!==p.b
+      if(p&&normKind(p.kind)&&typeof p.a==='string'&&typeof p.b==='string'&&p.a!==p.b
         &&(seen[p.a]||itemById(p.a))&&(seen[p.b]||itemById(p.b))){
-        pins.push({id:pinKey(p.a,p.b),data:{a:p.a,b:p.b,kind:p.kind,createdAt:Date.now()}});
+        pins.push({id:pinKey(p.a,p.b),data:{a:p.a,b:p.b,kind:normKind(p.kind),createdAt:Date.now()}});
       }
     });
   }
@@ -1441,42 +1703,103 @@ document.addEventListener('click',function(e){
   var el=e.target&&e.target.closest?e.target.closest('[data-act],[data-tab]'):null;
   if(!el){if(e.target===sheet)closeSheet();return;}
   var tab=el.getAttribute('data-tab');
-  if(tab){ui.tab=tab;render();window.scrollTo(0,0);return;}
+  if(tab){ui.tab=tab;ui.rate=false;ui.frozen={};render();window.scrollTo(0,0);return;}
   var act=el.getAttribute('data-act'),id=el.getAttribute('data-id'),it,a,b;
   switch(act){
     case 'pick':
       it=itemById(id);
       if(!it)break;
       ui.sel[it.layer]=ui.sel[it.layer]===id?null:id;
+      if(ui.sel[it.layer])ui.anchor=id;
+      if(!picked().length)ui.rate=false;
       ui.focus=id;
       render();
       break;
+    case 'rate':
+      if(!ui.rate&&(!canChange()||picked().length!==1||!RATERS[picked()[0].layer]))break;
+      ui.rate=!ui.rate;ui.frozen={};ui.rateStart={};
+      if(ui.rate)ui.anchor=picked()[0].id;
+      render();window.scrollTo(0,0);
+      break;
+    case 'ratedone':
+    case 'rateexit':
+      var anc=anchorItem(),todo=[];
+      if(act==='ratedone'&&anc&&canWrite){
+        LAYER_IDS.forEach(function(l){
+          if(LAYER_IDS.indexOf(l)<=LAYER_IDS.indexOf(anc.layer))return;
+          state.items.forEach(function(x){if(x.layer===l&&x.status==='active'&&!rating(x,anc))todo.push(x.id);});
+        });
+      }
+      ui.rate=false;ui.frozen={};ui.rateStart={};render();window.scrollTo(0,0);
+      if(todo.length){
+        var ti=0;
+        (function nextN(){
+          if(ti>=todo.length){toast('Saved. '+todo.length+(todo.length===1?' piece':' pieces')+' marked neutral.');schedule();return;}
+          var x=todo[ti++],np;
+          try{np=db.doc('pins/'+pinKey(x,anc.id)).set({a:x,b:anc.id,kind:'maybe',createdAt:Date.now()});}catch(e4){np=Promise.reject(e4);}
+          np.then(nextN,writeFailed);
+        })();
+      }
+      break;
+    case 'rateset':
+      var an=anchorItem(),ri=itemById(id);
+      if(!an||!ri)break;
+      var cur=rating(ri,an),key=ri.id;
+      if(!(key in ui.rateStart))ui.rateStart[key]=cur==='yes'||cur==='no'?'':cur;
+      var nextKind=cur===''||cur==='maybe'?'yes':cur==='yes'?'no':ui.rateStart[key];
+      ui.focus=id;
+      setRating(ri.id,an.id,nextKind).then(function(){schedule();},function(){});
+      break;
+    case 'rateto':
+      setRating(el.getAttribute('data-a'),el.getAttribute('data-b'),el.getAttribute('data-kind')||'').then(function(){
+        var w=itemById(el.getAttribute('data-a'));closeSheet();schedule();if(w&&!filterOut(w).length&&sheet)openWhy(w.id);
+      },function(){});
+      break;
     case 'why':openWhy(id);break;
-    case 'rough':ui.rough=!ui.rough;dropFiltered();render();break;
-    case 'clear':ui.sel={};render();break;
-    case 'clash':openClash();break;
+    case 'care':ui.care=el.getAttribute('data-val')||'all';dropFiltered();render();break;
+    case 'fold':
+      var fl=el.getAttribute('data-layer');
+      if(FOLD[fl])delete FOLD[fl];else FOLD[fl]=true;
+      try{localStorage.setItem('wardrobe.folded',JSON.stringify(FOLD));}catch(e2){}
+      render();
+      break;
+    case 'ttype':ui.topType=el.getAttribute('data-val')||'all';dropFiltered();render();break;
+    case 'more':
+      var sw=$('f-swatches');
+      if(sw){var open=!sw.classList.contains('show-more');sw.classList.toggle('show-more',open);el.setAttribute('aria-expanded',open?'true':'false');}
+      break;
+    case 'clear':ui.sel={};ui.rate=false;ui.frozen={};ui.anchor=null;render();break;
     case 'restart':
       it=itemById(id);
       if(!it)break;
-      ui.sel={};ui.level=0;ui.rough=false;ui.sel[it.layer]=id;
+      ui.sel={};ui.level=0;ui.care='all';ui.topType='all';ui.rate=false;ui.sel[it.layer]=id;ui.anchor=id;
       closeSheet();render();
       break;
-    case 'block':
-      if(!canChange())break;
-      a=el.getAttribute('data-a');b=el.getAttribute('data-b');
-      writePin(a,b,'block').then(function(){
-        var ib=itemById(b);
-        if(ib&&ui.sel[ib.layer]===b)ui.sel[ib.layer]=null;
-        closeSheet();schedule();toast('Saved. Those two won’t be paired again.');
-      },writeFailed);
+    case 'unpin':
+      var pk=el.getAttribute('data-key');
+      if(ui.armPin!==pk){ui.armPin=pk;render();setTimeout(function(){if(ui.armPin===pk){ui.armPin=null;schedule();}},4000);break;}
+      ui.armPin=null;removePin(pk);
       break;
-    case 'allow':
-      if(!canChange())break;
-      writePin(el.getAttribute('data-a'),el.getAttribute('data-b'),'allow').then(function(){
-        closeSheet();schedule();toast('Allowed. They’ll pair from now on.');
-      },writeFailed);
+    case 'openpiece':
+      if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
+      render();
       break;
-    case 'unpin':removePin(el.getAttribute('data-key'));break;
+    case 'resetpiece':
+      if(ui.armReset!==id){ui.armReset=id;render();setTimeout(function(){if(ui.armReset===id){ui.armReset=null;schedule();}},4000);break;}
+      ui.armReset=null;
+      deletePins(state.pinList.filter(function(x){return x.a===id||x.b===id;}).map(function(x){return x.key;}),function(){toast('Ratings cleared for that piece');});
+      break;
+    case 'unpinall':
+      if(!ui.armAll){ui.armAll=true;render();setTimeout(function(){if(ui.armAll){ui.armAll=false;schedule();}},4000);break;}
+      ui.armAll=false;
+      if(!canChange())break;
+      var dels=state.pinList.map(function(x){return x.key;}),di=0;
+      (function nextDel(){
+        if(di>=dels.length){toast('All pairings deleted');return;}
+        var dp;try{dp=db.doc('pins/'+dels[di++]).delete();}catch(e3){dp=Promise.reject(e3);}
+        dp.then(nextDel,writeFailed);
+      })();
+      break;
     case 'add':if(canChange())openForm(null,el.getAttribute('data-layer')||'');break;
     case 'edit':it=itemById(id);if(it)openForm(it);break;
     case 'del':
@@ -1490,7 +1813,6 @@ document.addEventListener('click',function(e){
       }else deleteItem(ui.form.id);
       break;
     case 'close':closeSheet();break;
-    case 'audit':toggleAudit(el.getAttribute('data-layer'));break;
     case 'export':exportCSV();break;
     case 'backup':doBackup();break;
     case 'copybk':copyBackup();break;
@@ -1521,8 +1843,12 @@ sheet.addEventListener('change',function(e){
   var t=e.target;
   if(!t||!t.name||!ui.form)return;
   if(t.name==='colour'){
-    var c=COLOUR_MAP[t.value],label=$('f-colour-name');
-    if(label)label.textContent=c?c.name:'';
+    var cs=ui.form.colours,i=cs.indexOf(t.value);
+    if(t.checked&&i<0){if(cs.length>=4){t.checked=false;toast('Up to four colours.');return;}cs.push(t.value);}
+    if(!t.checked&&i>=0)cs.splice(i,1);
+    var label=$('f-colour-name');
+    if(label)label.textContent=colourLabel();
+    var c=COLOUR_MAP[cs[0]];
     if(c&&!ui.form.toneTouched){var r=$('f-tone-'+c.tone);if(r)r.checked=true;}
   }else if(t.name==='tone'){
     ui.form.toneTouched=true;
@@ -1533,8 +1859,8 @@ sheet.addEventListener('change',function(e){
     $('f-bar').innerHTML=bar(o.lo,o.hi,'big');
     $('f-range').textContent=rangeText(o);
   }else if(t.name==='layer'){
-    var list=$('f-types');
-    if(list)list.innerHTML=typeOpts(t.value);
+    var wrap=$('f-type-wrap');
+    if(wrap)wrap.innerHTML=typeField(t.value,'');
   }
 });
 sheet.addEventListener('submit',function(e){
@@ -1577,9 +1903,10 @@ function subscribe(){
       var map=Object.create(null),list=[];
       s.docs.forEach(function(d){
         var x=d.data();
-        if(x&&(x.kind==='block'||x.kind==='allow')&&typeof x.a==='string'&&typeof x.b==='string'){
-          map[pinKey(x.a,x.b)]=x.kind;
-          list.push({key:d.id,a:x.a,b:x.b,kind:x.kind});
+        var k=x&&normKind(x.kind);
+        if(k&&typeof x.a==='string'&&typeof x.b==='string'){
+          map[pinKey(x.a,x.b)]=k;
+          list.push({key:d.id,a:x.a,b:x.b,kind:k});
         }
       });
       state.pins=map;state.pinList=list;
