@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T16:03:52.858Z",
+ "updatedAt": "2026-11-22T17:25:17.790Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4743,6 +4743,19 @@
    "b": "grandad-s-watch-3q9z",
    "kind": "maybe",
    "createdAt": 1795363430350
+  }
+ },
+ "outfits": {
+  "winter-street-fit-k6qu": {
+   "name": "Winter Street Fit",
+   "pieces": [
+    "beige-nikes-5fwc",
+    "blue-chords-ozq1",
+    "dragon-t-shirt-9uk9",
+    "black-sfa-hoodie-9x9z",
+    "beige-north-face-coat-64z6"
+   ],
+   "createdAt": 1795368315278
   }
  },
  "audit": {
