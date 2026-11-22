@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T22:17:37.115Z",
+ "updatedAt": "2026-11-22T22:17:49.262Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4766,6 +4766,24 @@
    "b": "grandad-s-watch-3q9z",
    "kind": "maybe",
    "createdAt": 1795363430350
+  },
+  "black-jorts-bynf__green-sambas-sm2n": {
+   "a": "black-jorts-bynf",
+   "b": "green-sambas-sm2n",
+   "kind": "yes",
+   "createdAt": 1795385863703
+  },
+  "black-suit-trousers-ylj4__green-sambas-sm2n": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "green-sambas-sm2n",
+   "kind": "no",
+   "createdAt": 1795385865121
+  },
+  "black-zara-jeans-ykmu__green-sambas-sm2n": {
+   "a": "black-zara-jeans-ykmu",
+   "b": "green-sambas-sm2n",
+   "kind": "yes",
+   "createdAt": 1795385866752
   }
  },
  "outfits": {
