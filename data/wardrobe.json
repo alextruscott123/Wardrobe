@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:52:29.288Z",
+ "updatedAt": "2026-11-22T15:53:17.024Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -812,6 +812,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362545600
+  },
+  "white-zara-t-shirt-boxy-fit-wm89": {
+   "name": "White Zara T-Shirt (boxy fit)",
+   "layer": "tops",
+   "type": "T-shirt",
+   "colours": [
+    "white"
+   ],
+   "colour": "white",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "protect",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362787470
   }
  },
  "pins": {
@@ -4126,6 +4144,18 @@
    "b": "white-airforces-nice-1u3h",
    "kind": "yes",
    "createdAt": 1795362746781
+  },
+  "black-sambas-debd__white-zara-t-shirt-boxy-fit-wm89": {
+   "a": "black-sambas-debd",
+   "b": "white-zara-t-shirt-boxy-fit-wm89",
+   "kind": "yes",
+   "createdAt": 1795362789550
+  },
+  "white-airforces-nice-1u3h__white-zara-t-shirt-boxy-fit-wm89": {
+   "a": "white-airforces-nice-1u3h",
+   "b": "white-zara-t-shirt-boxy-fit-wm89",
+   "kind": "yes",
+   "createdAt": 1795362794513
   }
  },
  "audit": {
