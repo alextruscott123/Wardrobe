@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:25:51.175Z",
+ "updatedAt": "2026-11-22T14:27:30.124Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3151,6 +3151,12 @@
    "b": "blue-chords-ozq1",
    "kind": "no",
    "createdAt": 1795357550472
+  },
+  "blue-chords-ozq1__navy-uniqlo-sweater-9u3k": {
+   "a": "navy-uniqlo-sweater-9u3k",
+   "b": "blue-chords-ozq1",
+   "kind": "yes",
+   "createdAt": 1795357647614
   }
  },
  "audit": {
