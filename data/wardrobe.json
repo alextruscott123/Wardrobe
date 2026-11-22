@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:01:27.634Z",
+ "updatedAt": "2026-11-22T14:01:44.720Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -186,9 +186,12 @@
    "createdAt": 1795345634551
   },
   "mont-bell-shitt-c91q": {
-   "name": "Mont Bell Shitt",
+   "name": "Mont Bell Shirt",
    "layer": "tops",
-   "type": "",
+   "type": "Shirt",
+   "colours": [
+    "yellow"
+   ],
    "colour": "yellow",
    "tone": "statement",
    "lo": 2,
