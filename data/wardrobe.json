@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:51:15.807Z",
+ "updatedAt": "2026-11-22T15:51:22.042Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3952,6 +3952,12 @@
    "b": "uniqlo-light-jeans-iyvr",
    "kind": "yes",
    "createdAt": 1795362673299
+  },
+  "passenger-overshirt-10m7__uniqlo-light-jeans-iyvr": {
+   "a": "passenger-overshirt-10m7",
+   "b": "uniqlo-light-jeans-iyvr",
+   "kind": "no",
+   "createdAt": 1795362679531
   }
  },
  "audit": {
