@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T13:42:20.763Z",
+ "updatedAt": "2026-11-22T13:42:22.505Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -1588,12 +1588,6 @@
    "b": "running-shoes-0say",
    "kind": "maybe",
    "createdAt": 1795354832365
-  },
-  "black-jorts-bynf__passenger-overshirt-10m7": {
-   "a": "passenger-overshirt-10m7",
-   "b": "black-jorts-bynf",
-   "kind": "no",
-   "createdAt": 1795354936469
   }
  },
  "audit": {
