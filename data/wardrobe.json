@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:55:15.749Z",
+ "updatedAt": "2026-11-22T15:55:47.333Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -866,6 +866,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362904653
+  },
+  "sfa-x-splice-t-shirt-78gk": {
+   "name": "SFA x Splice T-Shirt",
+   "layer": "tops",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 1,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362939945
   }
  },
  "pins": {
@@ -4432,6 +4450,90 @@
    "b": "gully-riddimz-t-shirt-z1tk",
    "kind": "maybe",
    "createdAt": 1795362913242
+  },
+  "running-shoes-0say__sfa-x-splice-t-shirt-78gk": {
+   "a": "running-shoes-0say",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "yes",
+   "createdAt": 1795362942437
+  },
+  "gymshark-gym-shorts-wjae__sfa-x-splice-t-shirt-78gk": {
+   "a": "gymshark-gym-shorts-wjae",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "yes",
+   "createdAt": 1795362943575
+  },
+  "beige-nikes-5fwc__sfa-x-splice-t-shirt-78gk": {
+   "a": "beige-nikes-5fwc",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944804
+  },
+  "black-sambas-debd__sfa-x-splice-t-shirt-78gk": {
+   "a": "black-sambas-debd",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944807
+  },
+  "sfa-x-splice-t-shirt-78gk__walking-boots-9kwv": {
+   "a": "walking-boots-9kwv",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944809
+  },
+  "sfa-x-splice-t-shirt-78gk__white-airforces-2nd-hand-fats": {
+   "a": "white-airforces-2nd-hand-fats",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944811
+  },
+  "sfa-x-splice-t-shirt-78gk__white-airforces-nice-1u3h": {
+   "a": "white-airforces-nice-1u3h",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944813
+  },
+  "black-joggers-z75d__sfa-x-splice-t-shirt-78gk": {
+   "a": "black-joggers-z75d",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944815
+  },
+  "black-jorts-bynf__sfa-x-splice-t-shirt-78gk": {
+   "a": "black-jorts-bynf",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944817
+  },
+  "black-suit-trousers-ylj4__sfa-x-splice-t-shirt-78gk": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944818
+  },
+  "black-zara-jeans-ykmu__sfa-x-splice-t-shirt-78gk": {
+   "a": "black-zara-jeans-ykmu",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944820
+  },
+  "blue-chords-ozq1__sfa-x-splice-t-shirt-78gk": {
+   "a": "blue-chords-ozq1",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944822
+  },
+  "blue-jorts-7chg__sfa-x-splice-t-shirt-78gk": {
+   "a": "blue-jorts-7chg",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944823
+  },
+  "sfa-x-splice-t-shirt-78gk__uniqlo-light-jeans-iyvr": {
+   "a": "uniqlo-light-jeans-iyvr",
+   "b": "sfa-x-splice-t-shirt-78gk",
+   "kind": "maybe",
+   "createdAt": 1795362944825
   }
  },
  "audit": {
