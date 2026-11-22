@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:52:04.682Z",
+ "updatedAt": "2026-11-22T15:52:21.457Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4114,6 +4114,12 @@
    "b": "walking-boots-9kwv",
    "kind": "no",
    "createdAt": 1795362722173
+  },
+  "uniqlo-light-jeans-iyvr__white-airforces-2nd-hand-fats": {
+   "a": "uniqlo-light-jeans-iyvr",
+   "b": "white-airforces-2nd-hand-fats",
+   "kind": "yes",
+   "createdAt": 1795362738948
   }
  },
  "audit": {
