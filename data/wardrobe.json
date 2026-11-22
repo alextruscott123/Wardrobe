@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:21:07.986Z",
+ "updatedAt": "2026-11-22T14:23:10.064Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -3061,6 +3061,18 @@
    "b": "black-suit-trousers-ylj4",
    "kind": "maybe",
    "createdAt": 1795357091278
+  },
+  "black-zara-jeans-ykmu__black-zara-t-shirt-boxy-fit-wn84": {
+   "a": "black-zara-t-shirt-boxy-fit-wn84",
+   "b": "black-zara-jeans-ykmu",
+   "kind": "yes",
+   "createdAt": 1795357387071
+  },
+  "black-zara-jeans-ykmu__white-zara-t-shirt-normal-fit-q898": {
+   "a": "white-zara-t-shirt-normal-fit-q898",
+   "b": "black-zara-jeans-ykmu",
+   "kind": "yes",
+   "createdAt": 1795357387556
   }
  },
  "audit": {
