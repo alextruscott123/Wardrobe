@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:02:37.870Z",
+ "updatedAt": "2026-11-22T14:02:54.979Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -258,20 +258,6 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795345841120
-  },
-  "og-bus-seat-shirt-cb4r": {
-   "name": "OG Bus Seat Shirt",
-   "layer": "tops",
-   "type": "",
-   "colour": "pattern",
-   "tone": "statement",
-   "lo": 2,
-   "hi": 2,
-   "season": "all",
-   "care": "normal",
-   "status": "active",
-   "notes": "",
-   "createdAt": 1795345878067
   },
   "carhartt-coat-5o25": {
    "name": "Carhartt Coat",
@@ -631,12 +617,6 @@
    "kind": "maybe",
    "createdAt": 1795354634701
   },
-  "black-sambas-debd__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "black-sambas-debd",
-   "kind": "maybe",
-   "createdAt": 1795354634702
-  },
   "black-parlez-hoodie-krhz__black-sambas-debd": {
    "a": "black-parlez-hoodie-krhz",
    "b": "black-sambas-debd",
@@ -810,12 +790,6 @@
    "b": "white-airforces-2nd-hand-fats",
    "kind": "maybe",
    "createdAt": 1795354685138
-  },
-  "og-bus-seat-shirt-cb4r__white-airforces-2nd-hand-fats": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "white-airforces-2nd-hand-fats",
-   "kind": "maybe",
-   "createdAt": 1795354685139
   },
   "black-parlez-hoodie-krhz__white-airforces-2nd-hand-fats": {
    "a": "black-parlez-hoodie-krhz",
@@ -991,12 +965,6 @@
    "kind": "maybe",
    "createdAt": 1795354740368
   },
-  "og-bus-seat-shirt-cb4r__white-airforces-nice-1u3h": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "white-airforces-nice-1u3h",
-   "kind": "maybe",
-   "createdAt": 1795354740368
-  },
   "black-parlez-hoodie-krhz__white-airforces-nice-1u3h": {
    "a": "black-parlez-hoodie-krhz",
    "b": "white-airforces-nice-1u3h",
@@ -1155,12 +1123,6 @@
   },
   "navy-vietnam-shirt-w32w__walking-boots-9kwv": {
    "a": "navy-vietnam-shirt-w32w",
-   "b": "walking-boots-9kwv",
-   "kind": "maybe",
-   "createdAt": 1795354774845
-  },
-  "og-bus-seat-shirt-cb4r__walking-boots-9kwv": {
-   "a": "og-bus-seat-shirt-cb4r",
    "b": "walking-boots-9kwv",
    "kind": "maybe",
    "createdAt": 1795354774845
@@ -1351,12 +1313,6 @@
    "kind": "maybe",
    "createdAt": 1795354823174
   },
-  "beige-nikes-5fwc__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "beige-nikes-5fwc",
-   "kind": "maybe",
-   "createdAt": 1795354823174
-  },
   "beige-nikes-5fwc__black-parlez-hoodie-krhz": {
    "a": "black-parlez-hoodie-krhz",
    "b": "beige-nikes-5fwc",
@@ -1519,12 +1475,6 @@
    "kind": "maybe",
    "createdAt": 1795354832355
   },
-  "og-bus-seat-shirt-cb4r__running-shoes-0say": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "running-shoes-0say",
-   "kind": "maybe",
-   "createdAt": 1795354832356
-  },
   "black-parlez-hoodie-krhz__running-shoes-0say": {
    "a": "black-parlez-hoodie-krhz",
    "b": "running-shoes-0say",
@@ -1665,12 +1615,6 @@
   },
   "black-jorts-bynf__navy-vietnam-shirt-w32w": {
    "a": "navy-vietnam-shirt-w32w",
-   "b": "black-jorts-bynf",
-   "kind": "maybe",
-   "createdAt": 1795354944230
-  },
-  "black-jorts-bynf__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
    "b": "black-jorts-bynf",
    "kind": "maybe",
    "createdAt": 1795354944230
@@ -1837,12 +1781,6 @@
    "kind": "maybe",
    "createdAt": 1795354985956
   },
-  "black-zara-jeans-ykmu__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "black-zara-jeans-ykmu",
-   "kind": "maybe",
-   "createdAt": 1795354985956
-  },
   "black-parlez-hoodie-krhz__black-zara-jeans-ykmu": {
    "a": "black-parlez-hoodie-krhz",
    "b": "black-zara-jeans-ykmu",
@@ -1944,12 +1882,6 @@
    "b": "blue-chords-ozq1",
    "kind": "no",
    "createdAt": 1795355004370
-  },
-  "blue-chords-ozq1__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "blue-chords-ozq1",
-   "kind": "no",
-   "createdAt": 1795355005922
   },
   "blue-chords-ozq1__brown-pull-bear-shirt-wjuo": {
    "a": "brown-pull-bear-shirt-wjuo",
@@ -2125,12 +2057,6 @@
    "kind": "maybe",
    "createdAt": 1795355075584
   },
-  "blue-jorts-7chg__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "blue-jorts-7chg",
-   "kind": "maybe",
-   "createdAt": 1795355075585
-  },
   "black-parlez-hoodie-krhz__blue-jorts-7chg": {
    "a": "black-parlez-hoodie-krhz",
    "b": "blue-jorts-7chg",
@@ -2268,12 +2194,6 @@
    "b": "gymshark-gym-shorts-wjae",
    "kind": "maybe",
    "createdAt": 1795355085610
-  },
-  "gymshark-gym-shorts-wjae__og-bus-seat-shirt-cb4r": {
-   "a": "og-bus-seat-shirt-cb4r",
-   "b": "gymshark-gym-shorts-wjae",
-   "kind": "maybe",
-   "createdAt": 1795355085611
   },
   "black-parlez-hoodie-krhz__gymshark-gym-shorts-wjae": {
    "a": "black-parlez-hoodie-krhz",
