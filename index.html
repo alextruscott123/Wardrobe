@@ -83,7 +83,7 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .mini{margin-left:auto;min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:5px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
 .mini.is-on{background:var(--good-soft);border-color:var(--good);color:var(--good)}
 
-select,input[type="text"],textarea{border:1px solid var(--line);border-radius:6px;background:var(--surface);min-height:44px;padding:0 12px;font-size:16px;max-width:100%}
+select,input[type="text"],input[type="password"],textarea{border:1px solid var(--line);border-radius:6px;background:var(--surface);min-height:44px;padding:0 12px;font-size:16px;max-width:100%}
 textarea{width:100%;min-height:64px;padding:10px 12px;resize:vertical}
 
 #view{display:flex;flex-direction:column;gap:22px;min-width:0}
@@ -197,7 +197,7 @@ dialog.sheet::backdrop{background:var(--scrim)}
 .lbl{font-family:var(--font-display);font-weight:600;font-size:13.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
 .lbl em{font-style:normal;font-weight:500;letter-spacing:.03em;text-transform:none;opacity:.85}
 .lbl-val{margin-left:6px;font-family:var(--font-body);font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink)}
-.fld input[type="text"]{width:100%;background:var(--bg)}
+.fld input[type="text"],.fld input[type="password"]{width:100%;background:var(--bg)}
 .fld textarea,.fld select{background:var(--bg)}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .segl{position:relative;display:block}
@@ -246,52 +246,233 @@ input[type="file"]{max-width:100%;font-size:15px}
 </head>
 <body>
 <script>
-/* Standalone storage: the wardrobe lives in this browser, on this device. Nothing is sent anywhere. */
+/* Standalone storage. On GitHub Pages the wardrobe is one file in this app's own repository (data/wardrobe.json):
+   every device reads it, and a device holding your key can save to it. Anywhere else it stays in this browser. */
 (function(){
   'use strict';
-  var KEY='wardrobe.v1',subs=[],META={fromCache:false,hasPendingWrites:false};
+  var LEGACY='wardrobe.v1',K_BASE='wardrobe.base',K_PEND='wardrobe.pending',K_TOKEN='wardrobe.token',K_SAVED='wardrobe.savedAt',PATH='data/wardrobe.json';
+  function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+  function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+  function parse(s){try{return JSON.parse(s||'null');}catch(e){return null;}}
   function bag(o){var b=Object.create(null);if(o&&typeof o==='object'&&!Array.isArray(o)){Object.keys(o).forEach(function(k){b[k]=o[k];});}return b;}
-  function load(){
-    var s={items:bag(),pins:bag(),meta:bag()};
-    try{
-      var p=JSON.parse(localStorage.getItem(KEY)||'null');
-      if(p&&typeof p==='object'){s.items=bag(p.items);s.pins=bag(p.pins);s.meta=bag(p.meta);}
-    }catch(e){}
-    return s;
+  function clone(x){return x===undefined?undefined:JSON.parse(JSON.stringify(x));}
+  function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+  function emptyData(){return {items:bag(),pins:bag(),meta:bag()};}
+  function asData(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);d.meta=bag(o.meta);}return d;}
+  /* The file on GitHub has the same shape as a backup, so either can stand in for the other. */
+  function toFile(d){var a=d.meta.audit;return {app:'wardrobe',version:1,updatedAt:new Date().toISOString(),items:d.items,pins:d.pins,audit:a&&typeof a==='object'&&!Array.isArray(a)?a:{}};}
+  function fromFile(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);if(o.audit&&typeof o.audit==='object'&&!Array.isArray(o.audit))d.meta.audit=o.audit;}return d;}
+  function apply(data,ops){
+    var d=asData(clone({items:data.items,pins:data.pins,meta:data.meta}));
+    ops.forEach(function(op){
+      var c=d[op.c]||(d[op.c]=bag());
+      if(op.t==='set')c[op.id]=clone(op.d);else delete c[op.id];
+    });
+    return d;
   }
-  var store=load();
-  function persist(){try{localStorage.setItem(KEY,JSON.stringify(store));return true;}catch(e){return false;}}
-  function clone(x){return JSON.parse(JSON.stringify(x));}
-  function col(name){if(!store[name])store[name]=bag();return store[name];}
-  function docSnap(c,id){var d=col(c)[id];return {id:id,exists:d!==undefined,data:function(){return d===undefined?undefined:clone(d);},metadata:META};}
-  function colSnap(c){var docs=Object.keys(col(c)).sort().map(function(id){return docSnap(c,id);});return {docs:docs,size:docs.length,empty:!docs.length,docChanges:function(){return [];},metadata:META};}
+  function b64encode(str){var bytes=new TextEncoder().encode(str),bin='',i;for(i=0;i<bytes.length;i+=0x8000){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));}return btoa(bin);}
+  function b64decode(b64){var bin=atob(String(b64||'').replace(/\s+/g,'')),bytes=new Uint8Array(bin.length),i;for(i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes);}
+
+  /* Which repository: the one this page is served from. (The test overrides only work on a local test address.) */
+  var onLocalhost=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  function detectRepo(){
+    var t=onLocalhost?lsGet('wardrobe.test.repo'):null,m;
+    if(t&&(m=/^([^\/\s]+)\/([^\/\s]+)$/.exec(t)))return {owner:m[1],repo:m[2]};
+    m=/^([a-z0-9][a-z0-9-]*)\.github\.io$/i.exec(location.hostname);
+    if(!m)return null;
+    var seg=location.pathname.split('/').filter(Boolean)[0]||'';
+    if(/\.html?$/i.test(seg))seg='';
+    return {owner:m[1],repo:seg||location.hostname};
+  }
+  var repo=detectRepo();
+  var API=(onLocalhost&&lsGet('wardrobe.test.api'))||'https://api.github.com';
+
+  var subs=[],watchers=[];
+  var base={data:emptyData(),sha:null,at:0};   /* the last copy known to be on GitHub */
+  var pending=[];                               /* changes made here that GitHub does not have yet */
+  var store=emptyData();                        /* what the app shows: base with pending applied */
+  var seq=0,pulled=false,state='idle',savedAt=Number(lsGet(K_SAVED))||0,pushing=false,pushTimer=0,tries=0;
+
+  function loadState(migrate){
+    if(!repo){store=asData(parse(lsGet(LEGACY)));return;}
+    var b=parse(lsGet(K_BASE)),p=parse(lsGet(K_PEND));
+    base={data:asData(b&&b.data),sha:b&&typeof b.sha==='string'?b.sha:null,at:b&&Number(b.at)||0};
+    pending=Array.isArray(p)?p.filter(function(op){return op&&(op.t==='set'||op.t==='del')&&typeof op.c==='string'&&typeof op.id==='string';}):[];
+    if(migrate&&!b&&!pending.length){
+      /* First run of the syncing version: carry over anything the device-only version had saved here. */
+      var old=asData(parse(lsGet(LEGACY)));
+      ['items','pins','meta'].forEach(function(c){Object.keys(old[c]).forEach(function(id){pending.push({t:'set',c:c,id:id,d:old[c][id]});});});
+    }
+    seq=0;
+    pending.forEach(function(op){if(typeof op.n!=='number')op.n=seq+1;if(op.n>seq)seq=op.n;});
+    store=apply(base.data,pending);
+  }
+  loadState(true);
+
+  function saveBase(){lsSet(K_BASE,JSON.stringify({data:{items:base.data.items,pins:base.data.pins,meta:base.data.meta},sha:base.sha,at:base.at}));}
+  function savePending(){return lsSet(K_PEND,JSON.stringify(pending));}
+  function meta(){return {fromCache:!!repo&&!pulled,hasPendingWrites:false};}
+  function docSnap(c,id){var col=store[c],d=col?col[id]:undefined;return {id:id,exists:d!==undefined,data:function(){return clone(d);},metadata:meta()};}
+  function colSnap(c){var docs=Object.keys(store[c]||{}).sort().map(function(id){return docSnap(c,id);});return {docs:docs,size:docs.length,empty:!docs.length,docChanges:function(){return [];},metadata:meta()};}
   function emit(){subs.slice().forEach(function(f){try{f();}catch(e){}});}
+  function notify(){watchers.slice().forEach(function(f){try{f();}catch(e){}});}
+  function setState(s){state=s;notify();}
   function sub(fn){subs.push(fn);setTimeout(fn,0);return function(){var i=subs.indexOf(fn);if(i>=0)subs.splice(i,1);};}
+  function token(){return lsGet(K_TOKEN)||'';}
   function full(){return {code:'quota_exceeded',message:'This browser would not save the change.'};}
+
+  function write(op){
+    var col=store[op.c]||(store[op.c]=bag()),cur=col[op.id];
+    if(op.t==='del'?cur===undefined:(cur!==undefined&&same(cur,op.d)))return Promise.resolve();
+    if(repo){
+      if(!token())return Promise.reject({code:'not_granted',message:'No key on this device.'});
+      var before=pending;
+      op.n=++seq;
+      pending=pending.filter(function(p){return !(p.c===op.c&&p.id===op.id);}).concat([op]);
+      if(!savePending()){pending=before;return Promise.reject(full());}
+      store=apply(base.data,pending);
+      emit();notify();schedulePush(2500);
+      return Promise.resolve();
+    }
+    if(op.t==='set')col[op.id]=clone(op.d);else delete col[op.id];
+    if(!lsSet(LEGACY,JSON.stringify({items:store.items,pins:store.pins,meta:store.meta}))){
+      if(cur===undefined)delete col[op.id];else col[op.id]=cur;
+      return Promise.reject(full());
+    }
+    emit();return Promise.resolve();
+  }
   function docRef(p){
     var a=String(p).split('/');
     if(a.length!==2||!a[0]||!a[1])throw new TypeError('A document path needs two segments.');
     var c=a[0],id=a[1];
     return {id:id,path:p,
       get:function(){return Promise.resolve(docSnap(c,id));},
-      set:function(data){
-        var had=col(c)[id]!==undefined,prev=col(c)[id];
-        col(c)[id]=clone(data);
-        if(!persist()){if(had)col(c)[id]=prev;else delete col(c)[id];return Promise.reject(full());}
-        emit();return Promise.resolve();
-      },
-      delete:function(){
-        var prev=col(c)[id];
-        if(prev===undefined)return Promise.resolve();
-        delete col(c)[id];
-        if(!persist()){col(c)[id]=prev;return Promise.reject(full());}
-        emit();return Promise.resolve();
-      },
+      set:function(data){return write({t:'set',c:c,id:id,d:clone(data)});},
+      delete:function(){return write({t:'del',c:c,id:id});},
       onSnapshot:function(next){return sub(function(){next(docSnap(c,id));});}};
   }
   var db={doc:docRef,collection:function(c){return {path:c,doc:function(id){return docRef(c+'/'+id);},get:function(){return Promise.resolve(colSnap(c));},onSnapshot:function(next){return sub(function(){next(colSnap(c));});}};}};
-  var yes=function(){return Promise.resolve(true);};
-  var user={canEdit:yes,isOwner:yes};
+
+  /* ---- GitHub ---- */
+  function hdr(tok,body){var h={'Accept':'application/vnd.github+json'};if(tok)h.Authorization='Bearer '+tok;if(body)h['Content-Type']='application/json';return h;}
+  function repoUrl(){return API+'/repos/'+encodeURIComponent(repo.owner)+'/'+encodeURIComponent(repo.repo);}
+  function fileUrl(){return repoUrl()+'/contents/'+PATH;}
+  function readRemote(tok){
+    return fetch(fileUrl(),{headers:hdr(tok),cache:'no-store'}).then(function(res){
+      if(res.status===404)return {data:emptyData(),sha:null};
+      if(res.status===401)throw {code:'auth'};
+      if(!res.ok)throw {code:'http',status:res.status};
+      return res.json().then(function(j){
+        var obj=null;
+        try{obj=JSON.parse(b64decode(j&&j.content));}catch(e){}
+        if(!obj||typeof obj!=='object'||Array.isArray(obj))throw {code:'badfile'};
+        return {data:fromFile(obj),sha:j.sha?String(j.sha):null};
+      });
+    },function(){throw {code:'network'};});
+  }
+  function pull(){
+    var tok=token(),bad=false;
+    return readRemote(tok).then(null,function(e){
+      /* A key GitHub rejects must not stop the device reading the public file. */
+      if(tok&&e&&e.code==='auth'){bad=true;return readRemote('');}
+      throw e;
+    }).then(function(r){
+      base={data:r.data,sha:r.sha,at:Date.now()};pulled=true;saveBase();
+      store=apply(base.data,pending);emit();
+      if(bad)setState('auth');
+      else if(state==='auth'||state==='badfile'||((state==='offline'||state==='error')&&!pending.length))setState('idle');
+      else notify();
+    },function(e){
+      if(e&&e.code==='badfile')setState('badfile');
+      throw e;
+    });
+  }
+  function schedulePush(ms){clearTimeout(pushTimer);pushTimer=setTimeout(push,ms);}
+  function push(){
+    if(!repo||pushing||!pending.length)return;
+    if(!token()){notify();return;}
+    if(navigator.onLine===false){setState('offline');return;}
+    pushing=true;setState('saving');
+    (pulled?Promise.resolve():pull()).then(function(){
+      var upTo=seq,snapshot=apply(base.data,pending.filter(function(p){return p.n<=upTo;}));
+      var body={message:'Update wardrobe',content:b64encode(JSON.stringify(toFile(snapshot),null,1)+'\n')};
+      if(base.sha)body.sha=base.sha;
+      return fetch(fileUrl(),{method:'PUT',headers:hdr(token(),true),body:JSON.stringify(body)}).then(function(res){
+        /* 409/422: the file changed on GitHub since this device last read it. */
+        if(res.status===409||res.status===422)throw {code:'conflict'};
+        if(res.status===401)throw {code:'auth'};
+        if(res.status===403||res.status===404)throw {code:'denied'};
+        if(!res.ok)throw {code:'http',status:res.status};
+        return res.json().then(function(j){
+          base={data:snapshot,sha:j&&j.content&&j.content.sha?String(j.content.sha):null,at:Date.now()};
+          pending=pending.filter(function(p){return p.n>upTo;});
+          saveBase();savePending();
+          savedAt=Date.now();lsSet(K_SAVED,String(savedAt));
+          store=apply(base.data,pending);emit();
+        });
+      },function(){throw {code:'network'};});
+    }).then(function(){
+      pushing=false;tries=0;
+      if(pending.length){setState('saving');schedulePush(400);}else setState('saved');
+    },function(e){
+      pushing=false;
+      var code=e&&e.code;
+      if(code==='conflict'&&tries<3){
+        /* Read the newer copy, lay this device's changes over it, and save again. */
+        tries++;pulled=false;setState('saving');schedulePush(200);return;
+      }
+      tries=0;
+      if(code==='auth')setState('auth');
+      else if(code==='denied')setState('denied');
+      else if(code==='badfile')setState('badfile');
+      else{
+        setState(navigator.onLine===false||code==='network'?'offline':'error');
+        if(pending.length)schedulePush(30000);
+      }
+    });
+  }
+  function syncNow(){
+    return pull().then(function(){if(pending.length&&token())schedulePush(0);});
+  }
+  var sync=repo?{
+    repo:repo.owner+'/'+repo.repo,
+    hasKey:function(){return !!token();},
+    status:function(){return {state:state,pending:pending.length,savedAt:savedAt};},
+    onStatus:function(fn){watchers.push(fn);return function(){var i=watchers.indexOf(fn);if(i>=0)watchers.splice(i,1);};},
+    setKey:function(raw){
+      var t=String(raw||'').trim();
+      if(!t)return Promise.reject({code:'empty'});
+      return fetch(repoUrl(),{headers:hdr(t),cache:'no-store'}).then(function(res){
+        if(res.status===401)throw {code:'auth'};
+        if(res.status===403||res.status===404)throw {code:'denied'};
+        if(!res.ok)throw {code:'http'};
+        return res.json();
+      },function(){throw {code:'network'};}).then(function(j){
+        if(j&&j.permissions&&j.permissions.push===false)throw {code:'denied'};
+        if(!lsSet(K_TOKEN,t))throw {code:'storage'};
+        state='idle';notify();
+        return syncNow().then(null,function(){});
+      });
+    },
+    clearKey:function(){lsDel(K_TOKEN);clearTimeout(pushTimer);state='idle';notify();},
+    syncNow:syncNow
+  }:null;
+  if(repo){
+    setTimeout(function(){
+      syncNow().then(null,function(e){
+        if(e&&e.code==='badfile')return;
+        if(pending.length&&token())setState(navigator.onLine===false||(e&&e.code==='network')?'offline':'error');
+      });
+    },0);
+    window.addEventListener('online',function(){syncNow().then(null,function(){});});
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible'&&!pushing&&Date.now()-base.at>60000)syncNow().then(null,function(){});
+    });
+  }
+
+  var canEdit=function(){return Promise.resolve(repo?!!token():true);};
+  var user={canEdit:canEdit,isOwner:canEdit};
   /* Saving a file: the share sheet on phones (Save to Files), an ordinary download elsewhere. */
   var downloads={save:function(req){
     var name=String(req&&req.filename||'wardrobe.txt'),data=req&&req.data;
@@ -313,12 +494,15 @@ input[type="file"]{max-width:100%;font-size:15px}
     }catch(e){return Promise.reject({code:'unavailable',message:'Saving a file is not available here.'});}
   }};
   window.WARDROBE_LOCAL=true;
-  window.claude={use:function(name){return Promise.resolve(name==='db'?db:name==='user'?user:name==='downloads'?downloads:null);}};
-  /* Another tab or window changed the wardrobe: pick the change up. */
-  window.addEventListener('storage',function(e){if(e.key===KEY){store=load();emit();}});
-  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});}catch(e){}
+  window.claude={use:function(name){return Promise.resolve(name==='db'?db:name==='user'?user:name==='downloads'?downloads:name==='sync'?sync:null);}};
+  /* Another tab or window changed something: pick it up. */
+  window.addEventListener('storage',function(e){
+    if([LEGACY,K_BASE,K_PEND,K_TOKEN].indexOf(e.key)<0)return;
+    loadState(false);emit();notify();
+  });
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().then(null,function(){});}catch(e){}
   if('serviceWorker' in navigator){
-    window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});
+    window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').then(null,function(){});});
   }
 })();
 </script>
@@ -543,6 +727,8 @@ var ui={tab:'build',sel:{},level:0,rough:false,open:{},form:null,focus:null,focu
 var db=null,dl=null,canWrite=true,unsubs=[],conf={},slowTimer=0,toastTimer=0,pending=false;
 /* Set by the standalone build, where the wardrobe is kept in this browser instead of in Claude. */
 var LOCAL=!!window.WARDROBE_LOCAL;
+/* Also from the standalone build: present when the wardrobe is kept as a file on GitHub. */
+var sync=null;
 
 function $(id){return document.getElementById(id);}
 var view=$('view'),tray=$('tray'),sheet=$('sheet'),toastEl=$('toast'),noticeEl=$('notice'),tallyEl=$('tally');
@@ -727,7 +913,7 @@ function renderWardrobe(A){
   }
   var edit=db&&canWrite;
   if(edit)h+='<div class="actions"><button type="button" class="btn primary" data-act="add">Add a piece</button></div>';
-  h+='<p class="sub">'+(edit?'Tap a piece to edit it. Mark a layer’s audit done once everything you own in it is here: Gaps only checks finished layers for holes.':'Only the owner can change this wardrobe.')+'</p>';
+  h+='<p class="sub">'+(edit?'Tap a piece to edit it. Mark a layer’s audit done once everything you own in it is here: Gaps only checks finished layers for holes.':sync?'View only on this device. Add your GitHub key under Your data to make changes.':'Only the owner can change this wardrobe.')+'</p>';
   LAYERS.forEach(function(L){
     var arr=state.items.filter(function(it){return it.layer===L.id;}).sort(function(a,b){
       return (a.status==='resting'?1:0)-(b.status==='resting'?1:0)||orderItems(a,b);
@@ -748,9 +934,10 @@ function renderWardrobe(A){
     });
     h+='</ul></section>';
   }
-  h+='<section class="group"><div class="group-head"><h2>Your data</h2></div><p class="sub">'
-    +(LOCAL?'Your wardrobe is saved on this device only. '+backupLine()+' ':'')
+  h+='<section class="group"><div class="group-head"><h2>Your data</h2></div><p class="sub">'+dataNote()
     +'A backup is one file holding every piece, exception and audit mark. Import it into another copy of this app to move your wardrobe there.</p><div class="actions">'
+    +(sync?'<button type="button" class="btn'+(sync.hasKey()?'':' primary')+'" data-act="key">'+(sync.hasKey()?'Change GitHub key':'Add your GitHub key')+'</button>'
+      +'<button type="button" class="btn" data-act="syncnow">Sync now</button>':'')
     +'<button type="button" class="btn" data-act="backup"'+(state.items.length?'':' disabled')+'>Back up</button>'
     +(edit?'<button type="button" class="btn" data-act="import">Import a backup</button>':'')
     +(dl&&state.items.length?'<button type="button" class="btn" data-act="export">Export CSV</button>':'')+'</div></section>';
@@ -862,6 +1049,7 @@ function renderChrome(A){
   var h='';
   if(state.phase==='nodb')h='<div class="notice"><span>Your wardrobe loads when this page is open in Claude and you’re signed in.</span></div>';
   else if(state.dead)h='<div class="notice err"><span>Lost the connection to your wardrobe.</span><button type="button" class="btn" data-act="reconnect">Reconnect</button></div>';
+  else if(sync&&syncNotice())h=syncNotice();
   else if(state.slow)h='<div class="notice"><span>'+(state.loaded?'Showing your last saved copy. It may be out of date.':'Can’t reach your wardrobe yet. Still trying.')+'</span></div>';
   if(noticeEl.innerHTML!==h)noticeEl.innerHTML=h;
 }
@@ -973,7 +1161,7 @@ function writeFailed(e){
 }
 function canChange(){
   if(!db){toast('Not connected to your wardrobe yet.');return false;}
-  if(!canWrite){toast('Only the owner can change this wardrobe.');return false;}
+  if(!canWrite){toast(sync?'View only on this device. Add your GitHub key under Wardrobe to make changes.':'Only the owner can change this wardrobe.');return false;}
   return true;
 }
 function submitForm(form){
@@ -1073,6 +1261,53 @@ function exportCSV(){
   dl.save({filename:'wardrobe.csv',data:csv}).then(function(){toast('Exported');},function(e){
     if(e&&e.code==='declined')return;
     toast('Export isn’t available in this view.');
+  });
+}
+
+/* ---------- Saving to GitHub (standalone build only) ---------- */
+function plural(n,one,many){return n+' '+(n===1?one:many);}
+function syncNotice(){
+  var st=sync.status();
+  if(st.state==='auth')return '<div class="notice err"><span>GitHub didn’t accept your key. It may have expired. Replace it under Wardrobe, in Your data.</span></div>';
+  if(st.state==='denied')return '<div class="notice err"><span>Your key isn’t allowed to save to this repository. It needs Contents set to Read and write.</span></div>';
+  if(st.state==='badfile')return '<div class="notice err"><span>The wardrobe file on GitHub can’t be read, so nothing will be saved over it.</span></div>';
+  if(st.pending&&st.state==='offline')return '<div class="notice"><span>Offline. '+plural(st.pending,'change','changes')+' will save to GitHub when you’re back online.</span></div>';
+  if(st.pending&&st.state==='error')return '<div class="notice"><span>Couldn’t reach GitHub. '+plural(st.pending,'change is','changes are')+' kept on this device.</span><button type="button" class="btn" data-act="syncnow">Try again</button></div>';
+  return '';
+}
+function dataNote(){
+  if(sync){
+    var st=sync.status();
+    return 'Saved to GitHub in '+esc(sync.repo)+', so it loads on any device. '
+      +(st.state==='saving'?'Saving now. ':st.pending?plural(st.pending,'change is','changes are')+' waiting to save. ':sync.hasKey()?'Everything is saved. ':'This device can view it but not change it. ');
+  }
+  return LOCAL?'Your wardrobe is saved on this device only. '+backupLine()+' ':'';
+}
+function openKey(){
+  var has=sync.hasKey();
+  openSheet(head(has?'Your GitHub key':'Add your GitHub key')
+    +'<p class="help">Paste the personal access token you created on GitHub for this repository. It is kept on this device only and is sent to GitHub and nowhere else.</p>'
+    +'<label class="fld" for="key-in"><span class="lbl">Key</span><input type="password" id="key-in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…"></label>'
+    +'<p class="form-err" id="key-err" role="alert" hidden></p>'
+    +'<div class="sheet-foot">'+(has?'<button type="button" class="btn danger" data-act="keydel">Remove from this device</button>':'')
+    +'<button type="button" class="btn primary" id="key-go" data-act="keysave">Save key</button></div>');
+}
+function saveKey(){
+  var input=$('key-in'),btn=$('key-go'),err=$('key-err');
+  if(!input||!sync)return;
+  if(btn)btn.disabled=true;
+  if(err)err.hidden=true;
+  sync.setKey(input.value).then(function(){
+    closeSheet();toast('Key saved. This device can now make changes.');
+  },function(e){
+    var code=e&&e.code,msg='Something went wrong. Try again.';
+    if(code==='empty')msg='Paste your key first.';
+    else if(code==='auth')msg='GitHub didn’t accept that key. Check you copied all of it.';
+    else if(code==='denied')msg='That key can’t reach this repository. When you create it, choose only this repository and set Contents to Read and write.';
+    else if(code==='network')msg='Couldn’t reach GitHub. Check your connection and try again.';
+    else if(code==='storage')msg='This browser wouldn’t store the key.';
+    if(btn)btn.disabled=false;
+    if(err){err.textContent=msg;err.hidden=false;}
   });
 }
 
@@ -1261,6 +1496,12 @@ document.addEventListener('click',function(e){
     case 'copybk':copyBackup();break;
     case 'import':if(canChange())openImport();break;
     case 'doimport':doImport();break;
+    case 'key':if(sync)openKey();break;
+    case 'keysave':saveKey();break;
+    case 'keydel':if(sync){sync.clearKey();closeSheet();toast('Key removed from this device');}break;
+    case 'syncnow':
+      if(sync)sync.syncNow().then(function(){toast('Up to date with GitHub');},function(){toast('Couldn’t reach GitHub');});
+      break;
     case 'reconnect':subscribe();render();break;
   }
 });
@@ -1377,6 +1618,13 @@ use('user').then(function(u){
   },function(){});
 });
 use('downloads').then(function(ns){dl=ns;if(ns)schedule();});
+use('sync').then(function(ns){
+  if(!ns)return;
+  sync=ns;
+  canWrite=ns.hasKey();
+  ns.onStatus(function(){canWrite=ns.hasKey();schedule();});
+  schedule();
+});
 })();
 </script>
 </body>
