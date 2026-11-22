@@ -111,6 +111,18 @@ h3{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.
 .pair-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
 .pair-list li span:not(.sw){flex:1;min-width:0}
 .more-btn{align-self:flex-start;margin-left:0}
+.suit-line{padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);font-size:14.5px;color:var(--ink-2)}
+.suit-line b{color:var(--ink)}
+.suit-line.blocked{border-color:var(--crit);background:var(--crit-soft)}
+.suit-line.blocked b{color:var(--crit)}
+.ofits{display:flex;flex-direction:column;gap:12px}
+.ofit{display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.ofit-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ofit-dots{display:flex;gap:6px}
+.ofit-list{display:flex;flex-direction:column;gap:5px}
+.ofit-list li{display:flex;align-items:center;gap:10px;font-size:14.5px}
+.ofit-list li span:nth-child(2){flex:1;min-width:0}
+.ofit-warn{font-size:13.5px;color:var(--crit)}
 .pair-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px}
 .pair-foot .btn{min-height:40px}
 .pair-reset{align-self:flex-start;margin-top:6px;min-height:38px}
@@ -267,6 +279,16 @@ body.rating{background:var(--accent-soft)}
 .tray{position:fixed;left:0;right:0;bottom:calc(var(--tabs-h) + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:10px;background:var(--surface);color:var(--ink);border-top:1px solid var(--line);padding:7px max(16px,env(safe-area-inset-right,0px)) 7px max(16px,env(safe-area-inset-left,0px))}
 .tray .tray-title{font-weight:500;font-size:14px}
 .tray .tray-sub{font-size:12.5px;color:var(--ink-2);opacity:1}
+.tray .tray-btns{gap:6px}
+@media (max-width:599px){
+  .tray.two{flex-wrap:wrap;row-gap:6px}
+  .tray.two .tray-text{flex:1 1 100%}
+  .tray.two .tray-btns{flex:1 1 100%}
+  .tray.two .tray-btns .mini{flex:1 1 0;margin-left:0}
+  .tabs{gap:4px}
+  .tabs a{font-size:15px;letter-spacing:.04em;padding:0 4px}
+}
+.mini.save-btn{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .tray .tray-done{color:var(--good);font-weight:600}
 .tray-text{flex:1;min-width:0}
 .tray-title{font-weight:600;font-size:15px;line-height:1.25}
@@ -348,13 +370,13 @@ input[type="file"]{max-width:100%;font-size:15px}
   function bag(o){var b=Object.create(null);if(o&&typeof o==='object'&&!Array.isArray(o)){Object.keys(o).forEach(function(k){b[k]=o[k];});}return b;}
   function clone(x){return x===undefined?undefined:JSON.parse(JSON.stringify(x));}
   function same(a,b){return JSON.stringify(a)===JSON.stringify(b);}
-  function emptyData(){return {items:bag(),pins:bag(),meta:bag()};}
-  function asData(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);d.meta=bag(o.meta);}return d;}
+  function emptyData(){return {items:bag(),pins:bag(),meta:bag(),outfits:bag()};}
+  function asData(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);d.meta=bag(o.meta);d.outfits=bag(o.outfits);}return d;}
   /* The file on GitHub has the same shape as a backup, so either can stand in for the other. */
-  function toFile(d){var a=d.meta.audit;return {app:'wardrobe',version:1,updatedAt:new Date().toISOString(),items:d.items,pins:d.pins,audit:a&&typeof a==='object'&&!Array.isArray(a)?a:{}};}
-  function fromFile(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);if(o.audit&&typeof o.audit==='object'&&!Array.isArray(o.audit))d.meta.audit=o.audit;}return d;}
+  function toFile(d){var a=d.meta.audit;return {app:'wardrobe',version:1,updatedAt:new Date().toISOString(),items:d.items,pins:d.pins,outfits:d.outfits,audit:a&&typeof a==='object'&&!Array.isArray(a)?a:{}};}
+  function fromFile(o){var d=emptyData();if(o&&typeof o==='object'){d.items=bag(o.items);d.pins=bag(o.pins);d.outfits=bag(o.outfits);if(o.audit&&typeof o.audit==='object'&&!Array.isArray(o.audit))d.meta.audit=o.audit;}return d;}
   function apply(data,ops){
-    var d=asData(clone({items:data.items,pins:data.pins,meta:data.meta}));
+    var d=asData(clone({items:data.items,pins:data.pins,meta:data.meta,outfits:data.outfits}));
     ops.forEach(function(op){
       var c=d[op.c]||(d[op.c]=bag());
       if(op.t==='set')c[op.id]=clone(op.d);else delete c[op.id];
@@ -392,7 +414,7 @@ input[type="file"]{max-width:100%;font-size:15px}
     if(migrate&&!b&&!pending.length){
       /* First run of the syncing version: carry over anything the device-only version had saved here. */
       var old=asData(parse(lsGet(LEGACY)));
-      ['items','pins','meta'].forEach(function(c){Object.keys(old[c]).forEach(function(id){pending.push({t:'set',c:c,id:id,d:old[c][id]});});});
+      ['items','pins','meta','outfits'].forEach(function(c){Object.keys(old[c]).forEach(function(id){pending.push({t:'set',c:c,id:id,d:old[c][id]});});});
     }
     seq=0;
     pending.forEach(function(op){if(typeof op.n!=='number')op.n=seq+1;if(op.n>seq)seq=op.n;});
@@ -400,7 +422,7 @@ input[type="file"]{max-width:100%;font-size:15px}
   }
   loadState(true);
 
-  function saveBase(){lsSet(K_BASE,JSON.stringify({data:{items:base.data.items,pins:base.data.pins,meta:base.data.meta},sha:base.sha,at:base.at}));}
+  function saveBase(){lsSet(K_BASE,JSON.stringify({data:{items:base.data.items,pins:base.data.pins,meta:base.data.meta,outfits:base.data.outfits},sha:base.sha,at:base.at}));}
   function savePending(){return lsSet(K_PEND,JSON.stringify(pending));}
   function meta(){return {fromCache:!!repo&&!pulled,hasPendingWrites:false};}
   function docSnap(c,id){var col=store[c],d=col?col[id]:undefined;return {id:id,exists:d!==undefined,data:function(){return clone(d);},metadata:meta()};}
@@ -426,7 +448,7 @@ input[type="file"]{max-width:100%;font-size:15px}
       return Promise.resolve();
     }
     if(op.t==='set')col[op.id]=clone(op.d);else delete col[op.id];
-    if(!lsSet(LEGACY,JSON.stringify({items:store.items,pins:store.pins,meta:store.meta}))){
+    if(!lsSet(LEGACY,JSON.stringify({items:store.items,pins:store.pins,meta:store.meta,outfits:store.outfits}))){
       if(cur===undefined)delete col[op.id];else col[op.id]=cur;
       return Promise.reject(full());
     }
@@ -601,6 +623,7 @@ input[type="file"]{max-width:100%;font-size:15px}
     <div class="brand"><h1>Wardrobe</h1><p class="tally" id="tally"></p></div>
     <nav class="tabs" aria-label="Views">
       <a href="#build" data-tab="build">Build</a>
+      <a href="#outfits" data-tab="outfits">Outfits</a>
       <a href="#wardrobe" data-tab="wardrobe">Wardrobe</a>
       <a href="#gaps" data-tab="gaps">Gaps</a>
     </nav>
@@ -837,7 +860,7 @@ var COLOURS=[
 var COLOUR_MAP={};COLOURS.forEach(function(c){COLOUR_MAP[c.key]=c;});
 var LEVEL_NOTES=['','Gym, running, walking','Streetwear, friends, gigs','A nice meal, work, a day in London','Weddings, Christmas dos, the Royal Albert Hall'];
 
-var state={items:[],pins:Object.create(null),pinList:[],audit:{},phase:'connecting',loaded:false,slow:false,dead:false};
+var state={outfits:[],items:[],pins:Object.create(null),pinList:[],audit:{},phase:'connecting',loaded:false,slow:false,dead:false};
 var FOLD={};try{FOLD=JSON.parse(localStorage.getItem('wardrobe.folded')||'{}')||{};}catch(e){FOLD={};}
 var ui={suitKeep:{},openPiece:{},tab:'build',sel:{},anchor:null,rate:false,frozen:{},rateStart:{},level:0,care:'all',topType:'all',open:{},form:null,focus:null,focusSel:false};
 var db=null,dl=null,canWrite=true,unsubs=[],conf={},slowTimer=0,toastTimer=0,pending=false;
@@ -1131,8 +1154,10 @@ function renderTray(A){
   var missing=REQ.filter(function(l){return A.by[l].length>0&&!selItem(l);}).map(function(l){return LAYER_MAP[l].need;});
   var status=missing.length?'Still needs '+joinAnd(missing):'Complete outfit';
   tray.innerHTML='<div class="tray-text"><div class="tray-title">'+(missing.length?esc(status):'<span class="tray-done">Complete outfit</span>')+'</div>'
-    +'<div class="tray-sub">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+(lo<=hi?'works for '+levelList(lo,hi):'paired by your own rating')+'</div></div>'
-    +'<button type="button" class="mini" data-act="clear">Clear outfit</button>';
+    +'<div class="tray-sub">'+picks.length+(picks.length===1?' piece':' pieces')+' · '+(lo<=hi?esc(rangeText({lo:lo,hi:hi})):'paired by your own rating')+'</div></div>'
+    +'<div class="tray-btns">'+(!missing.length&&db&&canWrite?'<button type="button" class="mini save-btn" data-act="saveoutfit">Save outfit</button>':'')
+    +'<button type="button" class="mini" data-act="clear">Clear outfit</button></div>';
+  tray.classList.toggle('two',!missing.length&&!!db&&canWrite);
   tray.hidden=false;
   setTrayH(tray.offsetHeight);
 }
@@ -1314,6 +1339,54 @@ function deletePins(keys,done){
   })();
 }
 
+/* ---------- Outfits ---------- */
+function outfitKey(ids){return ids.slice().sort().join('|');}
+function outfitPieces(o){
+  return o.pieces.map(function(id){return itemById(id);});
+}
+function openSaveOutfit(){
+  var picks=picked();
+  if(!picks.length||!canChange())return;
+  var dupe=state.outfits.filter(function(o){return outfitKey(o.pieces)===outfitKey(picks.map(function(p){return p.id;}));})[0];
+  if(dupe){toast('Already saved'+(dupe.name?' as “'+dupe.name+'”':'')+'.');return;}
+  openSheet(head('Save outfit')+'<form id="outfit-form" class="form" novalidate>'
+    +'<label class="fld" for="o-name"><span class="lbl">Name <em>optional</em></span><input id="o-name" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Gig night, Sunday lunch"></label>'
+    +'<ul class="ofit-list">'+picks.map(function(p){return '<li>'+swatch(p)+'<span>'+esc(p.name)+'</span><span class="help">'+LAYER_MAP[p.layer].name+'</span></li>';}).join('')+'</ul>'
+    +'<div class="sheet-foot"><button type="submit" class="btn primary" id="o-save">Save outfit</button></div></form>');
+}
+function saveOutfit(){
+  var picks=picked(),input=$('o-name'),btn=$('o-save');
+  if(!picks.length||!canChange())return;
+  var name=input?input.value.trim().slice(0,60):'';
+  if(btn)btn.disabled=true;
+  var data={name:name,pieces:picks.map(function(p){return p.id;}),createdAt:Date.now()},p;
+  try{p=db.doc('outfits/'+newId(name||'outfit')).set(data);}catch(e){p=Promise.reject(e);}
+  p.then(function(){closeSheet();toast('Saved to Outfits');},function(e){if(btn)btn.disabled=false;writeFailed(e);});
+}
+function renderOutfits(A){
+  if(!state.loaded){view.innerHTML=state.phase==='nodb'?'':'<p class="empty">Opening your wardrobe…</p>';return;}
+  var edit=db&&canWrite,h='<p class="sub">Outfits you’ve saved from Build. Tap Wear to load one back in.</p>';
+  if(!state.outfits.length){
+    h+='<div class="note"><b>No saved outfits yet.</b> Build an outfit in Build, and once the bar at the bottom says Complete outfit, tap Save outfit.</div>';
+    view.innerHTML=h;return;
+  }
+  h+='<ul class="ofits">';
+  state.outfits.forEach(function(o){
+    var ps=outfitPieces(o),gone=ps.filter(function(p){return !p;}).length,resting=ps.filter(function(p){return p&&p.status==='resting';}).length;
+    var live=ps.filter(Boolean).sort(function(a,b){return LAYER_IDS.indexOf(a.layer)-LAYER_IDS.indexOf(b.layer);});
+    var lo=1,hi=MAXL;live.forEach(function(p){if(p.lo>lo)lo=p.lo;if(p.hi<hi)hi=p.hi;});
+    var armed=ui.armOutfit===o.id;
+    h+='<li class="ofit"><div class="ofit-head"><h3>'+esc(o.name||'Untitled outfit')+'</h3><span class="help">'+(lo<=hi?esc(rangeText({lo:lo,hi:hi})):'')+'</span></div>'
+      +'<div class="ofit-dots" aria-hidden="true">'+live.map(function(p){return swatch(p,true);}).join('')+'</div>'
+      +'<ul class="ofit-list">'+live.map(function(p){return '<li>'+swatch(p)+'<span>'+esc(p.name)+'</span><span class="help">'+LAYER_MAP[p.layer].name+'</span></li>';}).join('')+'</ul>'
+      +(gone||resting?'<p class="ofit-warn">'+(gone?gone+(gone===1?' piece has':' pieces have')+' been deleted. ':'')+(resting?resting+(resting===1?' piece is':' pieces are')+' out of rotation.':'')+'</p>':'')
+      +'<div class="pair-foot"><button type="button" class="btn primary" data-act="wear" data-id="'+esc(o.id)+'"'+(live.length?'':' disabled')+'>Wear</button>'
+      +(edit?'<button type="button" class="btn danger" data-act="deloutfit" data-id="'+esc(o.id)+'">'+(armed?'Tap again to delete':'Delete')+'</button>':'')+'</div></li>';
+  });
+  h+='</ul>';
+  view.innerHTML=h;
+}
+
 /* ---------- Gaps ---------- */
 function blockText(b,by){
   var it=b.item;
@@ -1377,6 +1450,15 @@ function renderGaps(A){
   var unlock=A.candidates.filter(function(c){return c.freed.length||c.opened.length;});
   var variety=A.candidates.filter(function(c){return !(c.freed.length||c.opened.length);});
   h+='<section class="panel"><h2>Next best buy</h2>';
+  if(A.base.total!==null){
+    var suitN=A.base.perLevel[MAXL]||0;
+    if(!suitN){
+      var short=REQ.filter(function(l){return !A.cov[l][MAXL];}).map(function(l){return LAYER_MAP[l].name.toLowerCase();});
+      h+='<div class="suit-line blocked"><b>Suit and tie: no complete outfit possible.</b> '+(short.length?'You have no '+joinAnd(short)+' at Suit and tie.':'Your Suit and tie pieces don’t line up as a full outfit.')+'</div>';
+    }else{
+      h+='<div class="suit-line"><b>Suit and tie: '+suitN+(suitN===1?' outfit':' outfits')+' possible.</b> '+(suitN<4?'Still your thinnest occasion.':'')+'</div>';
+    }
+  }
   if(A.base.total===null)h+='<p class="sub">Needs at least two layers before it can score anything.</p>';
   else if(unlock.length)h+='<p class="sub">Ranked by what each would unlock, scored against what you own now and assuming a neutral colour.</p><ol class="cands">'+unlock.slice(0,4).map(candHTML).join('')+'</ol>';
   else if(variety.length)h+='<p class="sub">Nothing is blocked, so new pieces would add variety without unlocking anything. The biggest adds:</p><ol class="cands">'+variety.slice(0,3).map(candHTML).join('')+'</ol>';
@@ -1425,6 +1507,7 @@ function render(){
   var A=analyse(state.items,state.pins);
   renderChrome(A);
   if(ui.tab==='wardrobe')renderWardrobe(A);
+  else if(ui.tab==='outfits')renderOutfits(A);
   else if(ui.tab==='gaps')renderGaps(A);
   else renderBuild(A);
   renderTray(A);
@@ -1705,7 +1788,9 @@ function backupData(){
   state.items.forEach(function(it){items[it.id]=itemData(it);});
   state.pinList.forEach(function(p){pins[pinKey(p.a,p.b)]={a:p.a,b:p.b,kind:p.kind};});
   LAYER_IDS.forEach(function(l){if(state.audit[l])audit[l]=true;});
-  return {app:'wardrobe',version:1,exportedAt:new Date().toISOString(),items:items,pins:pins,audit:audit};
+  var outfits={};
+  state.outfits.forEach(function(o){outfits[o.id]={name:o.name,pieces:o.pieces,createdAt:o.createdAt};});
+  return {app:'wardrobe',version:1,exportedAt:new Date().toISOString(),items:items,pins:pins,outfits:outfits,audit:audit};
 }
 function showBackupText(json){
   openSheet(head('Copy your backup')+'<p class="help">Saving a file isn’t available in this view, so copy this text and keep it somewhere safe. Paste it into Import to restore it.</p>'
@@ -1774,7 +1859,16 @@ function parseBackup(text){
     });
   }
   if(raw.audit&&typeof raw.audit==='object')LAYER_IDS.forEach(function(l){if(raw.audit[l]===true)audit[l]=true;});
-  return {items:items,pins:pins,audit:audit,skipped:skipped};
+  var outfits=[];
+  if(raw.outfits&&typeof raw.outfits==='object'){
+    Object.keys(raw.outfits).forEach(function(k){
+      var o=raw.outfits[k];
+      if(!o||!Array.isArray(o.pieces)||!ID_OK.test(k))return;
+      var ps=o.pieces.filter(function(x){return typeof x==='string'&&(seen[x]||itemById(x));}).slice(0,8);
+      if(ps.length)outfits.push({id:k,data:{name:cleanStr(o.name,60),pieces:ps,createdAt:Number(o.createdAt)||Date.now()}});
+    });
+  }
+  return {items:items,pins:pins,outfits:outfits,audit:audit,skipped:skipped};
 }
 function doImport(){
   if(!canChange())return;
@@ -1793,6 +1887,7 @@ function doImport(){
     b.items.forEach(function(x){keep[x.id]=true;ops.push(function(){return db.doc('items/'+x.id).set(x.data);});});
     b.pins.forEach(function(x){keepPin[x.id]=true;ops.push(function(){return db.doc('pins/'+x.id).set(x.data);});});
     LAYER_IDS.forEach(function(l){if(b.audit[l]||(!replace&&state.audit[l]))audit[l]=true;});
+    (b.outfits||[]).forEach(function(x){ops.push(function(){return db.doc('outfits/'+x.id).set(x.data);});});
     ops.push(function(){return db.doc('meta/audit').set(audit);});
     if(replace){
       state.items.forEach(function(it){if(!keep[it.id])ops.push(function(){return db.doc('items/'+it.id).delete();});});
@@ -1916,6 +2011,23 @@ document.addEventListener('click',function(e){
       })();
       break;
     case 'morebear':ui.allBearing=!ui.allBearing;render();break;
+    case 'saveoutfit':openSaveOutfit();break;
+    case 'wear':
+      var wo=state.outfits.filter(function(o){return o.id===id;})[0];
+      if(!wo)break;
+      ui.sel={};ui.level=0;ui.care='all';ui.topType='all';ui.rate=false;
+      outfitPieces(wo).forEach(function(p){if(p&&p.status==='active')ui.sel[p.layer]=p.id;});
+      ui.tab='build';
+      try{history.replaceState(null,'','#build');}catch(e7){}
+      render();window.scrollTo(0,0);
+      break;
+    case 'deloutfit':
+      if(ui.armOutfit!==id){ui.armOutfit=id;render();setTimeout(function(){if(ui.armOutfit===id){ui.armOutfit=null;schedule();}},4000);break;}
+      ui.armOutfit=null;
+      if(!canChange())break;
+      var dpo;try{dpo=db.doc('outfits/'+id).delete();}catch(e8){dpo=Promise.reject(e8);}
+      dpo.then(function(){toast('Outfit deleted');},writeFailed);
+      break;
     case 'openpiece':
       if(ui.openPiece[id])delete ui.openPiece[id];else ui.openPiece[id]=true;
       render();
@@ -2002,6 +2114,7 @@ sheet.addEventListener('change',function(e){
 sheet.addEventListener('submit',function(e){
   e.preventDefault();
   if(e.target&&e.target.id==='item-form')submitForm(e.target);
+  if(e.target&&e.target.id==='outfit-form')saveOutfit();
 });
 sheet.addEventListener('close',function(){if(sheet.open)return;ui.form=null;sheet.innerHTML='';});
 window.addEventListener('hashchange',function(){ui.tab=readTab();render();});
@@ -2010,7 +2123,7 @@ window.addEventListener('resize',function(){if(!tray.hidden)setTrayH(tray.offset
 /* ---------- Data ---------- */
 function readTab(){
   var h=(location.hash||'').replace('#','');
-  return h==='wardrobe'||h==='gaps'?h:'build';
+  return h==='wardrobe'||h==='gaps'||h==='outfits'?h:'build';
 }
 function mark(key,snap){
   if(!(snap&&snap.metadata&&snap.metadata.fromCache)){
@@ -2054,6 +2167,15 @@ function subscribe(){
       state.audit=next;
       mark('audit',s);
     },onErr));
+    unsubs.push(db.collection('outfits').onSnapshot(function(s){
+      state.outfits=s.docs.map(function(d){
+        var x=d.data();
+        if(!x||!Array.isArray(x.pieces))return null;
+        var pieces=x.pieces.filter(function(p){return typeof p==='string';}).slice(0,8);
+        return pieces.length?{id:d.id,name:cleanStr(x.name,60),pieces:pieces,createdAt:Number(x.createdAt)||0}:null;
+      }).filter(Boolean).sort(function(a,b){return b.createdAt-a.createdAt;});
+      schedule();
+    },function(){}));
   }catch(e){onErr();}
 }
 function use(name){
