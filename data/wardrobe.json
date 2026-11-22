@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:56:13.028Z",
+ "updatedAt": "2026-11-22T16:01:39.479Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -53,14 +53,18 @@
    "name": "White Airforces (2nd hand)",
    "layer": "shoes",
    "type": "",
+   "colours": [
+    "white"
+   ],
    "colour": "white",
    "tone": "neutral",
    "lo": 2,
-   "hi": 3,
+   "hi": 2,
    "season": "all",
    "care": "beater",
    "status": "active",
    "notes": "",
+   "suitOk": true,
    "createdAt": 1795345149136
   },
   "running-shoes-0say": {
