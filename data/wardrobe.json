@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:26:05.572Z",
+ "updatedAt": "2026-11-22T11:26:46.272Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -478,6 +478,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346763069
+  },
+  "beige-north-face-coat-64z6": {
+   "name": "Beige North Face Coat",
+   "layer": "outer",
+   "type": "",
+   "colour": "tan",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346803768
   }
  },
  "pins": {},
