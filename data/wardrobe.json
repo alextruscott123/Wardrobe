@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:46:52.922Z",
+ "updatedAt": "2026-11-22T15:47:01.418Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -208,7 +208,8 @@
    "layer": "tops",
    "type": "Shirt",
    "colours": [
-    "yellow"
+    "yellow",
+    "pattern"
    ],
    "colour": "yellow",
    "tone": "statement",
@@ -218,8 +219,8 @@
    "care": "normal",
    "status": "active",
    "notes": "",
-   "createdAt": 1795345702280,
-   "suitOk": true
+   "suitOk": true,
+   "createdAt": 1795345702280
   },
   "guess-top-awed": {
    "name": "Guess Top",
