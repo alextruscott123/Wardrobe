@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:24:44.858Z",
+ "updatedAt": "2026-11-22T11:24:59.550Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -172,7 +172,7 @@
    "createdAt": 1795345508830
   },
   "grey-stussy-t-shirt-awq7": {
-   "name": "Grey Stussy T-Shirt",
+   "name": "Grey Stüssy T-Shirt",
    "layer": "tops",
    "type": "",
    "colour": "grey",
