@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T10:55:15.859Z",
+ "updatedAt": "2026-11-22T10:56:09.727Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -30,6 +30,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795344913356
+  },
+  "beige-nikes-5fwc": {
+   "name": "Beige Nikes",
+   "layer": "shoes",
+   "type": "",
+   "colour": "tan",
+   "tone": "statement",
+   "lo": 2,
+   "hi": 3,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795344967225
   }
  },
  "pins": {},
