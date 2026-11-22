@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:55:47.333Z",
+ "updatedAt": "2026-11-22T15:56:13.028Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -884,6 +884,24 @@
    "notes": "",
    "suitOk": true,
    "createdAt": 1795362939945
+  },
+  "element-t-shirt-4w57": {
+   "name": "Element T-Shirt",
+   "layer": "tops",
+   "type": "",
+   "colours": [
+    "black"
+   ],
+   "colour": "black",
+   "tone": "neutral",
+   "lo": 1,
+   "hi": 1,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "suitOk": true,
+   "createdAt": 1795362966918
   }
  },
  "pins": {
@@ -4534,6 +4552,90 @@
    "b": "sfa-x-splice-t-shirt-78gk",
    "kind": "maybe",
    "createdAt": 1795362944825
+  },
+  "element-t-shirt-4w57__running-shoes-0say": {
+   "a": "running-shoes-0say",
+   "b": "element-t-shirt-4w57",
+   "kind": "yes",
+   "createdAt": 1795362968480
+  },
+  "element-t-shirt-4w57__gymshark-gym-shorts-wjae": {
+   "a": "gymshark-gym-shorts-wjae",
+   "b": "element-t-shirt-4w57",
+   "kind": "yes",
+   "createdAt": 1795362968821
+  },
+  "beige-nikes-5fwc__element-t-shirt-4w57": {
+   "a": "beige-nikes-5fwc",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970501
+  },
+  "black-sambas-debd__element-t-shirt-4w57": {
+   "a": "black-sambas-debd",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970504
+  },
+  "element-t-shirt-4w57__walking-boots-9kwv": {
+   "a": "walking-boots-9kwv",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970506
+  },
+  "element-t-shirt-4w57__white-airforces-2nd-hand-fats": {
+   "a": "white-airforces-2nd-hand-fats",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970508
+  },
+  "element-t-shirt-4w57__white-airforces-nice-1u3h": {
+   "a": "white-airforces-nice-1u3h",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970510
+  },
+  "black-joggers-z75d__element-t-shirt-4w57": {
+   "a": "black-joggers-z75d",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970511
+  },
+  "black-jorts-bynf__element-t-shirt-4w57": {
+   "a": "black-jorts-bynf",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970513
+  },
+  "black-suit-trousers-ylj4__element-t-shirt-4w57": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970515
+  },
+  "black-zara-jeans-ykmu__element-t-shirt-4w57": {
+   "a": "black-zara-jeans-ykmu",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970517
+  },
+  "blue-chords-ozq1__element-t-shirt-4w57": {
+   "a": "blue-chords-ozq1",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970518
+  },
+  "blue-jorts-7chg__element-t-shirt-4w57": {
+   "a": "blue-jorts-7chg",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970520
+  },
+  "element-t-shirt-4w57__uniqlo-light-jeans-iyvr": {
+   "a": "uniqlo-light-jeans-iyvr",
+   "b": "element-t-shirt-4w57",
+   "kind": "maybe",
+   "createdAt": 1795362970522
   }
  },
  "audit": {
