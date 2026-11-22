@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T14:09:54.233Z",
+ "updatedAt": "2026-11-22T14:09:56.287Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -2695,6 +2695,12 @@
    "b": "white-airforces-2nd-hand-fats",
    "kind": "no",
    "createdAt": 1795356585614
+  },
+  "black-tommy-hilfiger-shirt-40sq__white-airforces-2nd-hand-fats": {
+   "a": "black-tommy-hilfiger-shirt-40sq",
+   "b": "white-airforces-2nd-hand-fats",
+   "kind": "no",
+   "createdAt": 1795356594934
   }
  },
  "audit": {
