@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:53:36.283Z",
+ "updatedAt": "2026-11-22T15:53:38.213Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4174,6 +4174,12 @@
    "b": "white-zara-t-shirt-boxy-fit-wm89",
    "kind": "yes",
    "createdAt": 1795362813773
+  },
+  "uniqlo-light-jeans-iyvr__white-zara-t-shirt-boxy-fit-wm89": {
+   "a": "uniqlo-light-jeans-iyvr",
+   "b": "white-zara-t-shirt-boxy-fit-wm89",
+   "kind": "yes",
+   "createdAt": 1795362816939
   }
  },
  "audit": {
