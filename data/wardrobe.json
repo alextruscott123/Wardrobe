@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T15:53:19.017Z",
+ "updatedAt": "2026-11-22T15:53:26.748Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4162,6 +4162,12 @@
    "b": "white-zara-t-shirt-boxy-fit-wm89",
    "kind": "no",
    "createdAt": 1795362798363
+  },
+  "black-suit-trousers-ylj4__white-zara-t-shirt-boxy-fit-wm89": {
+   "a": "black-suit-trousers-ylj4",
+   "b": "white-zara-t-shirt-boxy-fit-wm89",
+   "kind": "no",
+   "createdAt": 1795362804239
   }
  },
  "audit": {
