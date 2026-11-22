@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:25:42.851Z",
+ "updatedAt": "2026-11-22T11:26:05.572Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -464,6 +464,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346740347
+  },
+  "navy-umbro-sweater-bxh4": {
+   "name": "Navy Umbro Sweater",
+   "layer": "mid",
+   "type": "",
+   "colour": "navy",
+   "tone": "neutral",
+   "lo": 2,
+   "hi": 2,
+   "season": "all",
+   "care": "beater",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346763069
   }
  },
  "pins": {},
