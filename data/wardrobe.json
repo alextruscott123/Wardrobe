@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-22T11:18:21.261Z",
+ "updatedAt": "2026-11-22T11:18:43.337Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -366,6 +366,20 @@
    "status": "active",
    "notes": "",
    "createdAt": 1795346298758
+  },
+  "navy-vietnam-shirt-w32w": {
+   "name": "Navy Vietnam Shirt",
+   "layer": "tops",
+   "type": "",
+   "colour": "navy",
+   "tone": "neutral",
+   "lo": 4,
+   "hi": 4,
+   "season": "all",
+   "care": "normal",
+   "status": "active",
+   "notes": "",
+   "createdAt": 1795346320834
   }
  },
  "pins": {},
