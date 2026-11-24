@@ -1,7 +1,7 @@
 {
  "app": "wardrobe",
  "version": 1,
- "updatedAt": "2026-11-23T14:29:15.350Z",
+ "updatedAt": "2026-11-24T11:30:40.225Z",
  "items": {
   "black-sambas-debd": {
    "name": "Black Sambas",
@@ -4777,6 +4777,15 @@
     "grandad-s-watch-3q9z"
    ],
    "createdAt": 1795368374507
+  },
+  "sunday-lunch-14fa": {
+   "name": "Sunday Lunch",
+   "pieces": [
+    "black-sambas-debd",
+    "black-jorts-bynf",
+    "black-tommy-hilfiger-shirt-40sq"
+   ],
+   "createdAt": 1795519837712
   }
  },
  "audit": {
